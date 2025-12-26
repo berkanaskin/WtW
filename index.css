@@ -65,6 +65,10 @@ body {
     min-height: 100dvh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    /* iOS Safe Area Support */
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
 /* ============================================
@@ -475,9 +479,39 @@ body {
     color: var(--white-dim);
 }
 
-/* Slider Arrows - Desktop Only */
+/* Slider Arrows - Always Visible */
 .slider-arrow {
-    display: none;
+    display: flex;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    color: var(--white);
+    font-size: 1.3rem;
+    cursor: pointer;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.slider-arrow:hover {
+    opacity: 1;
+    background: var(--accent);
+}
+
+.slider-arrow-left {
+    left: 4px;
+}
+
+.slider-arrow-right {
+    right: 4px;
 }
 
 @media (min-width: 768px) {
@@ -2203,4 +2237,34 @@ a.rating-box.rt:hover {
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
+}
+
+/* ============================================
+   IMDB PROFILE BUTTON
+   ============================================ */
+.imdb-section {
+    text-align: center;
+    padding: 12px 0;
+}
+
+.imdb-profile-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, rgba(245, 197, 24, 0.15), rgba(245, 197, 24, 0.05));
+    border: 1px solid rgba(245, 197, 24, 0.4);
+    border-radius: 12px;
+    color: #f5c518;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.imdb-profile-btn:hover {
+    background: linear-gradient(135deg, rgba(245, 197, 24, 0.25), rgba(245, 197, 24, 0.1));
+    border-color: #f5c518;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(245, 197, 24, 0.3);
 }

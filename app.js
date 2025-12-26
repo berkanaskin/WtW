@@ -1154,6 +1154,14 @@ function renderDetail(details, providers, type, itemId) {
             </div>
 
             ${castHtml}
+
+            ${state.currentImdbData ? `
+            <div class="modal-section imdb-section">
+                <a href="https://www.imdb.com/title/${state.currentImdbData.id || ''}" target="_blank" rel="noopener" class="imdb-profile-btn">
+                    ⭐ IMDB'de Detaylı Bilgi ve Yorumları Gör
+                </a>
+            </div>
+            ` : ''}
             
             ${triviaHtml}
             
@@ -1191,12 +1199,13 @@ function renderDetail(details, providers, type, itemId) {
             });
         }
 
-        // Star Rating System
+        // Star Rating System with Drag Support
         const starsContainer = document.getElementById('stars-container');
         const starValue = document.getElementById('star-value');
         if (starsContainer) {
             const itemId = starsContainer.closest('.user-star-rating').dataset.itemId;
             const itemType = starsContainer.closest('.user-star-rating').dataset.itemType;
+            let isDragging = false;
 
             // Load existing rating
             const userRatings = JSON.parse(localStorage.getItem('userRatings') || '{}');
@@ -1206,39 +1215,78 @@ function renderDetail(details, providers, type, itemId) {
                 updateStarDisplay(starsContainer, existingRating);
             }
 
-            // Hover effect
+            // Calculate rating from mouse/touch position
+            function getRatingFromPosition(e) {
+                const containerRect = starsContainer.getBoundingClientRect();
+                const stars = starsContainer.querySelectorAll('.star');
+                const starWidth = containerRect.width / stars.length;
+
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const relativeX = clientX - containerRect.left;
+                const starIndex = Math.floor(relativeX / starWidth);
+                const isLeftHalf = (relativeX % starWidth) < (starWidth / 2);
+
+                let value = starIndex + (isLeftHalf ? 0.5 : 1);
+                value = Math.max(0.5, Math.min(10, value));
+                return value;
+            }
+
+            // Update display during drag
+            function handleDragMove(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const value = getRatingFromPosition(e);
+                updateStarDisplay(starsContainer, value);
+                starValue.textContent = value;
+            }
+
+            // Save rating on drag end
+            function handleDragEnd(e) {
+                if (!isDragging) return;
+                isDragging = false;
+
+                const value = parseFloat(starValue.textContent) || 0;
+                if (value > 0) {
+                    const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+                    ratings[`${itemType}_${itemId}`] = value;
+                    localStorage.setItem('userRatings', JSON.stringify(ratings));
+                }
+            }
+
+            // Mouse events
+            starsContainer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                handleDragMove(e);
+            });
+
+            document.addEventListener('mousemove', handleDragMove);
+            document.addEventListener('mouseup', handleDragEnd);
+
+            // Touch events for mobile
+            starsContainer.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                handleDragMove(e);
+            });
+
+            starsContainer.addEventListener('touchmove', handleDragMove);
+            starsContainer.addEventListener('touchend', handleDragEnd);
+
+            // Hover effect (non-drag)
             starsContainer.addEventListener('mousemove', (e) => {
+                if (isDragging) return;
                 const star = e.target.closest('.star');
                 if (!star) return;
 
                 const rect = star.getBoundingClientRect();
                 const isLeftHalf = (e.clientX - rect.left) < rect.width / 2;
                 const value = isLeftHalf ? parseFloat(star.dataset.halfLeft) : parseFloat(star.dataset.value);
-
                 updateStarDisplay(starsContainer, value);
             });
 
             starsContainer.addEventListener('mouseleave', () => {
+                if (isDragging) return;
                 const currentRating = parseFloat(starValue.textContent) || 0;
                 updateStarDisplay(starsContainer, currentRating);
-            });
-
-            // Click to set rating
-            starsContainer.addEventListener('click', (e) => {
-                const star = e.target.closest('.star');
-                if (!star) return;
-
-                const rect = star.getBoundingClientRect();
-                const isLeftHalf = (e.clientX - rect.left) < rect.width / 2;
-                const value = isLeftHalf ? parseFloat(star.dataset.halfLeft) : parseFloat(star.dataset.value);
-
-                starValue.textContent = value;
-                updateStarDisplay(starsContainer, value);
-
-                // Save to localStorage
-                const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
-                ratings[`${itemType}_${itemId}`] = value;
-                localStorage.setItem('userRatings', JSON.stringify(ratings));
             });
         }
     }

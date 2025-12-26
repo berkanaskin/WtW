@@ -468,15 +468,18 @@ const API = {
         if (!movieTitle) return null;
 
         try {
-            // Format title for search
-            const searchQuery = encodeURIComponent(`${movieTitle}${year ? ' ' + year : ''}`);
+            // Format title for URL (slug format)
+            const slug = movieTitle.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, '')
+                .replace(/\s+/g, '-')
+                .slice(0, 50);
 
             const response = await fetch(
-                `https://flixster.p.rapidapi.com/search?query=${searchQuery}`,
+                `https://rottentomato.p.rapidapi.com/search/search?query=${encodeURIComponent(movieTitle)}`,
                 {
                     headers: {
                         'X-RapidAPI-Key': CONFIG.MOVIEDB_API_KEY,
-                        'X-RapidAPI-Host': 'flixster.p.rapidapi.com'
+                        'X-RapidAPI-Host': 'rottentomato.p.rapidapi.com'
                     }
                 }
             );
@@ -485,16 +488,17 @@ const API = {
             const data = await response.json();
 
             // Find matching movie in results
-            const movie = data.data?.search?.edges?.find(edge => {
-                const title = edge.node?.name?.toLowerCase();
+            const movies = data.movies || [];
+            const movie = movies.find(m => {
+                const title = m.title?.toLowerCase() || m.name?.toLowerCase();
                 return title && title.includes(movieTitle.toLowerCase().slice(0, 10));
             });
 
-            if (movie?.node?.tomatoRating) {
+            if (movie) {
                 return {
-                    tomatometer: movie.node.tomatoRating.tomatometer,
-                    audienceScore: movie.node.tomatoRating.audienceScore,
-                    url: movie.node.emsId ? `https://www.rottentomatoes.com/m/${movie.node.emsId}` : null
+                    tomatometer: movie.tomatometer || movie.meterScore,
+                    audienceScore: movie.audienceScore,
+                    url: movie.url || `https://www.rottentomatoes.com/m/${slug}`
                 };
             }
 
