@@ -122,7 +122,17 @@ async function init() {
 
 function loadAuth() {
     state.currentUser = window.AuthService.getCurrentUser();
-    state.userTier = state.currentUser ? state.currentUser.tier : 'guest';
+
+    // Check localStorage for premium tier (set by purchase)
+    const savedTier = localStorage.getItem('userTier');
+    if (savedTier) {
+        state.userTier = savedTier;
+    } else if (state.currentUser) {
+        state.userTier = state.currentUser.tier || 'free';
+    } else {
+        state.userTier = 'guest';
+    }
+
     console.log('User loaded:', state.currentUser?.name, 'Tier:', state.userTier);
     updateAuthUI();
 }
