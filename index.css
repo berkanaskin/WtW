@@ -796,8 +796,10 @@ body {
     background: #7c4fe6;
 }
 
-/* User Rating Slider */
-.user-rating-slider {
+/* ============================================
+   STAR RATING SYSTEM
+   ============================================ */
+.user-star-rating {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -805,25 +807,177 @@ body {
     padding: 10px 14px;
     border-radius: 12px;
     font-size: 0.8rem;
+    width: 100%;
+    max-width: 280px;
 }
 
-.user-rating-slider label {
+.user-star-rating label {
     color: var(--white-muted);
     white-space: nowrap;
+    font-size: 0.75rem;
 }
 
-.user-rating-slider input[type="range"] {
+.stars-container {
+    display: flex;
+    gap: 2px;
     flex: 1;
-    height: 4px;
-    min-width: 80px;
-    accent-color: var(--accent);
+    justify-content: center;
 }
 
-.user-rating-slider #user-rating-val {
-    min-width: 20px;
-    text-align: center;
-    font-weight: 600;
+.star {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.1s ease;
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+
+.star::before {
+    content: '☆';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white-dim);
+}
+
+.star.full::before {
+    content: '★';
     color: var(--gold);
+}
+
+.star.half::before {
+    content: '★';
+    background: linear-gradient(90deg, var(--gold) 50%, var(--white-dim) 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.star.empty::before {
+    content: '☆';
+    color: var(--white-dim);
+}
+
+.star-half {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+}
+
+.star-half.left {
+    left: 0;
+}
+
+.star-half.right {
+    right: 0;
+}
+
+.star-value {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--gold);
+    font-size: 0.9rem;
+}
+
+/* Guest Prompt */
+.user-star-rating.guest-prompt {
+    justify-content: center;
+    gap: 8px;
+    color: var(--white-muted);
+    font-size: 0.75rem;
+}
+
+.user-star-rating.guest-prompt .lock-icon {
+    font-size: 1rem;
+}
+
+.user-star-rating.guest-prompt .login-link {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.user-star-rating.guest-prompt .login-link:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   CLICKABLE RATING BOXES
+   ============================================ */
+a.rating-box {
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+a.rating-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+a.rating-box.imdb:hover {
+    background: rgba(245, 197, 24, 0.15);
+    border: 1px solid #f5c518;
+}
+
+a.rating-box.tmdb:hover {
+    background: rgba(1, 180, 228, 0.15);
+    border: 1px solid #01b4e4;
+}
+
+/* ============================================
+   COMPACT IMDB INLINE LINK
+   ============================================ */
+.imdb-inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: rgba(245, 197, 24, 0.1);
+    border: 1px solid rgba(245, 197, 24, 0.3);
+    border-radius: 8px;
+    color: #f5c518;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 8px 16px;
+    transition: all 0.2s ease;
+}
+
+.imdb-inline-link:hover {
+    background: rgba(245, 197, 24, 0.2);
+    border-color: #f5c518;
+}
+
+.imdb-inline-link .imdb-logo {
+    height: 14px;
+    width: auto;
+}
+
+/* ============================================
+   LOCKED/PREMIUM BUTTON STYLES
+   ============================================ */
+.action-btn.notify-btn.locked {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white-muted);
+    border: 1px solid var(--glass-border);
+}
+
+.action-btn.notify-btn.locked:hover {
+    background: var(--glass);
+    cursor: not-allowed;
+}
+
+.action-btn.notify-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* Desktop Modal Header */

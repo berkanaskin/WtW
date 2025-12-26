@@ -977,14 +977,14 @@ function renderDetail(details, providers, type, itemId) {
                 </div>
                 
                 <div class="ratings-container">
-                    <div class="rating-box imdb">
+                    <a href="https://www.imdb.com/title/${state.currentImdbData?.id || ''}" target="_blank" rel="noopener" class="rating-box imdb" title="IMDB'de görüntüle">
                         <span class="source">IMDB</span>
                         <span class="score">⭐ ${imdbRating ? imdbRating.toFixed(1) : '-'}</span>
-                    </div>
-                    <div class="rating-box tmdb">
+                    </a>
+                    <a href="https://www.themoviedb.org/${type}/${itemId}" target="_blank" rel="noopener" class="rating-box tmdb" title="TMDB'de görüntüle">
                         <span class="source">TMDB</span>
                         <span class="score">📈 ${tmdbRating ? tmdbRating.toFixed(1) : '-'}</span>
-                    </div>
+                    </a>
                 </div>
 
                 ${crewHtml}
@@ -993,20 +993,30 @@ function renderDetail(details, providers, type, itemId) {
                     <button class="action-btn fav-btn" id="fav-btn" data-id="${itemId}" data-type="${type}">
                         ${favBtnText}
                     </button>
-                    ${isMember ? `
-                    <button class="action-btn notify-btn" id="notify-btn">
-                        🔔 Bildirim
+                    <button class="action-btn notify-btn ${!isPremium ? 'locked' : ''}" id="notify-btn" ${!isMember ? 'disabled' : ''}>
+                        ${isPremium ? '🔔 Bildirim' : '🔒 Bildirim (Premium)'}
                     </button>
-                    ` : ''}
                 </div>
                 
                 ${isMember ? `
-                <div class="user-rating-slider">
+                <div class="user-star-rating" data-item-id="${itemId}" data-item-type="${type}">
                     <label>Puanın:</label>
-                    <input type="range" min="1" max="10" step="1" value="5" id="user-rating">
-                    <span id="user-rating-val">5</span>
+                    <div class="stars-container" id="stars-container">
+                        ${[...Array(10)].map((_, i) => `
+                            <span class="star" data-value="${i + 1}" data-half-left="${i + 0.5}">
+                                <span class="star-half left"></span>
+                                <span class="star-half right"></span>
+                            </span>
+                        `).join('')}
+                    </div>
+                    <span class="star-value" id="star-value">-</span>
                 </div>
-                ` : ''}
+                ` : `
+                <div class="user-star-rating guest-prompt">
+                    <span class="lock-icon">🔒</span>
+                    <span>Puanlamak için <a href="#" class="login-link">giriş yapın</a></span>
+                </div>
+                `}
             </div>
         </div>
         
@@ -1024,11 +1034,9 @@ function renderDetail(details, providers, type, itemId) {
             ${castHtml}
 
             ${state.currentImdbData ? `
-            <div class="modal-section imdb-link-section">
-                <a href="https://www.imdb.com/title/${state.currentImdbData.id || ''}" target="_blank" rel="noopener" class="imdb-profile-link">
-                    🔗 IMDB Profilini Görüntüle
-                </a>
-            </div>
+            <a href="https://www.imdb.com/title/${state.currentImdbData.id || ''}" target="_blank" rel="noopener" class="imdb-inline-link">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" alt="IMDB" class="imdb-logo"> IMDB
+            </a>
             ` : ''}
             
             ${triviaHtml}
@@ -1067,11 +1075,54 @@ function renderDetail(details, providers, type, itemId) {
             });
         }
 
-        const ratingSlider = document.getElementById('user-rating');
-        const ratingVal = document.getElementById('user-rating-val');
-        if (ratingSlider) {
-            ratingSlider.addEventListener('input', (e) => {
-                ratingVal.textContent = e.target.value;
+        // Star Rating System
+        const starsContainer = document.getElementById('stars-container');
+        const starValue = document.getElementById('star-value');
+        if (starsContainer) {
+            const itemId = starsContainer.closest('.user-star-rating').dataset.itemId;
+            const itemType = starsContainer.closest('.user-star-rating').dataset.itemType;
+
+            // Load existing rating
+            const userRatings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+            const existingRating = userRatings[`${itemType}_${itemId}`];
+            if (existingRating) {
+                starValue.textContent = existingRating;
+                updateStarDisplay(starsContainer, existingRating);
+            }
+
+            // Hover effect
+            starsContainer.addEventListener('mousemove', (e) => {
+                const star = e.target.closest('.star');
+                if (!star) return;
+
+                const rect = star.getBoundingClientRect();
+                const isLeftHalf = (e.clientX - rect.left) < rect.width / 2;
+                const value = isLeftHalf ? parseFloat(star.dataset.halfLeft) : parseFloat(star.dataset.value);
+
+                updateStarDisplay(starsContainer, value);
+            });
+
+            starsContainer.addEventListener('mouseleave', () => {
+                const currentRating = parseFloat(starValue.textContent) || 0;
+                updateStarDisplay(starsContainer, currentRating);
+            });
+
+            // Click to set rating
+            starsContainer.addEventListener('click', (e) => {
+                const star = e.target.closest('.star');
+                if (!star) return;
+
+                const rect = star.getBoundingClientRect();
+                const isLeftHalf = (e.clientX - rect.left) < rect.width / 2;
+                const value = isLeftHalf ? parseFloat(star.dataset.halfLeft) : parseFloat(star.dataset.value);
+
+                starValue.textContent = value;
+                updateStarDisplay(starsContainer, value);
+
+                // Save to localStorage
+                const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+                ratings[`${itemType}_${itemId}`] = value;
+                localStorage.setItem('userRatings', JSON.stringify(ratings));
             });
         }
     }
@@ -1088,6 +1139,25 @@ function renderDetail(details, providers, type, itemId) {
     });
 
     renderVideos();
+}
+
+// Star Rating Display Helper
+function updateStarDisplay(container, rating) {
+    const stars = container.querySelectorAll('.star');
+    stars.forEach((star, index) => {
+        const fullValue = index + 1;
+        const halfValue = index + 0.5;
+
+        star.classList.remove('full', 'half', 'empty');
+
+        if (rating >= fullValue) {
+            star.classList.add('full');
+        } else if (rating >= halfValue) {
+            star.classList.add('half');
+        } else {
+            star.classList.add('empty');
+        }
+    });
 }
 
 function toggleFavorite(details, type) {
