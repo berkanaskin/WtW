@@ -23,7 +23,7 @@ const API = {
         }
     },
 
-    // Film/Dizi Arama - Language destekli
+    // Film/Dizi Arama - Language destekli + Franchise desteği
     async search(query, type = 'multi', language = 'tr-TR') {
         const endpoint = type === 'multi' ? '/search/multi' : `/search/${type}`;
         const url = `${API_URLS.TMDB_BASE}${endpoint}?api_key=${CONFIG.TMDB_API_KEY}&language=${language}&query=${encodeURIComponent(query)}&page=1`;
@@ -37,6 +37,29 @@ const API = {
                 data.results = data.results.filter(item =>
                     item.media_type === 'movie' || item.media_type === 'tv'
                 );
+            }
+
+            // Franchise/Collection desteği - ilk sonuç bir koleksiyona aitse, tüm filmleri getir
+            if (data.results.length > 0) {
+                const firstResult = data.results[0];
+                if (firstResult.media_type === 'movie' && firstResult.id) {
+                    try {
+                        const details = await this.fetchTMDB(`/movie/${firstResult.id}?language=${language}`);
+                        if (details.belongs_to_collection) {
+                            const collection = await this.fetchTMDB(`/collection/${details.belongs_to_collection.id}?language=${language}`);
+                            if (collection.parts && collection.parts.length > 1) {
+                                // Koleksiyondaki filmleri ekle (zaten varsa ekleme)
+                                const existingIds = new Set(data.results.map(r => r.id));
+                                const newParts = collection.parts
+                                    .filter(p => !existingIds.has(p.id))
+                                    .map(p => ({ ...p, media_type: 'movie' }));
+                                data.results.push(...newParts);
+                            }
+                        }
+                    } catch (e) {
+                        console.log('Collection fetch failed:', e);
+                    }
+                }
             }
 
             // Sonuçları alakaya göre sırala

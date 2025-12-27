@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.6-beta';
+const APP_VERSION = '1.6.1-beta';
 
 // DOM Elements
 const elements = {
@@ -84,11 +84,11 @@ const PLATFORM_URLS = {
     'Amazon Prime Video': 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=',
     'Amazon Video': 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=',
     'Prime Video': 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=',
-    'Disney Plus': 'https://www.disneyplus.com/tr-tr/search?q=',
-    'Disney+': 'https://www.disneyplus.com/tr-tr/search?q=',
-    'Apple TV': 'https://tv.apple.com/tr/search?term=',
-    'Apple TV Plus': 'https://tv.apple.com/tr/search?term=',
-    'Apple TV+': 'https://tv.apple.com/tr/search?term=',
+    'Disney Plus': 'https://www.google.com/search?q=site:disneyplus.com+',
+    'Disney+': 'https://www.google.com/search?q=site:disneyplus.com+',
+    'Apple TV': 'https://www.google.com/search?q=site:tv.apple.com+',
+    'Apple TV Plus': 'https://www.google.com/search?q=site:tv.apple.com+',
+    'Apple TV+': 'https://www.google.com/search?q=site:tv.apple.com+',
     'HBO Max': 'https://play.max.com/search?q=',
     'Max': 'https://play.max.com/search?q=',
     'Hulu': 'https://www.hulu.com/search?q=',
@@ -99,21 +99,21 @@ const PLATFORM_URLS = {
     'YouTube Premium': 'https://www.youtube.com/results?search_query=',
 
     // Turkey Platforms
-    'Gain': 'https://www.gain.tv/arama?q=',
+    'Gain': 'https://www.google.com/search?q=site:gain.tv+',
     'Exxen': 'https://www.exxen.com/tr/arama?q=',
     'BluTV': 'https://www.blutv.com/ara?q=',
     'TOD': 'https://www.tod.tv/arama?query=',
-    'Tabii': 'https://www.tabii.com/tr/arama?q=',
+    'Tabii': 'https://www.google.com/search?q=site:tabii.com+',
     'beIN CONNECT': 'https://www.beinconnect.com.tr/arama?query=',
     'Puhu TV': 'https://puhutv.com/arama?q=',
     'puhutv': 'https://puhutv.com/arama?q=',
-    'TV+': 'https://www.tvplus.com.tr/',
+    'TV+': 'https://www.google.com/search?q=site:tvplus.com.tr+',
 
     // Rent/Buy Platforms
-    'Google Play Movies': 'https://play.google.com/store/search?q=',
-    'Google Play Movies & TV': 'https://play.google.com/store/search?q=',
+    'Google Play Movies': 'https://play.google.com/store/movies/search?q=',
+    'Google Play Movies & TV': 'https://play.google.com/store/movies/search?q=',
     'Microsoft Store': 'https://www.microsoft.com/tr-tr/search/shop/movies-tv?q=',
-    'Apple iTunes': 'https://tv.apple.com/tr/search?term='
+    'Apple iTunes': 'https://www.google.com/search?q=site:tv.apple.com+'
 };
 
 // ============================================

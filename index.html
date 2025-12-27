@@ -20,7 +20,7 @@
         <!-- Header with WtW branding -->
         <header class="app-header">
             <div class="logo-title" id="logo-home" style="cursor: pointer;">
-                <img src="assets/wtw-logo-dark.png" alt="WtW" class="wtw-logo" id="wtw-logo">
+                <span class="wtw-logo-text">WtW</span>
                 <span class="header-divider">–</span>
                 <span class="header-section-title" id="header-section-title">Nerede İzlerim?</span>
             </div>
@@ -249,16 +249,41 @@
         <!-- Bottom Navigation -->
         <nav class="bottom-nav">
             <div class="nav-item active" data-page="home">
-                <span class="icon">🏠</span>
+                <div class="nav-icon-wrap">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+                <span class="nav-label">Ana Sayfa</span>
             </div>
             <div class="nav-item" data-page="discover">
-                <span class="icon">🔍</span>
+                <div class="nav-icon-wrap">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                    </svg>
+                </div>
+                <span class="nav-label">Keşfet</span>
             </div>
             <div class="nav-item" data-page="favorites">
-                <span class="icon">❤️</span>
+                <div class="nav-icon-wrap">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                </div>
+                <span class="nav-label">Favoriler</span>
             </div>
             <div class="nav-item" data-page="profile">
-                <span class="icon">👤</span>
+                <div class="nav-icon-wrap">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <span class="nav-label">Profil</span>
             </div>
         </nav>
 
