@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.7.4-beta';
+const APP_VERSION = '1.7.5-beta';
 
 // DOM Elements
 const elements = {
@@ -1350,11 +1350,16 @@ function renderDetail(details, providers, type, itemId) {
     // RT rating - comes as object with tomatometer
     const rtData = allRatings?.rottenTomatoes;
     const rtRating = rtData?.tomatometer || null;
-    const rtUrl = rtData?.url || 'https://www.rottentomatoes.com';
+    // Generate RT search URL with movie title
+    const rtSlug = (details.original_title || details.original_name || title).toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '_').slice(0, 50);
+    const rtUrl = rtRating ? `https://www.rottentomatoes.com/search?search=${encodeURIComponent(title)}` : '#';
 
     // Letterboxd and Metacritic - now come as direct values
     const letterboxdRating = allRatings?.letterboxd || null;
+    const letterboxdUrl = `https://letterboxd.com/search/${encodeURIComponent(title)}/`;
     const metacriticRating = allRatings?.metacritic || null;
+    const metacriticUrl = `https://www.metacritic.com/search/${type === 'movie' ? 'movie' : 'tv'}/${encodeURIComponent(title)}/`;
 
     // Check if in favorites
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -1461,13 +1466,13 @@ function renderDetail(details, providers, type, itemId) {
                     </a>
                     ` : ''}
                     ${letterboxdRating ? `
-                    <a href="https://letterboxd.com" target="_blank" rel="noopener" class="rating-box letterboxd" title="Letterboxd'da görüntüle">
+                    <a href="${letterboxdUrl}" target="_blank" rel="noopener" class="rating-box letterboxd" title="Letterboxd'da ara">
                         <span class="source">LB</span>
                         <span class="score">🎬 ${letterboxdRating}</span>
                     </a>
                     ` : ''}
                     ${metacriticRating ? `
-                    <a href="https://www.metacritic.com" target="_blank" rel="noopener" class="rating-box metacritic" title="Metacritic'te görüntüle">
+                    <a href="${metacriticUrl}" target="_blank" rel="noopener" class="rating-box metacritic" title="Metacritic'te ara">
                         <span class="source">MC</span>
                         <span class="score">📊 ${metacriticRating}</span>
                     </a>
