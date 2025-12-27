@@ -1250,19 +1250,20 @@ function renderDetail(details, providers, type, itemId) {
 
     // Ratings from unified API
     const allRatings = state.currentAllRatings;
-    const imdbRating = allRatings?.imdb?.rating || state.currentImdbData?.ratingsSummary?.aggregateRating;
+    console.log('Rendering ratings:', allRatings);
+
+    // IMDB rating - now comes as direct value from API
+    const imdbRating = allRatings?.imdb || state.currentImdbData?.ratingsSummary?.aggregateRating;
     const tmdbRating = details.vote_average;
 
-    // Extract actual values from rating objects (API returns {rating: value, url: ...})
+    // RT rating - comes as object with tomatometer
     const rtData = allRatings?.rottenTomatoes;
-    const rtRating = rtData ? (typeof rtData === 'object' ? (rtData.tomatometer || rtData.score || rtData.rating) : rtData) : null;
+    const rtRating = rtData?.tomatometer || null;
     const rtUrl = rtData?.url || 'https://www.rottentomatoes.com';
 
-    const lbData = allRatings?.letterboxd;
-    const letterboxdRating = lbData ? (typeof lbData === 'object' ? (lbData.rating || lbData.score || lbData.value) : lbData) : null;
-
-    const mcData = allRatings?.metacritic;
-    const metacriticRating = mcData ? (typeof mcData === 'object' ? (mcData.score || mcData.rating || mcData.value) : mcData) : null;
+    // Letterboxd and Metacritic - now come as direct values
+    const letterboxdRating = allRatings?.letterboxd || null;
+    const metacriticRating = allRatings?.metacritic || null;
 
     // Check if in favorites
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -1739,7 +1740,12 @@ function renderProviders(providers, networks, type, title, details) {
                         </div>
                     `;
                 } else {
-                    statusMessage = `<p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+                    statusMessage = `
+                        <p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>
+                        <a href="https://www.youtube.com/results?search_query=${encodedTitle}+full+movie" target="_blank" rel="noopener" class="youtube-search-btn">
+                            <span class="yt-icon">▶️</span> YouTube'da Ara
+                        </a>
+                    `;
                 }
             } else if (status === 'In Production' || status === 'Post Production' || status === 'Planned') {
                 statusMessage = `
@@ -1749,11 +1755,21 @@ function renderProviders(providers, networks, type, title, details) {
                     </div>
                 `;
             } else {
-                statusMessage = `<p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+                statusMessage = `
+                    <p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>
+                    <a href="https://www.youtube.com/results?search_query=${encodedTitle}+full+movie" target="_blank" rel="noopener" class="youtube-search-btn">
+                        <span class="yt-icon">▶️</span> YouTube'da Ara
+                    </a>
+                `;
             }
         } else {
-            // TV - sadece mesaj göster
-            statusMessage = `<p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+            // TV - sadece mesaj göster + YouTube
+            statusMessage = `
+                <p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>
+                <a href="https://www.youtube.com/results?search_query=${encodedTitle}+full+episode" target="_blank" rel="noopener" class="youtube-search-btn">
+                    <span class="yt-icon">▶️</span> YouTube'da Ara
+                </a>
+            `;
         }
 
         return statusMessage;

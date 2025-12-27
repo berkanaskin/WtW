@@ -73,7 +73,7 @@ const API = {
             if (exactMatchA && !exactMatchB) return -1;
             if (!exactMatchA && exactMatchB) return 1;
 
-            // Başlangıç eşleşmesi
+            // Başlangıç eşleşmesi (Emily in Paris = "Emily" aramasında önce)
             const startsWithA = titleANorm.startsWith(queryNorm) || originalANorm.startsWith(queryNorm);
             const startsWithB = titleBNorm.startsWith(queryNorm) || originalBNorm.startsWith(queryNorm);
 
@@ -87,18 +87,27 @@ const API = {
             if (containsA && !containsB) return -1;
             if (!containsA && containsB) return 1;
 
-            // Popülerlik + Güncellik puanı
+            // Franchise/Seri bonusu - aynı isimle başlayan içerikler birlikte
+            const franchiseMatchA = titleANorm.startsWith(queryNorm) ? 100 : (titleANorm.includes(queryNorm) ? 50 : 0);
+            const franchiseMatchB = titleBNorm.startsWith(queryNorm) ? 100 : (titleBNorm.includes(queryNorm) ? 50 : 0);
+
+            // Popülerlik (yüksek ağırlık)
             const popularityA = a.popularity || 0;
             const popularityB = b.popularity || 0;
+
+            // Vote count bonusu (çok oy = daha tanınmış)
+            const voteCountBonusA = Math.min((a.vote_count || 0) / 100, 100);
+            const voteCountBonusB = Math.min((b.vote_count || 0) / 100, 100);
 
             // Yakın tarihli içeriklere bonus
             const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
             const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
-            const recencyBonusA = dateA > new Date(now.getFullYear() - 2, 0, 1) ? 50 : 0;
-            const recencyBonusB = dateB > new Date(now.getFullYear() - 2, 0, 1) ? 50 : 0;
+            const recencyBonusA = dateA > new Date(now.getFullYear() - 3, 0, 1) ? 30 : 0;
+            const recencyBonusB = dateB > new Date(now.getFullYear() - 3, 0, 1) ? 30 : 0;
 
-            const scoreA = popularityA + recencyBonusA + (a.vote_average || 0) * 5;
-            const scoreB = popularityB + recencyBonusB + (b.vote_average || 0) * 5;
+            // Toplam puan
+            const scoreA = franchiseMatchA + popularityA + voteCountBonusA + recencyBonusA + (a.vote_average || 0) * 10;
+            const scoreB = franchiseMatchB + popularityB + voteCountBonusB + recencyBonusB + (b.vote_average || 0) * 10;
 
             return scoreB - scoreA;
         });
@@ -534,15 +543,26 @@ const API = {
                 }
             );
 
-            if (!response.ok) return null;
+            if (!response.ok) {
+                console.warn('Ratings API response not OK:', response.status);
+                return null;
+            }
             const data = await response.json();
+            console.log('Raw Ratings API data:', data);
+
+            // API may return ratings directly or nested in 'ratings' object
+            const ratings = data.ratings || data;
 
             return {
-                imdb: data.imdb || null,
-                rottenTomatoes: data.rottenTomatoes || data.rotten_tomatoes || null,
-                letterboxd: data.letterboxd || null,
-                metacritic: data.metacritic || null,
-                tmdb: data.tmdb || null
+                imdb: ratings.imdb?.score || ratings.imdb?.rating || null,
+                rottenTomatoes: {
+                    tomatometer: ratings.rottenTomatoes?.tomatometer || ratings.rotten_tomatoes?.tomatometer || null,
+                    audienceScore: ratings.rottenTomatoes?.audienceScore || ratings.rotten_tomatoes?.audienceScore || null,
+                    url: ratings.rottenTomatoes?.url || ratings.rotten_tomatoes?.url || 'https://www.rottentomatoes.com'
+                },
+                letterboxd: ratings.letterboxd?.score || ratings.letterboxd?.rating || null,
+                metacritic: ratings.metacritic?.metascore || ratings.metacritic?.score || null,
+                tmdb: ratings.tmdb?.score || null
             };
         } catch (error) {
             console.error('Ratings API hatası:', error);

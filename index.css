@@ -1266,6 +1266,31 @@ a.rating-box.rt:hover {
     border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
+/* YouTube Search Fallback Button */
+.youtube-search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.youtube-search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+.youtube-search-btn .yt-icon {
+    font-size: 1rem;
+}
+
 /* Networks Section */
 .networks-section {
     margin-top: 14px;
