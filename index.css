@@ -2345,3 +2345,148 @@ a.rating-box.rt:hover {
     border-color: #66cc33;
     box-shadow: 0 0 15px rgba(102, 204, 51, 0.3);
 }
+
+/* ============================================
+   TABLET & DESKTOP RESPONSIVE
+   ============================================ */
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+    .app-header {
+        padding: 16px 32px;
+    }
+
+    .search-section {
+        padding: 0 32px 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .section-header {
+        padding: 12px 32px 10px;
+    }
+
+    .movie-slider {
+        padding: 0 32px 16px;
+        gap: 16px;
+    }
+
+    .movie-card {
+        width: 150px;
+    }
+
+    /* Modal on tablet - centered card style */
+    .modal {
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.visible {
+        display: flex;
+    }
+
+    .modal-content {
+        max-width: 700px;
+        max-height: 90vh;
+        margin: 20px;
+        background: var(--bg-dark);
+        border-radius: 20px;
+        overflow-y: auto;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+
+    /* Ratings wrap better on tablet */
+    .ratings-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* Favorites grid */
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    /* Discover grid */
+    .discover-grid {
+        padding: 0 32px;
+    }
+
+    /* Profile content */
+    .profile-content {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+    .app {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .search-section {
+        max-width: 700px;
+    }
+
+    .movie-card {
+        width: 180px;
+    }
+
+    .modal-content {
+        max-width: 900px;
+    }
+
+    .modal-header {
+        flex-direction: row;
+        text-align: left;
+    }
+
+    .modal-poster {
+        width: 300px;
+        margin: 0;
+    }
+
+    .modal-details {
+        flex: 1;
+        padding-left: 24px;
+    }
+
+    .modal-title {
+        font-size: 2rem;
+    }
+
+    /* Bottom nav hidden on desktop, use top nav */
+    .bottom-nav {
+        display: none;
+    }
+
+    /* Show nav labels on desktop */
+    .nav-item .label {
+        display: block;
+        font-size: 0.7rem;
+        margin-top: 2px;
+    }
+
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+    .app {
+        max-width: 1400px;
+    }
+
+    .movie-card {
+        width: 200px;
+    }
+}
