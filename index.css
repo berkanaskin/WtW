@@ -3258,3 +3258,34 @@ a.rating-box.rt:hover {
 .rating-box.metacritic:hover {
     border-color: #66cc33;
 }
+
+/* ============================================
+   CINEMA SEARCH BUTTON
+   ============================================ */
+
+.cinema-search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    margin-top: 12px;
+    background: linear-gradient(135deg, #dc2626, #f59e0b);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+}
+
+.cinema-search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+}
+
+.cinema-icon {
+    font-size: 1.1rem;
+}

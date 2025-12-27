@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.8.0-beta';
+const APP_VERSION = '1.8.1-beta';
 
 // DOM Elements
 const elements = {
@@ -1834,6 +1834,9 @@ function renderProviders(providers, networks, type, title, details) {
                             <span class="status-icon">🎭</span>
                             <span class="status-text">Sinemalarda gösterimde olabilir</span>
                         </div>
+                        <a href="https://www.google.com/maps/search/sinema+yakınımda" target="_blank" rel="noopener" class="cinema-search-btn">
+                            <span class="cinema-icon">🎬</span> Yakındaki Sinemalar
+                        </a>
                     `;
                 } else {
                     statusMessage = `
