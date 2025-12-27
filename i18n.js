@@ -49,9 +49,10 @@ const i18n = {
             // Actions
             addFavorite: '🤍 Ekle',
             removeFavorite: '❤️ Çıkar',
-            notify: '🔔 Bildirim',
-
-            // Profile
+            notify: '🔔 Haber Ver',
+            notifyLocked: '🔒 Haber Ver (Premium)',
+            rateIt: 'Oy Ver',
+            deleteRating: 'Sil',
             theme: 'Tema',
             dark: 'Koyu',
             light: 'Açık',

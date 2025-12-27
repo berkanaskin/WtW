@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '5.0.0';
+const APP_VERSION = '1.5-beta';
 
 // DOM Elements
 const elements = {
@@ -626,24 +626,42 @@ async function loadHomePage() {
     }
 }
 
-async function loadDiscoverPage(selectedGenre = 'all', selectedType = 'all') {
+async function loadDiscoverPage(selectedGenre = 'all', mediaType = 'all') {
     hideAllSections();
     elements.discoverSection.style.display = 'block';
 
-    // Update active filter button
+    // Store current filters in state
+    state.discoverGenre = selectedGenre;
+    state.discoverMediaType = mediaType;
+
+    // Update active genre button
     const filterBtns = document.querySelectorAll('.discover-filter-btn');
     filterBtns.forEach(btn => {
         btn.classList.remove('active');
-        if (btn.dataset.genre === selectedGenre && btn.dataset.type === selectedType) {
+        if (btn.dataset.genre === selectedGenre) {
             btn.classList.add('active');
         }
     });
 
-    // Setup filter button click handlers (only once)
+    // Update type toggle buttons
+    const typeBtns = document.querySelectorAll('.type-toggle-btn');
+    typeBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.media === mediaType) {
+            btn.classList.add('active');
+        }
+    });
+
+    // Setup handlers (only once)
     if (!state.discoverFiltersSetup) {
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                loadDiscoverPage(btn.dataset.genre, btn.dataset.type);
+                loadDiscoverPage(btn.dataset.genre, state.discoverMediaType || 'all');
+            });
+        });
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                loadDiscoverPage(state.discoverGenre || 'all', btn.dataset.media);
             });
         });
         state.discoverFiltersSetup = true;
@@ -653,71 +671,81 @@ async function loadDiscoverPage(selectedGenre = 'all', selectedType = 'all') {
 
     try {
         let results = [];
-        let endpoint = '';
+        const lang = state.currentLanguage;
 
-        if (selectedGenre === 'all' && selectedType === 'all') {
-            // Default: All-time top rated mixed content (movies + TV)
-            const [movies, tvShows] = await Promise.all([
-                API.fetchTMDB(`/movie/top_rated?language=${state.currentLanguage}&page=1`),
-                API.fetchTMDB(`/tv/top_rated?language=${state.currentLanguage}&page=1`)
-            ]);
+        // Genre ID mapping for TV (TMDB uses different IDs for some genres)
+        const tvGenreMap = {
+            '28': '10759',   // Action -> Action & Adventure (TV)
+            '878': '10765',  // Sci-Fi -> Sci-Fi & Fantasy (TV)
+            '27': '9648',    // Horror -> Mystery (closest for TV)
+        };
 
-            results = [
-                ...(movies.results || []).slice(0, 12).map(m => ({ ...m, media_type: 'movie' })),
-                ...(tvShows.results || []).slice(0, 8).map(t => ({ ...t, media_type: 'tv' }))
-            ];
-            // Sort by vote_average descending
-            results.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
+        if (selectedGenre === 'anime') {
+            // Anime - Japanese animation (Film + TV)
+            if (mediaType === 'all' || mediaType === 'movie') {
+                const movieData = await API.fetchTMDB(
+                    `/discover/movie?language=${lang}&with_genres=16&with_original_language=ja&sort_by=vote_average.desc&vote_count.gte=100`
+                );
+                results.push(...(movieData.results || []).map(m => ({ ...m, media_type: 'movie' })));
+            }
+            if (mediaType === 'all' || mediaType === 'tv') {
+                const tvData = await API.fetchTMDB(
+                    `/discover/tv?language=${lang}&with_genres=16&with_original_language=ja&sort_by=vote_average.desc&vote_count.gte=50`
+                );
+                results.push(...(tvData.results || []).map(t => ({ ...t, media_type: 'tv' })));
+            }
 
-        } else if (selectedGenre === 'all' && selectedType === 'movie') {
-            // Movies only - top rated
-            const data = await API.fetchTMDB(`/movie/top_rated?language=${state.currentLanguage}&page=1`);
-            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
-
-        } else if (selectedType === 'tv') {
-            // TV Shows only - top rated
-            const data = await API.fetchTMDB(`/tv/top_rated?language=${state.currentLanguage}&page=1`);
-            results = (data.results || []).map(t => ({ ...t, media_type: 'tv' }));
-
-        } else if (selectedType === 'anime') {
-            // Anime - Japanese animation
-            const data = await API.fetchTMDB(
-                `/discover/movie?language=${state.currentLanguage}&with_genres=16&with_original_language=ja&sort_by=vote_average.desc&vote_count.gte=100`
-            );
-            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
-
-        } else if (selectedType === 'animation') {
-            // Animation (non-anime) - exclude Japanese
-            const data = await API.fetchTMDB(
-                `/discover/movie?language=${state.currentLanguage}&with_genres=16&without_original_language=ja&sort_by=vote_average.desc&vote_count.gte=200`
-            );
-            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
-
-        } else if (selectedType === 'local') {
-            // Regional content based on current language/region
-            const regionMap = {
-                'tr': { lang: 'tr', label: 'Türk' },
-                'en': { lang: 'en', label: 'İngilizce' },
-                'de': { lang: 'de', label: 'Alman' },
-                'fr': { lang: 'fr', label: 'Fransız' },
-                'es': { lang: 'es', label: 'İspanyol' },
-                'ja': { lang: 'ja', label: 'Japon' }
-            };
+        } else if (selectedGenre === 'local') {
+            // Regional content
+            const regionMap = { 'tr': 'tr', 'en': 'en', 'de': 'de', 'fr': 'fr', 'es': 'es', 'ja': 'ja' };
             const langCode = state.currentLanguageCode || 'tr';
-            const region = regionMap[langCode] || regionMap['tr'];
+            const origLang = regionMap[langCode] || 'tr';
 
-            const data = await API.fetchTMDB(
-                `/discover/movie?language=${state.currentLanguage}&with_original_language=${region.lang}&sort_by=vote_average.desc&vote_count.gte=100`
-            );
-            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
+            if (mediaType === 'all' || mediaType === 'movie') {
+                const movieData = await API.fetchTMDB(
+                    `/discover/movie?language=${lang}&with_original_language=${origLang}&sort_by=vote_average.desc&vote_count.gte=50`
+                );
+                results.push(...(movieData.results || []).map(m => ({ ...m, media_type: 'movie' })));
+            }
+            if (mediaType === 'all' || mediaType === 'tv') {
+                const tvData = await API.fetchTMDB(
+                    `/discover/tv?language=${lang}&with_original_language=${origLang}&sort_by=vote_average.desc&vote_count.gte=30`
+                );
+                results.push(...(tvData.results || []).map(t => ({ ...t, media_type: 'tv' })));
+            }
+
+        } else if (selectedGenre === 'all') {
+            // Top rated mixed/filtered
+            if (mediaType === 'all' || mediaType === 'movie') {
+                const movieData = await API.fetchTMDB(`/movie/top_rated?language=${lang}&page=1`);
+                results.push(...(movieData.results || []).slice(0, 12).map(m => ({ ...m, media_type: 'movie' })));
+            }
+            if (mediaType === 'all' || mediaType === 'tv') {
+                const tvData = await API.fetchTMDB(`/tv/top_rated?language=${lang}&page=1`);
+                results.push(...(tvData.results || []).slice(0, 8).map(t => ({ ...t, media_type: 'tv' })));
+            }
 
         } else {
-            // Genre-based filter
-            const data = await API.fetchTMDB(
-                `/discover/movie?language=${state.currentLanguage}&with_genres=${selectedGenre}&sort_by=vote_average.desc&vote_count.gte=500`
-            );
-            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
+            // Genre-based filter (mixed Film + Dizi)
+            const movieGenre = selectedGenre;
+            const tvGenre = tvGenreMap[selectedGenre] || selectedGenre;
+
+            if (mediaType === 'all' || mediaType === 'movie') {
+                const movieData = await API.fetchTMDB(
+                    `/discover/movie?language=${lang}&with_genres=${movieGenre}&sort_by=vote_average.desc&vote_count.gte=300`
+                );
+                results.push(...(movieData.results || []).map(m => ({ ...m, media_type: 'movie' })));
+            }
+            if (mediaType === 'all' || mediaType === 'tv') {
+                const tvData = await API.fetchTMDB(
+                    `/discover/tv?language=${lang}&with_genres=${tvGenre}&sort_by=vote_average.desc&vote_count.gte=100`
+                );
+                results.push(...(tvData.results || []).map(t => ({ ...t, media_type: 'tv' })));
+            }
         }
+
+        // Sort by vote_average
+        results.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
 
         hideLoading();
 
@@ -1129,6 +1157,7 @@ async function openDetail(id, type, title, year, originalTitle) {
         let allRatings = null;
 
         const imdbId = await API.getIMDBId(id, type);
+        console.log('IMDB ID:', imdbId);
         if (imdbId) {
             try {
                 [imdbData, triviaData, allRatings] = await Promise.all([
@@ -1146,6 +1175,9 @@ async function openDetail(id, type, title, year, originalTitle) {
         state.currentTrivia = triviaData;
         state.currentCredits = credits;
         state.currentAllRatings = allRatings;
+
+        // Debug: Log all ratings
+        console.log('All Ratings API Response:', allRatings);
 
         const trailers = tmdbVideos.filter(v => v.type === 'Trailer' || v.type === 'Teaser');
         const btsVideos = tmdbVideos.filter(v => v.type === 'Behind the Scenes' || v.type === 'Featurette');
@@ -1357,12 +1389,12 @@ function renderDetail(details, providers, type, itemId) {
                         ${favBtnText}
                     </button>
                     <button class="action-btn notify-btn ${!isPremium ? 'locked' : ''}" id="notify-btn" ${!isMember ? 'disabled' : ''}>
-                        ${isPremium ? '🔔 Bildirim' : '🔒 Bildirim (Premium)'}
+                        ${isPremium ? '🔔 Haber Ver' : '🔒 Haber Ver (Premium)'}
                     </button>
                 </div>
                 
                 ${isMember ? `
-                <div class="user-star-rating" data-item-id="${itemId}" data-item-type="${type}">
+                <div class="user-star-rating" data-item-id="${itemId}" data-item-type="${type}" data-item-title="${title}">
                     <label>Puanın:</label>
                     <div class="stars-container" id="stars-container">
                         ${[...Array(10)].map((_, i) => `
@@ -1373,6 +1405,7 @@ function renderDetail(details, providers, type, itemId) {
                         `).join('')}
                     </div>
                     <span class="star-value" id="star-value"></span>
+                    <button class="rate-confirm-btn" id="rate-confirm-btn" style="display: none;">Oy Ver</button>
                 </div>
                 ` : `
                 <div class="user-star-rating guest-prompt">
@@ -1483,28 +1516,52 @@ function renderDetail(details, providers, type, itemId) {
                 starValue.textContent = value;
             }
 
-            // Save rating on drag end (0 = delete rating)
+            // Show confirm button on drag end (0 = delete rating immediately)
             function handleDragEnd(e) {
                 if (!isDragging) return;
                 isDragging = false;
 
                 const value = parseFloat(starValue.textContent) || 0;
-                const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
-                const key = `${itemType}_${itemId}`;
+                const confirmBtn = document.getElementById('rate-confirm-btn');
 
                 if (value > 0) {
-                    ratings[key] = {
-                        value: value,
-                        title: state.currentTitle || 'Bilinmeyen'
-                    };
-                    localStorage.setItem('userRatings', JSON.stringify(ratings));
+                    // Show "Oy Ver" button
+                    if (confirmBtn) {
+                        confirmBtn.style.display = 'inline-block';
+                    }
                 } else {
                     // Delete rating when dragged to 0
+                    const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+                    const key = `${itemType}_${itemId}`;
                     if (ratings[key]) {
                         delete ratings[key];
                         localStorage.setItem('userRatings', JSON.stringify(ratings));
+                        if (confirmBtn) confirmBtn.style.display = 'none';
                     }
                 }
+            }
+
+            // Save rating on confirm button click
+            const confirmBtn = document.getElementById('rate-confirm-btn');
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', () => {
+                    const value = parseFloat(starValue.textContent) || 0;
+                    if (value > 0) {
+                        const ratings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+                        const key = `${itemType}_${itemId}`;
+                        const itemTitle = starsContainer.closest('.user-star-rating').dataset.itemTitle;
+                        ratings[key] = {
+                            value: value,
+                            title: itemTitle || state.currentTitle || 'Bilinmeyen'
+                        };
+                        localStorage.setItem('userRatings', JSON.stringify(ratings));
+                        confirmBtn.textContent = '✓ Kaydedildi';
+                        setTimeout(() => {
+                            confirmBtn.style.display = 'none';
+                            confirmBtn.textContent = 'Oy Ver';
+                        }, 1500);
+                    }
+                });
             }
 
             // Mouse events
