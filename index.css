@@ -862,17 +862,23 @@ body {
 
 /* ============================================
    STAR RATING SYSTEM
-   ============================================ */
+/* Rating Container */
+.modal-actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+/* User Star Rating - Compact */
 .user-star-rating {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    width: 100%;
-    max-width: 280px;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
 }
 
 .user-star-rating label {
@@ -890,10 +896,10 @@ body {
 
 .star {
     position: relative;
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
     transition: transform 0.1s ease;
 }
 
@@ -969,23 +975,21 @@ body {
     text-decoration: none;
 }
 
-/* Rate Confirm Button */
 .rate-confirm-btn {
-    padding: 4px 12px;
+    padding: 3px 8px;
     background: linear-gradient(135deg, var(--accent), #06b6d4);
     border: none;
     border-radius: var(--radius-full);
     color: white;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    margin-left: 8px;
+    white-space: nowrap;
 }
 
 .rate-confirm-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
 }
 
 .user-star-rating.guest-prompt .login-link:hover {
@@ -2582,19 +2586,18 @@ a.rating-box.rt:hover {
 /* Type Toggle (Film/Dizi/Tümü) */
 .discover-type-toggle {
     display: flex;
-    justify-content: center;
     gap: 4px;
-    padding: 12px 16px 6px;
+    padding: 8px 16px 4px;
 }
 
 .type-toggle-btn {
-    padding: 6px 16px;
+    padding: 4px 12px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-full);
     color: var(--white-muted);
     font-family: inherit;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -2615,8 +2618,8 @@ a.rating-box.rt:hover {
 /* Genre Filter Buttons */
 .discover-filters {
     display: flex;
-    gap: 8px;
-    padding: 8px 16px 16px;
+    gap: 6px;
+    padding: 6px 16px 12px;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -2629,13 +2632,13 @@ a.rating-box.rt:hover {
 
 .discover-filter-btn {
     flex-shrink: 0;
-    padding: 8px 12px;
+    padding: 5px 10px;
     background: var(--glass);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius-full);
     color: var(--white-soft);
     font-family: inherit;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;

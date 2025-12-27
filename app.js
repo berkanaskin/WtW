@@ -1384,36 +1384,36 @@ function renderDetail(details, providers, type, itemId) {
 
                 ${crewHtml}
 
-                <div class="modal-actions">
-                    <button class="action-btn fav-btn" id="fav-btn" data-id="${itemId}" data-type="${type}">
-                        ${favBtnText}
-                    </button>
-                    <button class="action-btn notify-btn ${!isPremium ? 'locked' : ''}" id="notify-btn" ${!isMember ? 'disabled' : ''}>
-                        ${isPremium ? '🔔 Haber Ver' : '🔒 Haber Ver (Premium)'}
-                    </button>
-                </div>
-                
-                ${isMember ? `
-                <div class="user-star-rating" data-item-id="${itemId}" data-item-type="${type}" data-item-title="${title}">
-                    <label>Puanın:</label>
-                    <div class="stars-container" id="stars-container">
-                        ${[...Array(10)].map((_, i) => `
-                            <span class="star empty" data-value="${i + 1}" data-half-left="${i + 0.5}">
-                                <span class="star-half left"></span>
-                                <span class="star-half right"></span>
-                            </span>
-                        `).join('')}
+                <div class="modal-actions-container">
+                    <div class="modal-actions">
+                        <button class="action-btn fav-btn" id="fav-btn" data-id="${itemId}" data-type="${type}">
+                            ${favBtnText}
+                        </button>
+                        <button class="action-btn notify-btn ${!isPremium ? 'locked' : ''}" id="notify-btn" ${!isMember ? 'disabled' : ''}>
+                            ${isPremium ? '🔔 Haber Ver' : '🔒 Haber Ver (Premium)'}
+                        </button>
                     </div>
-                    <span class="star-value" id="star-value"></span>
-                    <button class="rate-confirm-btn" id="rate-confirm-btn" style="display: none;">Oy Ver</button>
+                    ${isMember ? `
+                    <div class="user-star-rating" data-item-id="${itemId}" data-item-type="${type}" data-item-title="${title}">
+                        <label>Puanın:</label>
+                        <div class="stars-container" id="stars-container">
+                            ${[...Array(10)].map((_, i) => `
+                                <span class="star empty" data-value="${i + 1}" data-half-left="${i + 0.5}">
+                                    <span class="star-half left"></span>
+                                    <span class="star-half right"></span>
+                                </span>
+                            `).join('')}
+                        </div>
+                        <span class="star-value" id="star-value"></span>
+                        <button class="rate-confirm-btn" id="rate-confirm-btn">Oy Ver</button>
+                    </div>
+                    ` : `
+                    <div class="user-star-rating guest-prompt">
+                        <span class="lock-icon">🔒</span>
+                        <span>Puanlamak için <a href="#" class="login-link" onclick="openLoginModal()">giriş yapın</a></span>
+                    </div>
+                    `}
                 </div>
-                ` : `
-                <div class="user-star-rating guest-prompt">
-                    <span class="lock-icon">🔒</span>
-                    <span>Puanlamak için <a href="#" class="login-link" onclick="openLoginModal()">giriş yapın</a></span>
-                </div>
-                `}
-            </div>
         </div>
         
         <div class="modal-content-body">
@@ -1537,6 +1537,10 @@ function renderDetail(details, providers, type, itemId) {
                         delete ratings[key];
                         localStorage.setItem('userRatings', JSON.stringify(ratings));
                         if (confirmBtn) confirmBtn.style.display = 'none';
+                        // Reactive update: refresh profile if profile section is visible
+                        if (elements.profileSection?.style.display === 'block') {
+                            loadProfilePage();
+                        }
                     }
                 }
             }
