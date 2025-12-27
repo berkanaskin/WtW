@@ -13,6 +13,10 @@ const CONFIG = {
     // MoviesDatabase API Key (RapidAPI) - Trivia ve IMDB puanı için
     MOVIEDB_API_KEY: 'c6c8ab0a13msh052b4316e877d00p1cba02jsn9e4e6b349f2c',
 
+    // OMDB API Key (Free: 1000 calls/day) - omdbapi.com'dan alın
+    // RT ve Metacritic ratings için
+    OMDB_API_KEY: '',  // 👈 omdbapi.com'dan ücretsiz key alın
+
     // Varsayılan ülke kodu
     DEFAULT_COUNTRY: 'TR',
 

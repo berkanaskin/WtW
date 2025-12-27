@@ -468,9 +468,16 @@ const API = {
         }
     },
 
-    // IMDB ID ile trivia al
+    // IMDB ID ile trivia al (Premium feature - API desteği sınırlı)
     async getMovieTrivia(imdbId) {
         if (!imdbId) return [];
+
+        // MovieDB API trivia endpoint'i genellikle çalışmıyor
+        // Şimdilik boş dönüyoruz, ileride IMDB scraping veya alternatif API eklenebilir
+        console.log('Trivia API: Endpoint desteği sınırlı, imdbId:', imdbId);
+        return [];
+
+        /* Orjinal implementasyon (404 hatası veriyor):
         try {
             const response = await fetch(
                 `${API_URLS.MOVIEDB_BASE}/titles/${imdbId}/trivia`,
@@ -488,6 +495,7 @@ const API = {
             console.error('Trivia API hatası:', error);
             return [];
         }
+        */
     },
 
     // TMDB ID'den IMDB ID al
@@ -551,10 +559,45 @@ const API = {
         }
     },
 
-    // Unified Ratings API - IMDB, RT, Letterboxd, Metacritic all in one
+    // Unified Ratings API - IMDB, RT, Metacritic via OMDB (reliable)
     async getAllRatings(imdbId) {
         if (!imdbId) return null;
 
+        // Try OMDB first (most reliable for RT/Metacritic)
+        if (CONFIG.OMDB_API_KEY) {
+            try {
+                const response = await fetch(
+                    `https://www.omdbapi.com/?i=${imdbId}&apikey=${CONFIG.OMDB_API_KEY}`
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.Response === 'True') {
+                        // Parse ratings from OMDB format
+                        const ratings = data.Ratings || [];
+                        const findRating = (source) => {
+                            const r = ratings.find(r => r.Source.includes(source));
+                            return r ? r.Value : null;
+                        };
+
+                        return {
+                            imdb: data.imdbRating ? parseFloat(data.imdbRating) : null,
+                            rottenTomatoes: {
+                                tomatometer: findRating('Rotten') ? parseInt(findRating('Rotten')) : null,
+                                audienceScore: null,
+                                url: 'https://www.rottentomatoes.com'
+                            },
+                            letterboxd: null, // OMDB doesn't have Letterboxd
+                            metacritic: findRating('Metacritic') ? parseInt(findRating('Metacritic')) : null,
+                            tmdb: null
+                        };
+                    }
+                }
+            } catch (error) {
+                console.warn('OMDB API hatası:', error);
+            }
+        }
+
+        // Fallback to movies-ratings2 if OMDB key not set
         try {
             const response = await fetch(
                 `https://movies-ratings2.p.rapidapi.com/ratings?id=${imdbId}`,
@@ -571,9 +614,6 @@ const API = {
                 return null;
             }
             const data = await response.json();
-            console.log('Raw Ratings API data:', data);
-
-            // API may return ratings directly or nested in 'ratings' object
             const ratings = data.ratings || data;
 
             return {
@@ -581,7 +621,7 @@ const API = {
                 rottenTomatoes: {
                     tomatometer: ratings.rottenTomatoes?.tomatometer || ratings.rotten_tomatoes?.tomatometer || null,
                     audienceScore: ratings.rottenTomatoes?.audienceScore || ratings.rotten_tomatoes?.audienceScore || null,
-                    url: ratings.rottenTomatoes?.url || ratings.rotten_tomatoes?.url || 'https://www.rottentomatoes.com'
+                    url: ratings.rottenTomatoes?.url || 'https://www.rottentomatoes.com'
                 },
                 letterboxd: ratings.letterboxd?.score || ratings.letterboxd?.rating || null,
                 metacritic: ratings.metacritic?.metascore || ratings.metacritic?.score || null,
