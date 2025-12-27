@@ -313,9 +313,23 @@ function simulatePurchase() {
 // ============================================
 
 function loadLanguage() {
-    // Try to get from local storage, otherwise default to 'tr'
-    const saved = localStorage.getItem('language') || 'tr';
-    changeLanguageState(saved);
+    // Check if user has a saved preference
+    const saved = localStorage.getItem('language');
+
+    if (saved) {
+        changeLanguageState(saved);
+        return;
+    }
+
+    // Auto-detect from browser on first visit
+    const browserLang = navigator.language || navigator.userLanguage || 'tr';
+    const langCode = browserLang.split('-')[0].toLowerCase();
+
+    // Map to supported languages
+    const supported = ['tr', 'en', 'de', 'fr', 'es', 'ja', 'zh'];
+    const detected = supported.includes(langCode) ? langCode : 'tr';
+
+    changeLanguageState(detected);
 }
 
 function changeLanguageState(langCode) {
@@ -1568,6 +1582,18 @@ function renderProviders(providers, networks, type, title) {
             });
         }
     }
+
+    // Always add YouTube as a search option
+    html += `
+        <a href="https://www.youtube.com/results?search_query=${encodedTitle}+full+movie+izle" 
+           target="_blank" rel="noopener" 
+           class="provider-card youtube-search">
+            <img src="https://www.youtube.com/s/desktop/27e57068/img/favicon_144x144.png" 
+                 alt="YouTube" class="provider-logo">
+            <span class="provider-name">YouTube</span>
+            <span class="provider-type search">Ara</span>
+        </a>
+    `;
 
     html += '</div>';
 

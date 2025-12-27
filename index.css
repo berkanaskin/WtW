@@ -330,7 +330,7 @@ body {
 }
 
 .section-header {
-    padding: 10px 16px 8px 20px;
+    padding: 10px 16px 8px 16px;
 }
 
 .section-title {
@@ -356,7 +356,7 @@ body {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding: 0 16px 12px 20px;
+    padding: 0 16px 12px 16px;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -615,6 +615,36 @@ body {
     .app {
         padding-bottom: calc(90px + env(safe-area-inset-bottom));
     }
+}
+
+/* Tablet - Smaller bottom nav */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .bottom-nav {
+        left: 25%;
+        right: 25%;
+        height: 50px;
+        border-radius: 25px;
+    }
+
+    .nav-item .icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* YouTube Search Provider */
+.provider-card.youtube-search {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.3);
+}
+
+.provider-card.youtube-search:hover {
+    background: rgba(255, 0, 0, 0.2);
+    border-color: #ff0000;
+}
+
+.provider-type.search {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
 }
 
 /* ============================================
