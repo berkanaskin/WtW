@@ -3125,3 +3125,136 @@ a.rating-box.rt:hover {
         font-size: 0.8rem;
     }
 }
+
+/* ============================================
+   RATING BOXES - MODERN DESIGN
+   ============================================ */
+
+.ratings-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.rating-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    min-width: 60px;
+}
+
+.rating-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.rating-box .source {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    margin-bottom: 2px;
+}
+
+.rating-box .score {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* IMDB - Gold */
+.rating-box.imdb {
+    border-color: rgba(245, 197, 24, 0.3);
+    background: rgba(245, 197, 24, 0.08);
+}
+
+.rating-box.imdb .source {
+    color: #f5c518;
+}
+
+.rating-box.imdb .score {
+    color: #f5c518;
+}
+
+.rating-box.imdb:hover {
+    border-color: #f5c518;
+}
+
+/* TMDB - Teal */
+.rating-box.tmdb {
+    border-color: rgba(1, 180, 228, 0.3);
+    background: rgba(1, 180, 228, 0.08);
+}
+
+.rating-box.tmdb .source {
+    color: #01b4e4;
+}
+
+.rating-box.tmdb .score {
+    color: #01b4e4;
+}
+
+.rating-box.tmdb:hover {
+    border-color: #01b4e4;
+}
+
+/* Rotten Tomatoes - Red */
+.rating-box.rt {
+    border-color: rgba(250, 50, 10, 0.3);
+    background: rgba(250, 50, 10, 0.08);
+}
+
+.rating-box.rt .source {
+    color: #fa320a;
+}
+
+.rating-box.rt .score {
+    color: #fa320a;
+}
+
+.rating-box.rt:hover {
+    border-color: #fa320a;
+}
+
+/* Letterboxd - Orange */
+.rating-box.letterboxd {
+    border-color: rgba(255, 128, 0, 0.3);
+    background: rgba(255, 128, 0, 0.08);
+}
+
+.rating-box.letterboxd .source {
+    color: #ff8000;
+}
+
+.rating-box.letterboxd .score {
+    color: #ff8000;
+}
+
+.rating-box.letterboxd:hover {
+    border-color: #ff8000;
+}
+
+/* Metacritic - Yellow-Green */
+.rating-box.metacritic {
+    border-color: rgba(102, 204, 51, 0.3);
+    background: rgba(102, 204, 51, 0.08);
+}
+
+.rating-box.metacritic .source {
+    color: #66cc33;
+}
+
+.rating-box.metacritic .score {
+    color: #66cc33;
+}
+
+.rating-box.metacritic:hover {
+    border-color: #66cc33;
+}

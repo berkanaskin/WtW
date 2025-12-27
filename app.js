@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.7.5-beta';
+const APP_VERSION = '1.7.6-beta';
 
 // DOM Elements
 const elements = {
