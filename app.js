@@ -669,15 +669,45 @@ async function loadDiscoverPage(selectedGenre = 'all', selectedType = 'all') {
             // Sort by vote_average descending
             results.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
 
+        } else if (selectedGenre === 'all' && selectedType === 'movie') {
+            // Movies only - top rated
+            const data = await API.fetchTMDB(`/movie/top_rated?language=${state.currentLanguage}&page=1`);
+            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
+
         } else if (selectedType === 'tv') {
             // TV Shows only - top rated
             const data = await API.fetchTMDB(`/tv/top_rated?language=${state.currentLanguage}&page=1`);
             results = (data.results || []).map(t => ({ ...t, media_type: 'tv' }));
 
-        } else if (selectedType === 'local') {
-            // Turkish content
+        } else if (selectedType === 'anime') {
+            // Anime - Japanese animation
             const data = await API.fetchTMDB(
-                `/discover/movie?language=${state.currentLanguage}&region=TR&with_original_language=tr&sort_by=vote_average.desc&vote_count.gte=100`
+                `/discover/movie?language=${state.currentLanguage}&with_genres=16&with_original_language=ja&sort_by=vote_average.desc&vote_count.gte=100`
+            );
+            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
+
+        } else if (selectedType === 'animation') {
+            // Animation (non-anime) - exclude Japanese
+            const data = await API.fetchTMDB(
+                `/discover/movie?language=${state.currentLanguage}&with_genres=16&without_original_language=ja&sort_by=vote_average.desc&vote_count.gte=200`
+            );
+            results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
+
+        } else if (selectedType === 'local') {
+            // Regional content based on current language/region
+            const regionMap = {
+                'tr': { lang: 'tr', label: 'Türk' },
+                'en': { lang: 'en', label: 'İngilizce' },
+                'de': { lang: 'de', label: 'Alman' },
+                'fr': { lang: 'fr', label: 'Fransız' },
+                'es': { lang: 'es', label: 'İspanyol' },
+                'ja': { lang: 'ja', label: 'Japon' }
+            };
+            const langCode = state.currentLanguageCode || 'tr';
+            const region = regionMap[langCode] || regionMap['tr'];
+
+            const data = await API.fetchTMDB(
+                `/discover/movie?language=${state.currentLanguage}&with_original_language=${region.lang}&sort_by=vote_average.desc&vote_count.gte=100`
             );
             results = (data.results || []).map(m => ({ ...m, media_type: 'movie' }));
 
@@ -900,6 +930,17 @@ function loadProfilePage() {
             ` : ''}
         </div>
     `;
+
+    // Add click handlers to rating items
+    elements.profileContent.querySelectorAll('.rating-item').forEach(item => {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => {
+            const id = item.dataset.id;
+            const type = item.dataset.type;
+            const title = item.querySelector('.rating-title')?.textContent;
+            openDetail(id, type, title);
+        });
+    });
 }
 
 // ============================================
@@ -1345,7 +1386,7 @@ function renderDetail(details, providers, type, itemId) {
         <div class="modal-content-body">
             <div class="modal-section">
                 <h3 class="section-heading">📺 Nerede İzlenir?</h3>
-                ${renderProviders(providers, details.networks, type, title)}
+                ${renderProviders(providers, details.networks, type, title, details)}
             </div>
 
             <div class="modal-section">
@@ -1557,7 +1598,7 @@ function toggleFavorite(details, type) {
     localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
-function renderProviders(providers, networks, type, title) {
+function renderProviders(providers, networks, type, title, details) {
     let html = '<div class="providers-grid">';
     let hasProviders = false;
     const encodedTitle = encodeURIComponent(title);
@@ -1583,20 +1624,9 @@ function renderProviders(providers, networks, type, title) {
         }
     }
 
-    // Always add YouTube as a search option
-    html += `
-        <a href="https://www.youtube.com/results?search_query=${encodedTitle}+full+movie+izle" 
-           target="_blank" rel="noopener" 
-           class="provider-card youtube-search">
-            <img src="https://www.youtube.com/s/desktop/27e57068/img/favicon_144x144.png" 
-                 alt="YouTube" class="provider-logo">
-            <span class="provider-name">YouTube</span>
-            <span class="provider-type search">Ara</span>
-        </a>
-    `;
-
     html += '</div>';
 
+    // TV için orijinal yayıncı
     if (type === 'tv' && networks?.length > 0) {
         html += `
             <div class="networks-section">
@@ -1616,8 +1646,56 @@ function renderProviders(providers, networks, type, title) {
         `;
     }
 
+    // Platform yoksa gösterim durumunu kontrol et
     if (!hasProviders && (!networks || networks.length === 0)) {
-        return `<p class="no-providers">Bu içerik için ${state.currentCountry === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+        const releaseDate = details?.release_date || details?.first_air_date;
+        const status = details?.status;
+        const dateObj = releaseDate ? new Date(releaseDate) : null;
+        const now = new Date();
+
+        let statusMessage = '';
+
+        if (type === 'movie') {
+            if (dateObj && dateObj > now) {
+                // Vizyona girecek film
+                const formattedDate = dateObj.toLocaleDateString('tr-TR', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
+                statusMessage = `
+                    <div class="release-status upcoming">
+                        <span class="status-icon">🎬</span>
+                        <span class="status-text"><strong>${formattedDate}</strong> tarihinde vizyonda</span>
+                    </div>
+                `;
+            } else if (status === 'Released' && dateObj) {
+                // Gösterimdeydi/gösterimde olabilir
+                const daysSinceRelease = Math.floor((now - dateObj) / (1000 * 60 * 60 * 24));
+                if (daysSinceRelease < 90) {
+                    statusMessage = `
+                        <div class="release-status theatrical">
+                            <span class="status-icon">🎭</span>
+                            <span class="status-text">Sinemalarda gösterimde olabilir</span>
+                        </div>
+                    `;
+                } else {
+                    statusMessage = `<p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+                }
+            } else if (status === 'In Production' || status === 'Post Production' || status === 'Planned') {
+                statusMessage = `
+                    <div class="release-status production">
+                        <span class="status-icon">🎥</span>
+                        <span class="status-text">Yapım aşamasında</span>
+                    </div>
+                `;
+            } else {
+                statusMessage = `<p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+            }
+        } else {
+            // TV - sadece mesaj göster
+            statusMessage = `<p class="no-providers">Bu içerik için ${state.currentRegion === 'TR' ? 'Türkiye\'de' : 'seçili ülkede'} platform bilgisi bulunamadı.</p>`;
+        }
+
+        return statusMessage;
     }
 
     return html;

@@ -49,10 +49,11 @@ const API = {
         }
     },
 
-    // Arama sonuçlarını alakaya göre sırala
+    // Arama sonuçlarını alakaya + popülerliğe göre sırala
     sortByRelevance(results, query) {
         const queryLower = query.toLowerCase().trim();
         const queryNorm = this.normalizeTitle(queryLower);
+        const now = new Date();
 
         return results.sort((a, b) => {
             const titleA = (a.title || a.name || '').toLowerCase();
@@ -65,7 +66,7 @@ const API = {
             const originalANorm = this.normalizeTitle(originalA);
             const originalBNorm = this.normalizeTitle(originalB);
 
-            // Tam eşleşme
+            // Tam eşleşme (en yüksek öncelik)
             const exactMatchA = titleANorm === queryNorm || originalANorm === queryNorm;
             const exactMatchB = titleBNorm === queryNorm || originalBNorm === queryNorm;
 
@@ -86,9 +87,18 @@ const API = {
             if (containsA && !containsB) return -1;
             if (!containsA && containsB) return 1;
 
-            // Popülerlik
-            const scoreA = (a.vote_count || 0) * (a.vote_average || 0);
-            const scoreB = (b.vote_count || 0) * (b.vote_average || 0);
+            // Popülerlik + Güncellik puanı
+            const popularityA = a.popularity || 0;
+            const popularityB = b.popularity || 0;
+
+            // Yakın tarihli içeriklere bonus
+            const dateA = new Date(a.release_date || a.first_air_date || '1900-01-01');
+            const dateB = new Date(b.release_date || b.first_air_date || '1900-01-01');
+            const recencyBonusA = dateA > new Date(now.getFullYear() - 2, 0, 1) ? 50 : 0;
+            const recencyBonusB = dateB > new Date(now.getFullYear() - 2, 0, 1) ? 50 : 0;
+
+            const scoreA = popularityA + recencyBonusA + (a.vote_average || 0) * 5;
+            const scoreB = popularityB + recencyBonusB + (b.vote_average || 0) * 5;
 
             return scoreB - scoreA;
         });
