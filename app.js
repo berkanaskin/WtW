@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.9.1.1-beta';
+const APP_VERSION = '1.9.1.2-beta';
 
 // DOM Elements
 const elements = {
@@ -888,26 +888,56 @@ async function loadHomePage() {
         console.log('Loading local content for region:', state.currentRegion, '-> language:', localLang);
 
         const promises = [
-            API.fetchTMDB(`/trending/all/week?language=${state.currentLanguage}`),
-            API.fetchTMDB(`/movie/now_playing?language=${state.currentLanguage}`),
+            // Fetch 3 pages of trending (60 items total)
+            API.fetchTMDB(`/trending/all/week?language=${state.currentLanguage}&page=1`),
+            API.fetchTMDB(`/trending/all/week?language=${state.currentLanguage}&page=2`),
+            API.fetchTMDB(`/trending/all/week?language=${state.currentLanguage}&page=3`),
+            // Fetch 3 pages of new releases (60 items total)
+            API.fetchTMDB(`/movie/now_playing?language=${state.currentLanguage}&page=1`),
+            API.fetchTMDB(`/movie/now_playing?language=${state.currentLanguage}&page=2`),
+            API.fetchTMDB(`/movie/now_playing?language=${state.currentLanguage}&page=3`),
             API.getClassics(state.currentLanguage),
             // Fetch local content based on user's auto-detected REGION
             API.fetchTMDB(`/discover/movie?language=${state.currentLanguage}&with_original_language=${localLang}&sort_by=popularity.desc`),
             API.fetchTMDB(`/discover/tv?language=${state.currentLanguage}&with_original_language=${localLang}&sort_by=popularity.desc`)
         ];
 
-        // Fetch suggested content if user is logged in
+        // Fetch suggested content if user is logged in (3 pages)
         if (state.userTier !== 'guest') {
+            promises.push(API.fetchTMDB(`/movie/top_rated?language=${state.currentLanguage}&page=1`));
             promises.push(API.fetchTMDB(`/movie/top_rated?language=${state.currentLanguage}&page=2`));
+            promises.push(API.fetchTMDB(`/movie/top_rated?language=${state.currentLanguage}&page=3`));
         }
 
         const results = await Promise.all(promises);
-        const trending = results[0];
-        const newReleases = results[1];
-        const classics = results[2];
-        const localMovies = results[3];
-        const localTv = results[4];
-        const suggested = results.length > 5 ? results[5] : null;
+
+        // Combine trending pages
+        const trendingResults = [
+            ...(results[0].results || []),
+            ...(results[1].results || []),
+            ...(results[2].results || [])
+        ];
+
+        // Combine new releases pages
+        const newReleasesResults = [
+            ...(results[3].results || []),
+            ...(results[4].results || []),
+            ...(results[5].results || [])
+        ];
+
+        const classics = results[6];
+        const localMovies = results[7];
+        const localTv = results[8];
+
+        // Combine suggested pages if available
+        let suggestedResults = [];
+        if (state.userTier !== 'guest' && results.length > 9) {
+            suggestedResults = [
+                ...(results[9].results || []),
+                ...(results[10].results || []),
+                ...(results[11].results || [])
+            ];
+        }
 
         hideLoading();
 
@@ -916,7 +946,7 @@ async function loadHomePage() {
         const localTvList = (localTv.results || []).slice(0, 7);
         const allLocalContent = [...localMoviesList, ...localTvList];
 
-        const mixedTrending = [...trending.results];
+        const mixedTrending = [...trendingResults];
         // Insert local content at every 3rd position for better distribution
         allLocalContent.forEach((item, i) => {
             const insertPos = 3 + (i * 3); // positions 3, 6, 9, 12, 15...
@@ -925,16 +955,16 @@ async function loadHomePage() {
             }
         });
 
-        // Display trending (with Turkish content mixed in)
+        // Display trending (with local content mixed in) - 50 items
         elements.trendingSlider.innerHTML = '';
         mixedTrending.slice(0, 50).forEach(item => {
             const card = createMovieCard(item, item.media_type || 'movie');
             elements.trendingSlider.appendChild(card);
         });
 
-        // Display new releases (with local content mixed in)
+        // Display new releases (with local content mixed in) - 50 items
         elements.newReleasesSlider.innerHTML = '';
-        const mixedNewReleases = [...newReleases.results];
+        const mixedNewReleases = [...newReleasesResults];
         // Add local movies to new releases at various positions
         localMoviesList.slice(0, 5).forEach((item, i) => {
             const insertPos = 4 + (i * 4);
@@ -947,19 +977,19 @@ async function loadHomePage() {
             elements.newReleasesSlider.appendChild(card);
         });
 
-        // Display classics
+        // Display classics - 50 items
         if (elements.classicsSlider) {
             elements.classicsSlider.innerHTML = '';
-            classics.results.slice(0, 50).forEach(item => {
+            (classics.results || []).slice(0, 50).forEach(item => {
                 const card = createMovieCard({ ...item, media_type: 'movie' }, 'movie');
                 elements.classicsSlider.appendChild(card);
             });
         }
 
-        // Display suggested if available (members only)
-        if (suggested && elements.suggestedSlider) {
+        // Display suggested if available (members only) - 50 items
+        if (suggestedResults.length > 0 && elements.suggestedSlider) {
             elements.suggestedSlider.innerHTML = '';
-            suggested.results.slice(0, 50).forEach(item => {
+            suggestedResults.slice(0, 50).forEach(item => {
                 const card = createMovieCard({ ...item, media_type: 'movie' }, 'movie');
                 elements.suggestedSlider.appendChild(card);
             });
