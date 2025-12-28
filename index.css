@@ -372,7 +372,7 @@ body {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding: 0 16px 12px 20px;
+    padding: 0 20px 12px 24px;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -474,6 +474,12 @@ body {
     font-size: 0.55rem;
     font-weight: 700;
     color: var(--gold);
+    transition: all 0.3s ease;
+}
+
+.rating-badge.imdb-loaded {
+    background: rgba(245, 197, 24, 0.15);
+    border: 1px solid rgba(245, 197, 24, 0.4);
 }
 
 .movie-info {
@@ -843,6 +849,39 @@ body {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--white);
+}
+
+.rating-box.rt .source {
+    color: #fa320a;
+}
+
+.rating-box.letterboxd .source {
+    color: #ff7a00;
+}
+
+.rating-box.metacritic .source {
+    color: #ffcc33;
+}
+
+/* Responsive ratings for mobile */
+@media (max-width: 400px) {
+    .ratings-container {
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .rating-box {
+        padding: 6px 10px;
+        min-width: 55px;
+    }
+
+    .rating-box .source {
+        font-size: 0.5rem;
+    }
+
+    .rating-box .score {
+        font-size: 0.7rem;
+    }
 }
 
 /* Crew Meta Row */
@@ -1318,13 +1357,13 @@ a.rating-box.rt:hover {
 .youtube-search-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 10px;
-    padding: 8px 16px;
+    gap: 4px;
+    margin-top: 8px;
+    padding: 6px 12px;
     background: linear-gradient(135deg, #ff0000, #cc0000);
     border-radius: var(--radius-full);
     color: white;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 600;
     text-decoration: none;
     transition: all 0.2s ease;
@@ -1336,7 +1375,7 @@ a.rating-box.rt:hover {
 }
 
 .youtube-search-btn .yt-icon {
-    font-size: 1rem;
+    font-size: 0.85rem;
 }
 
 /* Networks Section */
@@ -3266,28 +3305,28 @@ a.rating-box.rt:hover {
 .cinema-search-btn {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    margin-top: 12px;
+    gap: 6px;
+    padding: 8px 14px;
+    margin-top: 10px;
     background: linear-gradient(135deg, #dc2626, #f59e0b);
     border: none;
-    border-radius: 12px;
+    border-radius: 20px;
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3);
 }
 
 .cinema-search-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
 }
 
 .cinema-icon {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 /* ============================================
@@ -3304,4 +3343,452 @@ a.rating-box.rt:hover {
     color: #f59e0b;
     font-size: 0.8rem;
     font-weight: 600;
+}
+
+/* ============================================
+   AUTH BUTTONS - Login & User Avatar
+   ============================================ */
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.login-btn:hover {
+    background: var(--glass-strong);
+    border-color: var(--accent);
+}
+
+.login-btn span:first-child {
+    font-size: 0.85rem;
+}
+
+.user-avatar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 4px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    color: var(--white);
+    font-family: inherit;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    max-width: 120px;
+}
+
+.user-avatar-btn:hover {
+    background: var(--glass-strong);
+    border-color: var(--accent);
+}
+
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.user-avatar-btn>span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70px;
+}
+
+/* ============================================
+   HEADER ACTIONS LAYOUT FIX
+   ============================================ */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+@media (max-width: 400px) {
+    .user-avatar-btn>span:last-child {
+        display: none;
+    }
+
+    .user-avatar-btn {
+        padding: 4px;
+        border-radius: 50%;
+    }
+}
+
+/* ============================================
+   PROFILE - LEGAL & ATTRIBUTION SECTION
+   ============================================ */
+
+.profile-legal-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.profile-legal-section h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--white-soft);
+}
+
+.attribution-box {
+    background: var(--glass);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.attribution-box .tmdb-logo {
+    height: 16px;
+    margin-bottom: 6px;
+    opacity: 0.9;
+}
+
+.attribution-box .attribution-text {
+    font-size: 0.65rem;
+    color: var(--white-muted);
+    line-height: 1.4;
+}
+
+.youtube-attr {
+    font-size: 0.6rem;
+    color: var(--white-dim);
+    margin-bottom: 12px;
+}
+
+.legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.legal-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    color: var(--white-soft);
+    font-size: 0.65rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.legal-links a:hover {
+    background: var(--glass-strong);
+    border-color: var(--accent);
+}
+
+.dmca-contact {
+    font-size: 0.65rem;
+    color: var(--white-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dmca-contact a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* ============================================
+   LEGAL PAGE MODAL CONTENT
+   ============================================ */
+
+.legal-modal-content {
+    padding: 60px 20px 40px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.legal-page h2 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.legal-page .legal-date {
+    font-size: 0.75rem;
+    color: var(--white-muted);
+    margin-bottom: 20px;
+}
+
+.legal-page h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 16px 0 8px;
+    color: var(--accent);
+}
+
+.legal-page p {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--white-soft);
+    margin-bottom: 8px;
+}
+
+.legal-page ul {
+    padding-left: 20px;
+    margin-bottom: 12px;
+}
+
+.legal-page li {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--white-muted);
+    margin-bottom: 4px;
+}
+
+.legal-page a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.legal-close-btn {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 24px auto 0;
+    padding: 12px 24px;
+    background: var(--accent);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.legal-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+/* ============================================
+   USER DROPDOWN MENU
+   ============================================ */
+
+.user-menu-container {
+    position: relative;
+}
+
+.user-avatar-btn .dropdown-arrow {
+    font-size: 0.5rem;
+    opacity: 0.6;
+    margin-left: 2px;
+    transition: transform 0.2s ease;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: var(--bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.user-dropdown.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    color: var(--white-soft);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--glass);
+}
+
+.dropdown-item.locked {
+    opacity: 0.5;
+}
+
+.dropdown-item.locked:hover {
+    background: transparent;
+}
+
+.dropdown-item .dropdown-icon {
+    font-size: 1rem;
+}
+
+.dropdown-item small {
+    font-size: 0.6rem;
+    opacity: 0.7;
+    margin-left: 4px;
+}
+
+.dropdown-item.logout {
+    color: #f87171;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--glass-border);
+    margin: 4px 0;
+}
+
+/* Mobile: hide username text in header, keep in dropdown */
+@media (max-width: 400px) {
+    .user-avatar-btn .user-name-text {
+        display: none;
+    }
+
+    .user-dropdown {
+        right: -10px;
+    }
+}
+
+/* ============================================
+   NOTIFICATION BUTTON & BADGE
+   ============================================ */
+
+.notification-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.notification-btn:hover {
+    transform: scale(1.1);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background: #ef4444;
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   NOTIFY BUTTON STATES (Modal)
+   ============================================ */
+
+.notify-btn.watching {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    border-color: #22c55e;
+}
+
+.notify-btn.watching:hover {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+}
+
+.notify-btn.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   SVG ICON STYLES
+   ============================================ */
+
+/* Search icon SVG */
+.search-icon svg {
+    width: 18px;
+    height: 18px;
+    color: var(--white-muted);
+}
+
+/* Social login icons */
+.social-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Notification bell SVG (when using SVG) */
+.notification-btn svg,
+.notification-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Theme icon SVG */
+.theme-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Login icon SVG */
+.login-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }

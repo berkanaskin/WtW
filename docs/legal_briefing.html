@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WtW Uygulaması - Hukuki Değerlendirme</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+        }
+
+        .document {
+            background: white;
+            padding: 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1a1a2e;
+            font-size: 24px;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #4361ee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #16213e;
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4361ee;
+            padding-left: 10px;
+        }
+
+        h3 {
+            color: #0f3460;
+            font-size: 15px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #4361ee;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+        }
+
+        pre {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 13px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .alert-danger {
+            background: #ffe6e6;
+            border-left: 4px solid #dc3545;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .alert-info {
+            background: #e7f3ff;
+            border-left: 4px solid #4361ee;
+        }
+
+        .header-info {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .summary-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        ul,
+        ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        .check {
+            color: #28a745;
+        }
+
+        .cross {
+            color: #dc3545;
+        }
+
+        .warn {
+            color: #ffc107;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .document {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="document">
+        <h1>WtW Uygulaması - Hukuki Değerlendirme</h1>
+        <p class="header-info">
+            <strong>Tarih:</strong> 28 Aralık 2025 &nbsp;|&nbsp;
+            <strong>Versiyon:</strong> 3.0 (Final)
+        </p>
+
+        <div class="summary-box">
+            <h3>ÖNEMLİ BULGULAR ÖZETİ</h3>
+            <table>
+                <tr>
+                    <th>Konu</th>
+                    <th>Sonuç</th>
+                </tr>
+                <tr>
+                    <td>TMDB Attribution</td>
+                    <td><span class="check">✓</span> Her durumda zorunlu (ticari lisans dahil)</td>
+                </tr>
+                <tr>
+                    <td>YouTube API</td>
+                    <td><span class="check">✓</span> Mevcut kullanım güvenli</td>
+                </tr>
+                <tr>
+                    <td>OMDB API</td>
+                    <td><span class="cross">✗</span> <strong>Ticari kullanım YASAK</strong> - alternatif gerekli</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>1. TMDB ATTRİBUTION</h2>
+
+        <h3>Soru: "TMDB ile ticari anlaşma yapsam da zorunlu mu?"</h3>
+        <div class="alert alert-info">
+            <strong>CEVAP: EVET, her durumda zorunlu.</strong>
+        </div>
+
+        <p>TMDB şartları açıkça belirtiyor:</p>
+        <blockquote
+            style="background:#f9f9f9; padding:15px; border-left:4px solid #4361ee; margin:15px 0; font-style:italic;">
+            "You must use the TMDB logo to identify Your use of TMDB... You must place the following notice prominently
+            in or on Your Application"
+        </blockquote>
+
+        <h3>Ticari Lisans Olsa Bile:</h3>
+        <ul>
+            <li><span class="check">✓</span> Logo kullanımı - Zorunlu</li>
+            <li><span class="check">✓</span> Disclaimer metni - Zorunlu</li>
+            <li><span class="cross">✗</span> "Approved by TMDB" ibaresi - Yazılamaz</li>
+        </ul>
+
+        <h3>Gerekli Metin:</h3>
+        <pre>"Bu uygulama TMDB API'sini kullanmaktadır ancak TMDB tarafından 
+onaylanmış, sertifikalandırılmış veya desteklenmemektedir."</pre>
+
+        <h2>2. YOUTUBE API - DETAYLI ANALİZ</h2>
+
+        <h3>Soru: "Bizim kullandığımız şekliyle yasal sıkıntı var mı?"</h3>
+        <div class="alert alert-success">
+            <strong>CEVAP: HAYIR, mevcut kullanımınız güvenli.</strong>
+        </div>
+
+        <h3>Mevcut Kullanım Analizi:</h3>
+        <table>
+            <tr>
+                <th>Özellik</th>
+                <th>Kodda Var mı?</th>
+                <th>Yasal mı?</th>
+            </tr>
+            <tr>
+                <td>iFrame ile video embed</td>
+                <td><span class="check">✓</span> Var</td>
+                <td><span class="check">✓</span> İzinli</td>
+            </tr>
+            <tr>
+                <td>Video araması</td>
+                <td><span class="check">✓</span> Var</td>
+                <td><span class="check">✓</span> İzinli</td>
+            </tr>
+            <tr>
+                <td>Thumbnail gösterimi</td>
+                <td><span class="check">✓</span> Var</td>
+                <td><span class="check">✓</span> İzinli</td>
+            </tr>
+            <tr>
+                <td>Video indirme</td>
+                <td><span class="cross">✗</span> Yok</td>
+                <td><span class="cross">✗</span> Yasak</td>
+            </tr>
+            <tr>
+                <td>Video üzerine reklam</td>
+                <td><span class="cross">✗</span> Yok</td>
+                <td><span class="cross">✗</span> Yasak</td>
+            </tr>
+        </table>
+
+        <h3>İzinli Kullanımlar:</h3>
+        <ul>
+            <li><span class="check">✓</span> Film fragmanlarını iFrame ile göstermek</li>
+            <li><span class="check">✓</span> YouTube Search API ile arama yapmak</li>
+            <li><span class="check">✓</span> Uygulamanın başka yerlerinde reklam göstermek</li>
+        </ul>
+
+        <h3>Yasak Kullanımlar:</h3>
+        <ul>
+            <li><span class="cross">✗</span> Video oynatıcı üzerine/etrafına kendi reklamını koymak</li>
+            <li><span class="cross">✗</span> Sadece YouTube videoları toplamak için site kurmak</li>
+            <li><span class="cross">✗</span> Video indirme özelliği sunmak</li>
+        </ul>
+
+        <h2>3. OMDB API - KRİTİK SORUN</h2>
+
+        <h3>Soru: "OMDB'de sıkıntı yaşamaz mıyım?"</h3>
+        <div class="alert alert-danger">
+            <strong>CEVAP: EVET, ticari kullanımda SIKIINTI YAŞARSIN.</strong>
+        </div>
+
+        <h3>OMDB Lisansı:</h3>
+        <pre>Creative Commons Attribution-NonCommercial 4.0 International License</pre>
+
+        <p><strong>Bu demek ki:</strong></p>
+        <ul>
+            <li><span class="cross">✗</span> Ticari uygulamada kullanılamaz</li>
+            <li><span class="cross">✗</span> Reklam geliri olan uygulamada kullanılamaz</li>
+            <li><span class="cross">✗</span> Premium subscription olan uygulamada kullanılamaz</li>
+        </ul>
+
+        <h3>Çözüm Seçenekleri:</h3>
+        <table>
+            <tr>
+                <th>Seçenek</th>
+                <th>Açıklama</th>
+                <th>Maliyet</th>
+            </tr>
+            <tr>
+                <td><strong>A: OMDB'yi kaldır</strong></td>
+                <td>Puanları TMDB'den al</td>
+                <td>$0</td>
+            </tr>
+            <tr>
+                <td><strong>B: movies-ratings2 API</strong></td>
+                <td>RapidAPI alternatifi</td>
+                <td>Mevcut key ile</td>
+            </tr>
+            <tr>
+                <td><strong>C: Patron ol</strong></td>
+                <td>OMDB Patreon</td>
+                <td>$1+/ay</td>
+            </tr>
+        </table>
+
+        <h2>4. YASAL METİNLER CHECKLIST</h2>
+
+        <h3>4.1 Gizlilik Politikası (Privacy Policy)</h3>
+        <p><strong>Konum:</strong> Ayarlar > Gizlilik Politikası</p>
+        <ul>
+            <li>☐ Toplanan veriler</li>
+            <li>☐ Veri kullanım amacı</li>
+            <li>☐ Üçüncü taraf paylaşımları</li>
+            <li>☐ KVKK uyumu (Türkiye)</li>
+            <li>☐ GDPR uyumu (Avrupa)</li>
+            <li>☐ İletişim bilgileri</li>
+        </ul>
+
+        <h3>4.2 Kullanım Şartları (Terms of Service)</h3>
+        <p><strong>Konum:</strong> Ayarlar > Kullanım Şartları</p>
+        <ul>
+            <li>☐ Hizmet tanımı</li>
+            <li>☐ Kullanıcı yükümlülükleri</li>
+            <li>☐ Fikri mülkiyet hakları</li>
+            <li>☐ Sorumluluk sınırlaması</li>
+        </ul>
+
+        <h3>4.3 Attribution (Kaynak Belirtme)</h3>
+        <p><strong>Konum:</strong> Ayarlar > Hakkında</p>
+        <pre>Veri Kaynakları:
+────────────────
+[TMDB Logo]
+Bu uygulama TMDB API'sini kullanmaktadır ancak TMDB 
+tarafından onaylanmış veya desteklenmemektedir.
+
+YouTube is a trademark of Google Inc.</pre>
+
+        <h3>4.4 Telif İletişimi (DMCA)</h3>
+        <p><strong>Konum:</strong> Ayarlar > Telif Hakkı</p>
+        <pre>Telif Hakkı Bildirimi
+────────────────────
+İçerikle ilgili telif hakkı ihlali taleplerinizi 
+aşağıdaki adrese iletebilirsiniz:
+
+📧 copyright@wtw-app.com</pre>
+
+        <h2>5. SONUÇ</h2>
+
+        <div class="summary-box">
+            <h3>Monetizasyon için Gerekli Değişiklikler:</h3>
+            <table>
+                <tr>
+                    <th>API</th>
+                    <th>Mevcut</th>
+                    <th>Değişiklik</th>
+                </tr>
+                <tr>
+                    <td>TMDB</td>
+                    <td><span class="check">✓</span> OK</td>
+                    <td>Attribution ekle</td>
+                </tr>
+                <tr>
+                    <td>Streaming</td>
+                    <td>➕ Yeni</td>
+                    <td>Entegre et</td>
+                </tr>
+                <tr>
+                    <td>YouTube</td>
+                    <td><span class="check">✓</span> OK</td>
+                    <td>ToS linki ekle</td>
+                </tr>
+                <tr>
+                    <td>OMDB</td>
+                    <td><span class="cross">✗</span> Sorunlu</td>
+                    <td>Kaldır veya değiştir</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="alert alert-warning">
+            <strong>UYARI:</strong> Bu döküman teknik değerlendirme amaçlıdır, hukuki tavsiye niteliği taşımaz.
+            Nihai karar için avukat danışmanlığı önerilir.
+        </div>
+
+        <hr style="margin: 30px 0;">
+        <p style="text-align:center; color:#666; font-size:12px;">
+            WtW Hukuki Değerlendirme Dökümanı v3.0 | 28 Aralık 2025
+        </p>
+    </div>
+</body>
+
+</html>

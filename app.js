@@ -78,42 +78,62 @@ const state = {
 };
 
 // Platform URLs for deep linking
+// Priority: Direct platform search > Google site search
 const PLATFORM_URLS = {
-    // Global Platforms
+    // Global Streaming Platforms
     'Netflix': 'https://www.netflix.com/search?q=',
     'Amazon Prime Video': 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=',
     'Amazon Video': 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=',
     'Prime Video': 'https://www.primevideo.com/search/ref=atv_nb_sr?phrase=',
-    'Disney Plus': 'https://www.google.com/search?q=site:disneyplus.com+',
-    'Disney+': 'https://www.google.com/search?q=site:disneyplus.com+',
-    'Apple TV': 'https://www.google.com/search?q=site:tv.apple.com+',
-    'Apple TV Plus': 'https://www.google.com/search?q=site:tv.apple.com+',
-    'Apple TV+': 'https://www.google.com/search?q=site:tv.apple.com+',
+    'Disney Plus': 'https://www.disneyplus.com/search?q=',
+    'Disney+': 'https://www.disneyplus.com/search?q=',
+    'Apple TV': 'https://tv.apple.com/search?term=',
+    'Apple TV Plus': 'https://tv.apple.com/search?term=',
+    'Apple TV+': 'https://tv.apple.com/search?term=',
     'HBO Max': 'https://play.max.com/search?q=',
     'Max': 'https://play.max.com/search?q=',
     'Hulu': 'https://www.hulu.com/search?q=',
     'Paramount Plus': 'https://www.paramountplus.com/search/?q=',
     'Paramount+': 'https://www.paramountplus.com/search/?q=',
+    'Peacock': 'https://www.peacocktv.com/watch/search?q=',
     'Mubi': 'https://mubi.com/tr/search?query=',
     'YouTube': 'https://www.youtube.com/results?search_query=',
     'YouTube Premium': 'https://www.youtube.com/results?search_query=',
+    'Crunchyroll': 'https://www.crunchyroll.com/search?q=',
 
-    // Turkey Platforms
-    'Gain': 'https://www.google.com/search?q=site:gain.tv+',
+    // Turkey Platforms - Direct search links where available
+    'GAIN': 'https://www.gain.tv/search?q=',
+    'Gain': 'https://www.gain.tv/search?q=',
     'Exxen': 'https://www.exxen.com/tr/arama?q=',
     'BluTV': 'https://www.blutv.com/ara?q=',
+    'blutv': 'https://www.blutv.com/ara?q=',
     'TOD': 'https://www.tod.tv/arama?query=',
-    'Tabii': 'https://www.google.com/search?q=site:tabii.com+',
+    'TOD TV': 'https://www.tod.tv/arama?query=',
+    'Tabii': 'https://www.tabii.com/tr/search?q=',
     'beIN CONNECT': 'https://www.beinconnect.com.tr/arama?query=',
     'Puhu TV': 'https://puhutv.com/arama?q=',
     'puhutv': 'https://puhutv.com/arama?q=',
-    'TV+': 'https://www.google.com/search?q=site:tvplus.com.tr+',
+    'TV+': 'https://www.tvplus.com.tr/arama?q=',
+    'Tivibu': 'https://www.tivibu.com.tr/arama?q=',
+    'Tivibu Go': 'https://www.tivibu.com.tr/arama?q=',
+    'D-Smart GO': 'https://www.dsmart.com.tr/dsmartgo/arama?q=',
+    'D-Smart': 'https://www.dsmart.com.tr/dsmartgo/arama?q=',
+    'Dsmart GO': 'https://www.dsmart.com.tr/dsmartgo/arama?q=',
+    'S Sport': 'https://www.ssport.com.tr/search?q=',
+    'S Sport Plus': 'https://www.ssportplus.com/arama?q=',
+    'S Sport+': 'https://www.ssportplus.com/arama?q=',
 
     // Rent/Buy Platforms
-    'Google Play Movies': 'https://play.google.com/store/movies/search?q=',
-    'Google Play Movies & TV': 'https://play.google.com/store/movies/search?q=',
+    'Google Play Movies': 'https://play.google.com/store/search?q=',
+    'Google Play Movies & TV': 'https://play.google.com/store/search?q=',
     'Microsoft Store': 'https://www.microsoft.com/tr-tr/search/shop/movies-tv?q=',
-    'Apple iTunes': 'https://www.google.com/search?q=site:tv.apple.com+'
+    'Apple iTunes': 'https://tv.apple.com/search?term=',
+    'iTunes': 'https://tv.apple.com/search?term=',
+    'Vudu': 'https://www.vudu.com/content/movies/search?searchString=',
+    'Amazon Video': 'https://www.amazon.com/s?k=',
+
+    // Fallback for unknown platforms
+    'default': 'https://www.google.com/search?q='
 };
 
 // ============================================
@@ -126,11 +146,45 @@ async function init() {
     loadTheme();
     loadAuth(); // Check user session
     loadLanguage();
+    await detectUserRegion(); // Auto-detect user's region
     setupEventListeners();
     await loadHomePage();
 
     // Initial sync for Suggested section visibility
     updateSuggestedVisibility();
+}
+
+// Auto-detect user's region for local content and platform providers
+async function detectUserRegion() {
+    // Check if region is already cached
+    const cachedRegion = localStorage.getItem('detectedRegion');
+    if (cachedRegion) {
+        state.currentRegion = cachedRegion;
+        console.log('Using cached region:', cachedRegion);
+        return;
+    }
+
+    try {
+        // Use ipapi.co for region detection (free, no API key needed for basic use)
+        const response = await fetch('https://ipapi.co/json/', {
+            signal: AbortSignal.timeout(3000) // 3 second timeout
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.country_code) {
+                state.currentRegion = data.country_code;
+                localStorage.setItem('detectedRegion', data.country_code);
+                console.log('Detected region:', data.country_code);
+                return;
+            }
+        }
+    } catch (error) {
+        console.warn('Region detection failed, using default:', error);
+    }
+
+    // Fallback to default region
+    state.currentRegion = CONFIG.DEFAULT_COUNTRY || 'TR';
 }
 
 function loadLanguage() {
@@ -182,16 +236,76 @@ function updateAuthUI() {
     if (!authArea) return;
 
     if (state.currentUser) {
-        // User is logged in - show avatar and name
+        // User is logged in - show avatar with dropdown
         const initial = state.currentUser.name?.charAt(0).toUpperCase() || '👤';
+        const isPremium = state.userTier === 'premium';
+
         authArea.innerHTML = `
-            <button class="user-avatar-btn" id="user-menu-btn">
-                <span class="user-avatar">${initial}</span>
-                <span>${state.currentUser.name?.split(' ')[0] || 'Kullanıcı'}</span>
-            </button>
+            <div class="user-menu-container">
+                <button class="user-avatar-btn" id="user-menu-btn">
+                    <span class="user-avatar">${initial}</span>
+                    <span class="user-name-text">${state.currentUser.name?.split(' ')[0] || 'Kullanıcı'}</span>
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                <div class="user-dropdown" id="user-dropdown">
+                    <a href="#" class="dropdown-item" data-action="profile">
+                        <span class="dropdown-icon">👤</span> Profilim
+                    </a>
+                    <a href="#" class="dropdown-item" data-action="favorites">
+                        <span class="dropdown-icon">❤️</span> Favorilerim
+                    </a>
+                    <a href="#" class="dropdown-item ${!isPremium ? 'locked' : ''}" data-action="notifications">
+                        <span class="dropdown-icon">${isPremium ? '🔔' : '🔒'}</span> Bildirimler ${!isPremium ? '<small>(Premium)</small>' : ''}
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item logout" data-action="logout">
+                        <span class="dropdown-icon">🚪</span> Çıkış Yap
+                    </a>
+                </div>
+            </div>
         `;
-        // Add logout listener
-        document.getElementById('user-menu-btn')?.addEventListener('click', handleLogout);
+
+        // Toggle dropdown on avatar click
+        const menuBtn = document.getElementById('user-menu-btn');
+        const dropdown = document.getElementById('user-dropdown');
+
+        menuBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('visible');
+        });
+
+        // Handle dropdown item clicks
+        dropdown?.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                dropdown.classList.remove('visible');
+
+                const action = item.dataset.action;
+                switch (action) {
+                    case 'profile':
+                        document.querySelector('.nav-item[data-page="profile"]')?.click();
+                        break;
+                    case 'favorites':
+                        document.querySelector('.nav-item[data-page="favorites"]')?.click();
+                        break;
+                    case 'notifications':
+                        if (isPremium) {
+                            alert('Bildirimler yakında!');
+                        } else {
+                            showPremiumModal();
+                        }
+                        break;
+                    case 'logout':
+                        handleLogout();
+                        break;
+                }
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            dropdown?.classList.remove('visible');
+        });
     } else {
         // Guest - show login button
         authArea.innerHTML = `<button class="login-btn" id="login-btn">👤 Giriş</button>`;
@@ -242,6 +356,99 @@ async function handleLogout() {
 }
 
 // ============================================
+// LEGAL PAGES
+// ============================================
+
+function showLegalPage(type) {
+    const content = {
+        privacy: `
+            <div class="legal-page">
+                <h2>🔒 Gizlilik Politikası</h2>
+                <p class="legal-date">Son Güncelleme: 28 Aralık 2024</p>
+                
+                <h3>1. Toplanan Veriler</h3>
+                <p>WtW uygulaması aşağıdaki verileri toplar ve işler:</p>
+                <ul>
+                    <li><strong>Kullanıcı Tercihleri:</strong> Tema seçimi, dil tercihi</li>
+                    <li><strong>Favoriler:</strong> Kaydedilen film ve diziler (yerel depolama)</li>
+                    <li><strong>Puanlamalar:</strong> Kullanıcının verdiği puanlar (yerel depolama)</li>
+                    <li><strong>Konum Bilgisi:</strong> Sadece ülke tespiti için (API çağrıları)</li>
+                </ul>
+                
+                <h3>2. Verilerin Kullanımı</h3>
+                <p>Toplanan veriler şu amaçlarla kullanılır:</p>
+                <ul>
+                    <li>Kişiselleştirilmiş içerik önerileri</li>
+                    <li>Ülkeye göre streaming platform bilgisi</li>
+                    <li>Kullanıcı deneyiminin iyileştirilmesi</li>
+                </ul>
+                
+                <h3>3. Üçüncü Taraf Hizmetler</h3>
+                <p>Uygulamamız aşağıdaki üçüncü taraf API'leri kullanmaktadır:</p>
+                <ul>
+                    <li>TMDB (The Movie Database) - Film/dizi verileri</li>
+                    <li>YouTube API - Video içerikleri</li>
+                </ul>
+                
+                <h3>4. Yerel Depolama</h3>
+                <p>Uygulama, kullanıcı tercihlerini saklamak için tarayıcı yerel depolamasını (localStorage) kullanır. Bu veriler cihazınızda saklanır ve sunucularımıza gönderilmez.</p>
+                
+                <h3>5. Kullanıcı Hakları (KVKK/GDPR)</h3>
+                <ul>
+                    <li>Verilerinize erişim hakkı</li>
+                    <li>Verilerinizin düzeltilmesini isteme hakkı</li>
+                    <li>Verilerinizin silinmesini isteme hakkı</li>
+                    <li>Veri taşınabilirliği hakkı</li>
+                </ul>
+                
+                <h3>6. İletişim</h3>
+                <p>📧 <a href="mailto:privacy@wtw-app.com">privacy@wtw-app.com</a></p>
+            </div>
+        `,
+        terms: `
+            <div class="legal-page">
+                <h2>📜 Kullanım Şartları</h2>
+                <p class="legal-date">Son Güncelleme: 28 Aralık 2024</p>
+                
+                <h3>1. Hizmet Tanımı</h3>
+                <p>WtW (Where to Watch / Nerede İzlerim?), kullanıcıların film ve dizilerin hangi streaming platformlarında izlenebileceğini öğrenmelerini sağlayan bir keşif uygulamasıdır.</p>
+                
+                <h3>2. Kabul</h3>
+                <p>Bu uygulamayı kullanarak, aşağıdaki şartları kabul etmiş sayılırsınız.</p>
+                
+                <h3>3. Kullanım Kuralları</h3>
+                <ul>
+                    <li>Uygulamayı yasal amaçlarla kullanmalısınız</li>
+                    <li>Başkalarının haklarını ihlal etmemelisiniz</li>
+                    <li>Uygulamanın güvenliğini tehlikeye atmamalısınız</li>
+                </ul>
+                
+                <h3>4. Fikri Mülkiyet</h3>
+                <p>Uygulama tasarımı ve kodu geliştiriciye aittir. Film/dizi posterleri ve bilgileri ilgili stüdyo ve API sağlayıcılarına aittir.</p>
+                
+                <h3>5. Sorumluluk Sınırlaması</h3>
+                <p>Uygulama "olduğu gibi" sunulmaktadır. Streaming platform bilgilerinin doğruluğu garanti edilmez. Platform erişilebilirliği değişebilir.</p>
+                
+                <h3>6. Değişiklikler</h3>
+                <p>Bu şartlar önceden haber verilmeksizin değiştirilebilir.</p>
+                
+                <h3>7. Uygulanacak Hukuk</h3>
+                <p>Bu şartlar Türkiye Cumhuriyeti hukuku çerçevesinde yorumlanır.</p>
+            </div>
+        `
+    };
+
+    elements.modal.classList.add('visible');
+    elements.modalBody.innerHTML = `
+        <div class="legal-modal-content">
+            ${content[type] || '<p>Sayfa bulunamadı.</p>'}
+            <button class="legal-close-btn" onclick="closeModal()">Kapat</button>
+        </div>
+    `;
+    document.body.style.overflow = 'hidden';
+}
+
+// ============================================
 // THEME MANAGEMENT
 // ============================================
 
@@ -260,8 +467,17 @@ function toggleTheme() {
 }
 
 function updateThemeIcon() {
-    if (elements.themeIcon) {
-        elements.themeIcon.textContent = state.currentTheme === 'dark' ? '☀️' : '🌙';
+    const sunIcon = document.getElementById('theme-icon-sun');
+    const moonIcon = document.getElementById('theme-icon-moon');
+
+    if (sunIcon && moonIcon) {
+        if (state.currentTheme === 'dark') {
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+        } else {
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+        }
     }
     updateLogoForTheme();
 }
@@ -435,6 +651,16 @@ function setupEventListeners() {
     const logoHome = document.getElementById('logo-home');
     if (logoHome) {
         logoHome.addEventListener('click', () => {
+            // Reset header section title
+            const headerTitle = document.getElementById('header-section-title');
+            if (headerTitle) {
+                const homeText = window.i18n?.t('sectionHome') || 'Nerede İzlerim?';
+                headerTitle.textContent = homeText;
+            }
+            // Reset nav items
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector('.nav-item[data-page="home"]')?.classList.add('active');
+            state.currentPage = 'home';
             loadHomePage();
         });
     }
@@ -623,10 +849,40 @@ async function loadHomePage() {
     showLoading();
 
     try {
+        // Map region to original language for local content
+        // Region is auto-detected, separate from UI language
+        const regionToLanguageMap = {
+            'TR': 'tr',  // Turkey
+            'US': 'en',  // USA
+            'GB': 'en',  // UK
+            'DE': 'de',  // Germany
+            'FR': 'fr',  // France
+            'ES': 'es',  // Spain
+            'IT': 'it',  // Italy
+            'JP': 'ja',  // Japan
+            'CN': 'zh',  // China
+            'KR': 'ko',  // Korea
+            'IN': 'hi',  // India
+            'BR': 'pt',  // Brazil
+            'MX': 'es',  // Mexico
+            'RU': 'ru',  // Russia
+            'AR': 'es',  // Argentina
+            'NL': 'nl',  // Netherlands
+            'SE': 'sv',  // Sweden
+            'NO': 'no',  // Norway
+            'DK': 'da',  // Denmark
+            'PL': 'pl'   // Poland
+        };
+        const localLang = regionToLanguageMap[state.currentRegion] || 'en';
+        console.log('Loading local content for region:', state.currentRegion, '-> language:', localLang);
+
         const promises = [
             API.fetchTMDB(`/trending/all/week?language=${state.currentLanguage}`),
             API.fetchTMDB(`/movie/now_playing?language=${state.currentLanguage}`),
-            API.getClassics(state.currentLanguage)
+            API.getClassics(state.currentLanguage),
+            // Fetch local content based on user's auto-detected REGION
+            API.fetchTMDB(`/discover/movie?language=${state.currentLanguage}&with_original_language=${localLang}&sort_by=popularity.desc`),
+            API.fetchTMDB(`/discover/tv?language=${state.currentLanguage}&with_original_language=${localLang}&sort_by=popularity.desc`)
         ];
 
         // Fetch suggested content if user is logged in
@@ -638,20 +894,33 @@ async function loadHomePage() {
         const trending = results[0];
         const newReleases = results[1];
         const classics = results[2];
-        const suggested = results.length > 3 ? results[3] : null;
+        const localMovies = results[3];
+        const localTv = results[4];
+        const suggested = results.length > 5 ? results[5] : null;
 
         hideLoading();
 
-        // Display trending
+        // Mix local content into trending (add top 5 local items)
+        const localTrending = [...(localMovies.results || []).slice(0, 3), ...(localTv.results || []).slice(0, 2)];
+        const mixedTrending = [...trending.results];
+        // Insert local content at positions 5, 10, 15, 20, 25
+        localTrending.forEach((item, i) => {
+            const insertPos = 5 + (i * 5);
+            if (insertPos < mixedTrending.length) {
+                mixedTrending.splice(insertPos, 0, { ...item, media_type: item.first_air_date ? 'tv' : 'movie' });
+            }
+        });
+
+        // Display trending (with Turkish content mixed in)
         elements.trendingSlider.innerHTML = '';
-        trending.results.slice(0, 15).forEach(item => {
+        mixedTrending.slice(0, 30).forEach(item => {
             const card = createMovieCard(item, item.media_type || 'movie');
             elements.trendingSlider.appendChild(card);
         });
 
         // Display new releases
         elements.newReleasesSlider.innerHTML = '';
-        newReleases.results.slice(0, 15).forEach(item => {
+        newReleases.results.slice(0, 30).forEach(item => {
             const card = createMovieCard({ ...item, media_type: 'movie' }, 'movie');
             elements.newReleasesSlider.appendChild(card);
         });
@@ -659,7 +928,7 @@ async function loadHomePage() {
         // Display classics
         if (elements.classicsSlider) {
             elements.classicsSlider.innerHTML = '';
-            classics.results.slice(0, 15).forEach(item => {
+            classics.results.slice(0, 30).forEach(item => {
                 const card = createMovieCard({ ...item, media_type: 'movie' }, 'movie');
                 elements.classicsSlider.appendChild(card);
             });
@@ -668,7 +937,7 @@ async function loadHomePage() {
         // Display suggested if available (members only)
         if (suggested && elements.suggestedSlider) {
             elements.suggestedSlider.innerHTML = '';
-            suggested.results.slice(0, 15).forEach(item => {
+            suggested.results.slice(0, 30).forEach(item => {
                 const card = createMovieCard({ ...item, media_type: 'movie' }, 'movie');
                 elements.suggestedSlider.appendChild(card);
             });
@@ -796,12 +1065,19 @@ async function generateNeIzlesemResults(append = false) {
 
     try {
         const lang = state.currentLanguage;
-        const page = neIzlesemFilters.page;
+        let page = neIzlesemFilters.page;
         let allResults = [];
+
+        // For random mode, pick a random page (1-10)
+        const isRandom = neIzlesemFilters.style === 'random';
+        if (isRandom && !append) {
+            page = Math.floor(Math.random() * 10) + 1;
+        }
 
         // Build query based on style
         const styleQueries = {
             'popular': 'sort_by=popularity.desc&vote_count.gte=100',
+            'random': 'sort_by=popularity.desc&vote_count.gte=50', // Will shuffle results
             'hollywood': 'with_original_language=en&sort_by=vote_average.desc&vote_count.gte=500',
             'festival': 'with_keywords=10714|293509|16154&sort_by=vote_average.desc&vote_count.gte=50', // Cannes, Sundance, Berlin
             'awarded': 'sort_by=vote_average.desc&vote_count.gte=1000&vote_average.gte=7.5',
@@ -832,6 +1108,11 @@ async function generateNeIzlesemResults(append = false) {
 
             const tvData = await API.fetchTMDB(tvUrl);
             allResults.push(...(tvData.results || []).map(t => ({ ...t, media_type: 'tv' })));
+        }
+
+        // Shuffle results for random mode
+        if (isRandom) {
+            allResults = allResults.sort(() => Math.random() - 0.5);
         }
 
         hideLoading();
@@ -1074,6 +1355,29 @@ function loadProfilePage() {
                 <button class="upgrade-btn" onclick="showPremiumModal()">Premium'a Yükselt</button>
             </div>
             ` : ''}
+            
+            <!-- About & Legal Section -->
+            <div class="profile-legal-section">
+                <h4>📋 Hakkında & Yasal</h4>
+                
+                <div class="attribution-box">
+                    <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" class="tmdb-logo">
+                    <p class="attribution-text">Bu uygulama TMDB API'sini kullanmaktadır ancak TMDB tarafından onaylanmış, sertifikalandırılmış veya desteklenmemektedir.</p>
+                </div>
+                
+                <p class="youtube-attr">YouTube is a trademark of Google Inc.</p>
+                
+                <div class="legal-links">
+                    <a href="#" onclick="showLegalPage('privacy'); return false;">📄 Gizlilik Politikası</a>
+                    <a href="#" onclick="showLegalPage('terms'); return false;">📜 Kullanım Şartları</a>
+                    <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">▶️ YouTube Şartları</a>
+                </div>
+                
+                <div class="dmca-contact">
+                    <span>📧 Telif bildirimi:</span>
+                    <a href="mailto:copyright@wtw-app.com">copyright@wtw-app.com</a>
+                </div>
+            </div>
         </div>
     `;
 
@@ -1213,7 +1517,7 @@ function createMovieCard(item, mediaType) {
     const tmdbRating = item.vote_average ? item.vote_average.toFixed(1) : null;
     const posterUrl = API.getPosterUrl(item.poster_path);
 
-    // Use unique ID for rating badge update
+    // Unique ID for rating badge update
     const ratingBadgeId = `rating-${item.id}-${mediaType}`;
 
     card.innerHTML = `
@@ -1235,40 +1539,77 @@ function createMovieCard(item, mediaType) {
         openDetail(item.id, mediaType, title, year, item.original_title || item.original_name);
     });
 
-    // Fetch IMDB rating asynchronously (lazy load)
-    if (tmdbRating && CONFIG.OMDB_API_KEY) {
+    // Fetch IMDB rating asynchronously using movies-ratings2 API
+    if (tmdbRating) {
         fetchIMDBRatingForCard(item.id, mediaType, ratingBadgeId);
     }
 
     return card;
 }
 
-// Async function to fetch and update IMDB rating on card
+// IMDB Rating Cache to avoid duplicate API calls
+const imdbRatingCache = new Map();
+
+// Fetch IMDB rating using movies-ratings2 API (commercially allowed)
 async function fetchIMDBRatingForCard(tmdbId, mediaType, badgeId) {
+    const cacheKey = `${mediaType}_${tmdbId}`;
+
+    // Check cache first
+    if (imdbRatingCache.has(cacheKey)) {
+        const cachedRating = imdbRatingCache.get(cacheKey);
+        if (cachedRating) {
+            updateRatingBadge(badgeId, cachedRating);
+        }
+        return;
+    }
+
     try {
-        // Get IMDB ID from TMDB
+        // Get IMDB ID from TMDB first
         const imdbId = await API.getIMDBId(tmdbId, mediaType);
         if (!imdbId) {
+            imdbRatingCache.set(cacheKey, null);
             return;
         }
 
-        // Get IMDB rating from OMDB
-        const url = `https://www.omdbapi.com/?i=${imdbId}&apikey=${CONFIG.OMDB_API_KEY}`;
+        // Fetch rating from movies-ratings2 API
+        const response = await fetch(
+            `https://movies-ratings2.p.rapidapi.com/ratings?id=${imdbId}`,
+            {
+                headers: {
+                    'X-RapidAPI-Key': CONFIG.MOVIEDB_API_KEY,
+                    'X-RapidAPI-Host': 'movies-ratings2.p.rapidapi.com'
+                }
+            }
+        );
 
-        const response = await fetch(url);
-        if (!response.ok) return;
+        if (!response.ok) {
+            imdbRatingCache.set(cacheKey, null);
+            return;
+        }
 
         const data = await response.json();
+        const ratings = data.ratings || data;
+        const imdbRating = ratings.imdb?.score || ratings.imdb?.rating;
 
-        if (data.Response === 'True' && data.imdbRating && data.imdbRating !== 'N/A') {
-            const badge = document.getElementById(badgeId);
-            if (badge) {
-                badge.textContent = `⭐ ${data.imdbRating}`;
-                badge.classList.add('imdb-loaded');
-            }
+        if (imdbRating) {
+            imdbRatingCache.set(cacheKey, imdbRating);
+            updateRatingBadge(badgeId, imdbRating);
+        } else {
+            imdbRatingCache.set(cacheKey, null);
         }
     } catch (error) {
         // Silently fail - keep TMDB rating
+        imdbRatingCache.set(cacheKey, null);
+    }
+}
+
+function updateRatingBadge(badgeId, rating) {
+    const badge = document.getElementById(badgeId);
+    if (badge) {
+        const formattedRating = typeof rating === 'number' ? rating.toFixed(1) : rating;
+        badge.textContent = `⭐ ${formattedRating}`;
+        badge.classList.add('imdb-loaded');
+        badge.title = 'IMDB Rating';
     }
 }
 
@@ -1797,6 +2138,47 @@ function renderDetail(details, providers, type, itemId) {
     });
 
     renderVideos();
+
+    // Notify button (watchlist for platform availability)
+    const notifyBtn = document.getElementById('notify-btn');
+    if (notifyBtn && window.NotificationService) {
+        const isInWatchlist = window.NotificationService.isInWatchlist(itemId, type);
+
+        // Update button state if already watching
+        if (isInWatchlist && state.userTier === 'premium') {
+            notifyBtn.innerHTML = '✓ Takipte';
+            notifyBtn.classList.add('watching');
+        }
+
+        notifyBtn.addEventListener('click', () => {
+            if (state.userTier !== 'premium') {
+                showPremiumModal();
+                return;
+            }
+
+            const isWatching = window.NotificationService.isInWatchlist(itemId, type);
+
+            if (isWatching) {
+                // Remove from watchlist
+                window.NotificationService.removeFromWatchlist(itemId, type);
+                notifyBtn.innerHTML = '🔔 Haber Ver';
+                notifyBtn.classList.remove('watching');
+            } else {
+                // Add to watchlist
+                const added = window.NotificationService.addToWatchlist({
+                    id: itemId,
+                    type: type,
+                    title: details.title || details.name,
+                    poster: details.poster_path
+                });
+
+                if (added) {
+                    notifyBtn.innerHTML = '✓ Takipte';
+                    notifyBtn.classList.add('watching');
+                }
+            }
+        });
+    }
 }
 
 // Star Rating Display Helper
@@ -1960,12 +2342,11 @@ function renderProviders(providers, networks, type, title, details) {
 }
 
 function createProviderCard(provider, typeText, typeClass, encodedTitle) {
-    const platformUrl = PLATFORM_URLS[provider.provider_name];
-    const href = platformUrl ? platformUrl + encodedTitle : '#';
-    const target = platformUrl ? '_blank' : '_self';
+    const platformUrl = PLATFORM_URLS[provider.provider_name] || PLATFORM_URLS['default'];
+    const href = platformUrl + encodedTitle;
 
     return `
-        <a href="${href}" target="${target}" rel="noopener" class="provider-card">
+        <a href="${href}" target="_blank" rel="noopener" class="provider-card">
             <img src="${API.getPosterUrl(provider.logo_path, 'w92')}" alt="${provider.provider_name}" class="provider-logo">
             <span class="provider-name">${provider.provider_name}</span>
             <span class="provider-type ${typeClass}">${typeText}</span>

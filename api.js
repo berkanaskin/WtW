@@ -593,11 +593,49 @@ const API = {
         }
     },
 
-    // Unified Ratings API - IMDB, RT, Metacritic via OMDB (reliable)
+    // Unified Ratings API - IMDB, RT, Metacritic
+    // Primary: movies-ratings2 (RapidAPI - commercial allowed)
+    // Fallback: OMDB (non-commercial but useful for personal projects)
     async getAllRatings(imdbId) {
         if (!imdbId) return null;
 
-        // Try OMDB first (most reliable for RT/Metacritic)
+        // Try movies-ratings2 first (RapidAPI - commercial allowed)
+        try {
+            const response = await fetch(
+                `https://movies-ratings2.p.rapidapi.com/ratings?id=${imdbId}`,
+                {
+                    headers: {
+                        'X-RapidAPI-Key': CONFIG.MOVIEDB_API_KEY,
+                        'X-RapidAPI-Host': 'movies-ratings2.p.rapidapi.com'
+                    }
+                }
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                const ratings = data.ratings || data;
+
+                // Check if we got valid data
+                const imdbScore = ratings.imdb?.score || ratings.imdb?.rating || null;
+                if (imdbScore) {
+                    return {
+                        imdb: imdbScore,
+                        rottenTomatoes: {
+                            tomatometer: ratings.rottenTomatoes?.tomatometer || ratings.rotten_tomatoes?.tomatometer || null,
+                            audienceScore: ratings.rottenTomatoes?.audienceScore || ratings.rotten_tomatoes?.audienceScore || null,
+                            url: ratings.rottenTomatoes?.url || 'https://www.rottentomatoes.com'
+                        },
+                        letterboxd: ratings.letterboxd?.score || ratings.letterboxd?.rating || null,
+                        metacritic: ratings.metacritic?.metascore || ratings.metacritic?.score || null,
+                        tmdb: ratings.tmdb?.score || null
+                    };
+                }
+            }
+        } catch (error) {
+            console.warn('movies-ratings2 API error:', error);
+        }
+
+        // Fallback to OMDB if movies-ratings2 fails
         if (CONFIG.OMDB_API_KEY) {
             try {
                 const response = await fetch(
@@ -606,7 +644,6 @@ const API = {
                 if (response.ok) {
                     const data = await response.json();
                     if (data.Response === 'True') {
-                        // Parse ratings from OMDB format
                         const ratings = data.Ratings || [];
                         const findRating = (source) => {
                             const r = ratings.find(r => r.Source.includes(source));
@@ -620,51 +657,18 @@ const API = {
                                 audienceScore: null,
                                 url: 'https://www.rottentomatoes.com'
                             },
-                            letterboxd: null, // OMDB doesn't have Letterboxd
+                            letterboxd: null,
                             metacritic: findRating('Metacritic') ? parseInt(findRating('Metacritic')) : null,
                             tmdb: null
                         };
                     }
                 }
             } catch (error) {
-                console.warn('OMDB API hatası:', error);
+                console.warn('OMDB API error:', error);
             }
         }
 
-        // Fallback to movies-ratings2 if OMDB key not set
-        try {
-            const response = await fetch(
-                `https://movies-ratings2.p.rapidapi.com/ratings?id=${imdbId}`,
-                {
-                    headers: {
-                        'X-RapidAPI-Key': CONFIG.MOVIEDB_API_KEY,
-                        'X-RapidAPI-Host': 'movies-ratings2.p.rapidapi.com'
-                    }
-                }
-            );
-
-            if (!response.ok) {
-                console.warn('Ratings API response not OK:', response.status);
-                return null;
-            }
-            const data = await response.json();
-            const ratings = data.ratings || data;
-
-            return {
-                imdb: ratings.imdb?.score || ratings.imdb?.rating || null,
-                rottenTomatoes: {
-                    tomatometer: ratings.rottenTomatoes?.tomatometer || ratings.rotten_tomatoes?.tomatometer || null,
-                    audienceScore: ratings.rottenTomatoes?.audienceScore || ratings.rotten_tomatoes?.audienceScore || null,
-                    url: ratings.rottenTomatoes?.url || 'https://www.rottentomatoes.com'
-                },
-                letterboxd: ratings.letterboxd?.score || ratings.letterboxd?.rating || null,
-                metacritic: ratings.metacritic?.metascore || ratings.metacritic?.score || null,
-                tmdb: ratings.tmdb?.score || null
-            };
-        } catch (error) {
-            console.error('Ratings API hatası:', error);
-            return null;
-        }
+        return null;
     }
 };
 
