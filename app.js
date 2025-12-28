@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.8.3-beta';
+const APP_VERSION = '1.8.4-beta';
 
 // DOM Elements
 const elements = {
@@ -131,6 +131,33 @@ async function init() {
 
     // Initial sync for Suggested section visibility
     updateSuggestedVisibility();
+}
+
+function loadLanguage() {
+    // Load saved language preference
+    i18n.loadLanguage();
+
+    // Set UI select to match
+    const langSelect = document.getElementById('language-select');
+    if (langSelect) {
+        langSelect.value = i18n.currentLang;
+
+        // Add change handler
+        langSelect.addEventListener('change', (e) => {
+            const newLang = e.target.value;
+            i18n.setLanguage(newLang);
+            i18n.updateTranslations();
+
+            // Also update TMDB language
+            state.currentLanguage = newLang === 'tr' ? 'tr-TR' : newLang === 'en' ? 'en-US' : `${newLang}-${newLang.toUpperCase()}`;
+
+            // Reload content with new language
+            loadHomePage();
+        });
+    }
+
+    // Apply initial translations
+    i18n.updateTranslations();
 }
 
 function loadAuth() {
@@ -1218,40 +1245,30 @@ function createMovieCard(item, mediaType) {
 
 // Async function to fetch and update IMDB rating on card
 async function fetchIMDBRatingForCard(tmdbId, mediaType, badgeId) {
-    console.log(`[IMDB Card] Starting fetch for tmdbId=${tmdbId}, type=${mediaType}, badgeId=${badgeId}`);
-    console.log(`[IMDB Card] CONFIG.OMDB_API_KEY exists: ${!!CONFIG.OMDB_API_KEY}`);
-
     try {
         // Get IMDB ID from TMDB
         const imdbId = await API.getIMDBId(tmdbId, mediaType);
-        console.log(`[IMDB Card] Got imdbId: ${imdbId}`);
         if (!imdbId) {
-            console.log(`[IMDB Card] No IMDB ID found, skipping`);
             return;
         }
 
         // Get IMDB rating from OMDB
         const url = `https://www.omdbapi.com/?i=${imdbId}&apikey=${CONFIG.OMDB_API_KEY}`;
-        console.log(`[IMDB Card] Fetching: ${url.replace(CONFIG.OMDB_API_KEY, 'API_KEY')}`);
 
         const response = await fetch(url);
-        console.log(`[IMDB Card] Response status: ${response.status}`);
         if (!response.ok) return;
 
         const data = await response.json();
-        console.log(`[IMDB Card] OMDB data:`, data);
 
         if (data.Response === 'True' && data.imdbRating && data.imdbRating !== 'N/A') {
             const badge = document.getElementById(badgeId);
-            console.log(`[IMDB Card] Found badge element: ${!!badge}, new rating: ${data.imdbRating}`);
             if (badge) {
                 badge.textContent = `⭐ ${data.imdbRating}`;
                 badge.classList.add('imdb-loaded');
-                console.log(`[IMDB Card] ✅ Updated badge to ${data.imdbRating}`);
             }
         }
     } catch (error) {
-        console.error(`[IMDB Card] Error:`, error);
+        // Silently fail - keep TMDB rating
     }
 }
 

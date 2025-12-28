@@ -22,7 +22,7 @@
             <div class="logo-title" id="logo-home" style="cursor: pointer;">
                 <span class="wtw-logo-text">WtW</span>
                 <span class="header-divider">–</span>
-                <span class="header-section-title" id="header-section-title">Nerede İzlerim?</span>
+                <span class="header-section-title" id="header-section-title" data-i18n="sectionHome">Nerede İzlerim?</span>
             </div>
             <div class="header-actions">
                 <div class="language-select">
@@ -41,7 +41,7 @@
                 </button>
                 <!-- Auth Area -->
                 <div id="auth-area">
-                    <button class="login-btn" id="login-btn">👤 Giriş</button>
+                    <button class="login-btn" id="login-btn"><span>👤</span> <span data-i18n="login">Giriş</span></button>
                 </div>
             </div>
         </header>
@@ -53,7 +53,7 @@
                     <div class="search-box-inner">
                         <span class="search-icon">🔍</span>
                         <input type="text" class="search-input" id="search-input" placeholder="Film veya dizi ara..."
-                            autocomplete="off">
+                            autocomplete="off" data-i18n-placeholder="search">
                         <button class="search-clear" id="search-clear" style="display: none;">✕</button>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
             <!-- Trending Section -->
             <section class="content-section" id="trending-section">
                 <div class="section-header">
-                    <h2 class="section-title">🔥 Popüler</h2>
+                    <h2 class="section-title"><span>🔥</span> <span data-i18n="trending">Popüler</span></h2>
                 </div>
                 <div class="slider-container">
                     <button class="slider-arrow slider-arrow-left" data-slider="trending-slider">‹</button>
@@ -78,7 +78,7 @@
             <!-- New Releases Section -->
             <section class="content-section" id="new-releases-section">
                 <div class="section-header">
-                    <h2 class="section-title">✨ Yeni Çıkanlar</h2>
+                    <h2 class="section-title"><span>✨</span> <span data-i18n="newReleases">Yeni Çıkanlar</span></h2>
                 </div>
                 <div class="slider-container">
                     <button class="slider-arrow slider-arrow-left" data-slider="new-releases-slider">‹</button>
@@ -90,7 +90,7 @@
             <!-- Classics Section -->
             <section class="content-section" id="classics-section">
                 <div class="section-header">
-                    <h2 class="section-title">🎬 Klasikler</h2>
+                    <h2 class="section-title"><span>🎬</span> <span data-i18n="classics">Klasikler</span></h2>
                 </div>
                 <div class="slider-container">
                     <button class="slider-arrow slider-arrow-left" data-slider="classics-slider">‹</button>
@@ -249,12 +249,12 @@
 
             <div class="loading-state" id="loading">
                 <div class="spinner"></div>
-                <p>Yükleniyor...</p>
+                <p data-i18n="loading">Yükleniyor...</p>
             </div>
 
             <div class="empty-state" id="no-results">
                 <span class="empty-icon">🎭</span>
-                <p>Sonuç bulunamadı</p>
+                <p data-i18n="noResults">Sonuç bulunamadı</p>
             </div>
         </main>
 
@@ -267,7 +267,7 @@
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
                 </div>
-                <span class="nav-label">Ana Sayfa</span>
+                <span class="nav-label" data-i18n="sectionHome">Ana Sayfa</span>
             </div>
             <div class="nav-item" data-page="discover">
                 <div class="nav-icon-wrap">
@@ -276,7 +276,7 @@
                         <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
                     </svg>
                 </div>
-                <span class="nav-label">Keşfet</span>
+                <span class="nav-label" data-i18n="sectionDiscover">Keşfet</span>
             </div>
             <div class="nav-item" data-page="favorites">
                 <div class="nav-icon-wrap">
@@ -286,7 +286,7 @@
                         </path>
                     </svg>
                 </div>
-                <span class="nav-label">Favoriler</span>
+                <span class="nav-label" data-i18n="sectionFavorites">Favoriler</span>
             </div>
             <div class="nav-item" data-page="profile">
                 <div class="nav-icon-wrap">
@@ -295,7 +295,7 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </div>
-                <span class="nav-label">Profil</span>
+                <span class="nav-label" data-i18n="sectionProfile">Profil</span>
             </div>
         </nav>
 

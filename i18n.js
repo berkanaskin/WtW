@@ -200,6 +200,30 @@ const i18n = {
         if (saved && this.translations[saved]) {
             this.currentLang = saved;
         }
+    },
+
+    // Update all translatable elements in DOM
+    updateTranslations() {
+        // Update elements with data-i18n attribute
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const translation = this.t(key);
+            if (translation && translation !== key) {
+                el.textContent = translation;
+            }
+        });
+
+        // Update placeholders with data-i18n-placeholder attribute
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            const translation = this.t(key);
+            if (translation && translation !== key) {
+                el.placeholder = translation;
+            }
+        });
+
+        // Update page title
+        document.title = this.t('appTitle');
     }
 };
 
