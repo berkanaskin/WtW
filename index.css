@@ -431,14 +431,20 @@ body {
     display: flex;
     gap: 12px;
     overflow-x: auto;
-    padding: 0 16px 12px;
+    padding: 4px 16px 12px;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 16px;
 }
 
 .movie-slider::-webkit-scrollbar {
     display: none;
+}
+
+/* First card alignment - ensures no extra left padding */
+.movie-slider .movie-card:first-child {
+    margin-left: 0;
 }
 
 /* Movie Grid */
