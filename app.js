@@ -759,6 +759,13 @@ function setupEventListeners() {
     // Search clear button
     if (elements.searchClear) {
         elements.searchClear.addEventListener('click', () => {
+            // Skip if search restore is active (modal just closed)
+            const timeSinceRestore = Date.now() - state.searchRestoreTime;
+            if (state.skipNextHomePage || timeSinceRestore < 500) {
+                console.log('Skipping searchClear click - search restore active');
+                state.skipNextHomePage = false;
+                return;
+            }
             elements.searchInput.value = '';
             elements.searchClear.style.display = 'none';
             hideAutocomplete();
