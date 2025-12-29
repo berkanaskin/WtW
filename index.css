@@ -113,6 +113,13 @@ body {
     flex-shrink: 0;
 }
 
+/* WtW Image Logo */
+.wtw-logo-img {
+    height: 36px;
+    width: auto;
+    flex-shrink: 0;
+}
+
 .header-divider {
     color: var(--white-muted);
     font-weight: 300;
