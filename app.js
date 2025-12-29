@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.9.2.0-beta';
+const APP_VERSION = '1.9.2.1-beta';
 
 // DOM Elements
 const elements = {
@@ -2544,16 +2544,24 @@ function closeModal() {
 
     // Restore search state if user came from search
     if (state.cameFromSearch && state.searchQuery) {
-        // Keep search input value
+        // Restore search input value
         if (elements.searchInput) {
             elements.searchInput.value = state.searchQuery;
         }
-        // Show search results section
-        hideAllSections();
-        elements.searchResultsSection.style.display = 'block';
 
-        // Re-render results from saved state
+        // Show search clear button
+        if (elements.searchClear) {
+            elements.searchClear.style.display = 'block';
+        }
+
+        // Two scenarios:
+        // 1. Full search results (Enter was pressed) - show results grid
+        // 2. Autocomplete click - show autocomplete dropdown
+
         if (state.searchResults && state.searchResults.length > 0) {
+            // Scenario 1: Full search results - show results section
+            hideAllSections();
+            elements.searchResultsSection.style.display = 'block';
             elements.resultsTitle.textContent = `"${state.searchQuery}"`;
             elements.resultsGrid.innerHTML = '';
             state.searchResults.forEach(item => {
@@ -2561,10 +2569,9 @@ function closeModal() {
                 elements.resultsGrid.appendChild(card);
             });
             elements.resultsCount.textContent = `${state.searchResults.length} sonuç`;
-        }
-        // Show search clear button
-        if (elements.searchClear) {
-            elements.searchClear.style.display = 'block';
+        } else {
+            // Scenario 2: Autocomplete click - trigger autocomplete again
+            handleAutocomplete();
         }
     }
 
