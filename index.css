@@ -115,7 +115,7 @@ body {
 
 /* WtW Image Logo */
 .wtw-logo-img {
-    height: 32px;
+    height: 42px;
     width: auto;
     flex-shrink: 0;
     object-fit: contain;
@@ -187,11 +187,11 @@ body {
 }
 
 .lang-dropdown-btn {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: var(--glass);
-    border: 2px solid var(--glass-border);
+    border: 1px solid var(--glass-border);
     cursor: pointer;
     padding: 3px;
     overflow: hidden;
@@ -216,11 +216,11 @@ body {
 
 .lang-dropdown-menu {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 6px);
     right: 0;
     background: rgba(15, 15, 25, 0.98);
     border: 1px solid var(--glass-border);
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(20px);
     opacity: 0;
@@ -229,7 +229,7 @@ body {
     transition: all 0.2s ease;
     z-index: 9999;
     overflow: hidden;
-    min-width: 150px;
+    min-width: 120px;
 }
 
 .lang-dropdown-menu.visible {
@@ -241,14 +241,14 @@ body {
 .lang-option {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
-    padding: 10px 14px;
+    padding: 8px 12px;
     background: transparent;
     border: none;
     color: var(--white-soft);
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.15s ease;
 }
@@ -258,8 +258,8 @@ body {
 }
 
 .lang-option .lang-flag {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center center;
@@ -1923,7 +1923,21 @@ a.rating-box.rt:hover {
 /* ============================================
    LOADING & EMPTY STATES
    ============================================ */
-.loading-state,
+.loading-state {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 50;
+}
+
 .empty-state {
     display: none;
     flex-direction: column;
@@ -1936,10 +1950,8 @@ a.rating-box.rt:hover {
 /* Centered loading state in modal */
 .modal-body .loading-state {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
 }
 
 .loading-state.visible,
@@ -3246,126 +3258,60 @@ a.rating-box.rt:hover {
 }
 
 /* ============================================
-   CINEMATIC DISCOVERY - PROFESSIONAL DESIGN
+   DISCOVER WIZARD - COMPACT PROFESSIONAL DESIGN
    ============================================ */
 
-.cinematic-wizard {
-    padding: 32px 24px;
+.discover-wizard {
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
-    background: linear-gradient(165deg, rgba(20, 20, 35, 0.95), rgba(10, 10, 20, 0.98));
-    border-radius: 24px;
+    gap: 16px;
+    background: linear-gradient(165deg, rgba(20, 20, 35, 0.92), rgba(10, 10, 20, 0.95));
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    margin: 16px;
-    backdrop-filter: blur(30px);
-    box-shadow:
-        0 0 60px rgba(139, 92, 246, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    margin: 12px 16px;
+    backdrop-filter: blur(20px);
 }
 
-/* Elegant Title */
-.cinematic-header {
-    text-align: center;
-    margin-bottom: 8px;
-}
-
-.cinematic-title {
-    font-size: 2.4rem;
-    font-weight: 300;
-    letter-spacing: 12px;
+/* Title */
+.discover-title {
+    font-size: 1.3rem;
+    font-weight: 600;
     color: rgba(255, 255, 255, 0.95);
     margin: 0;
-    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.cinematic-subtitle {
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 4px;
-    color: rgba(139, 92, 246, 0.8);
-    margin: 8px 0 0 0;
-    text-transform: uppercase;
-}
-
-/* Sürpriz Yap Button - Standalone */
-.surprise-btn {
+/* Row: Type Toggle + Sürpriz */
+.discover-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 28px;
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.1));
-    border: 1px solid rgba(255, 193, 7, 0.3);
-    border-radius: 50px;
-    color: #ffc107;
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.surprise-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.25), rgba(255, 152, 0, 0.2));
-    transform: scale(1.03);
-    box-shadow: 0 0 25px rgba(255, 193, 7, 0.25);
-}
-
-.surprise-btn:active {
-    transform: scale(0.98);
-}
-
-.surprise-icon {
-    font-size: 1.3rem;
-    animation: none;
-}
-
-.surprise-btn:hover .surprise-icon {
-    animation: dice-roll 0.5s ease;
-}
-
-@keyframes dice-roll {
-
-    0%,
-    100% {
-        transform: rotate(0deg);
-    }
-
-    25% {
-        transform: rotate(-15deg);
-    }
-
-    50% {
-        transform: rotate(15deg);
-    }
-
-    75% {
-        transform: rotate(-10deg);
-    }
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
 }
 
 /* Type Toggle Container */
 .type-toggle-container {
     display: flex;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 5px;
-    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 4px;
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .type-toggle-btn {
-    padding: 12px 36px;
+    padding: 8px 20px;
     background: transparent;
     border: none;
-    border-radius: 25px;
+    border-radius: 16px;
     color: rgba(255, 255, 255, 0.5);
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    letter-spacing: 2px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .type-toggle-btn:hover {
@@ -3373,101 +3319,75 @@ a.rating-box.rt:hover {
 }
 
 .type-toggle-btn.active {
+    background: rgba(139, 92, 246, 0.25);
+    color: #fff;
+}
+
+/* Sürpriz Button Small */
+.surprise-btn-sm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(255, 193, 7, 0.12);
+    border: 1px solid rgba(255, 193, 7, 0.25);
+    border-radius: 20px;
+    color: #ffc107;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.surprise-btn-sm:hover {
+    background: rgba(255, 193, 7, 0.2);
+    transform: scale(1.02);
+}
+
+.surprise-btn-sm:active {
+    transform: scale(0.98);
+}
+
+/* Category Scroll */
+.category-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    width: 100%;
+    padding: 4px 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.category-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Category Chip */
+.category-chip {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.category-chip:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
-    box-shadow: inset 0 0 20px rgba(139, 92, 246, 0.2);
 }
 
-/* Category Grid */
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    width: 100%;
-    max-width: 400px;
-}
-
-@media (max-width: 400px) {
-    .category-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-    }
-}
-
-.category-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 4px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.category-btn:hover {
-    transform: translateY(-4px);
-}
-
-.category-btn.selected .category-icon {
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.6), 0 8px 25px rgba(139, 92, 246, 0.4);
-    transform: scale(1.1);
-}
-
-.category-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-/* Category Icon Colors - Muted Pastels */
-.category-icon.trend {
-    background: linear-gradient(145deg, #e8926a, #d4745a);
-}
-
-.category-icon.blockbuster {
-    background: linear-gradient(145deg, #9b7fd4, #7b5fbf);
-}
-
-.category-icon.art {
-    background: linear-gradient(145deg, #d49b9b, #c48080);
-}
-
-.category-icon.awarded {
-    background: linear-gradient(145deg, #6ac4c4, #4ab0b0);
-}
-
-.category-icon.classic {
-    background: linear-gradient(145deg, #8a8a9a, #6a6a7a);
-}
-
-.category-icon.local {
-    background: linear-gradient(145deg, #c46a6a, #a85050);
-}
-
-.category-icon.nostalgia {
-    background: linear-gradient(145deg, #b8a070, #9a8560);
-}
-
-.category-icon.hidden-gem {
-    background: linear-gradient(145deg, #7ab8d4, #5a9ab8);
-}
-
-.category-btn span:not(.category-icon) {
-    font-size: 0.65rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.3px;
-}
-
-.category-btn.selected span:not(.category-icon) {
+.category-chip.selected {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: rgba(139, 92, 246, 0.4);
     color: #fff;
 }
 
@@ -3476,19 +3396,19 @@ a.rating-box.rt:hover {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .filter-group-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     color: rgba(255, 255, 255, 0.4);
     padding-left: 4px;
 }
@@ -3496,17 +3416,17 @@ a.rating-box.rt:hover {
 .filter-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
 }
 
 .filter-chip {
-    padding: 9px 16px;
+    padding: 7px 12px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 16px;
     color: rgba(255, 255, 255, 0.6);
     font-family: inherit;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -3527,29 +3447,29 @@ a.rating-box.rt:hover {
 /* Recommend Button */
 .recommend-btn {
     width: 100%;
-    max-width: 280px;
-    padding: 16px 32px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #4f46e5 100%);
+    max-width: 240px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
     border: none;
-    border-radius: 30px;
+    border-radius: 22px;
     color: white;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    letter-spacing: 3px;
+    letter-spacing: 1.5px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.35);
-    margin-top: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+    margin-top: 4px;
 }
 
 .recommend-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.45);
 }
 
 .recommend-btn:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
 

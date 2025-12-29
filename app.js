@@ -1099,17 +1099,17 @@ function setupNeIzlesemWizard() {
             neIzlesemFilters.platforms = [];
             // Deselect everything
             wizard.querySelectorAll('.type-toggle-btn').forEach(b => b.classList.remove('active'));
-            wizard.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+            wizard.querySelectorAll('.category-chip').forEach(b => b.classList.remove('selected'));
             wizard.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('selected'));
             // Trigger generation immediately
             generateRecommendations();
         });
     }
 
-    // Category buttons (single select for main category/style)
-    wizard.querySelectorAll('.category-btn').forEach(btn => {
+    // Category chips (single select for main category/style)
+    wizard.querySelectorAll('.category-chip').forEach(btn => {
         btn.addEventListener('click', () => {
-            wizard.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+            wizard.querySelectorAll('.category-chip').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
             neIzlesemFilters.style = btn.dataset.value;
         });
@@ -1344,6 +1344,11 @@ async function generateNeIzlesemResults(append = false) {
         // Hide wizard, show results
         if (wizard) wizard.style.display = 'none';
         if (results) results.style.display = 'block';
+
+        // Scroll to top when showing results
+        if (!append) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         if (allResults.length === 0 && !append) {
             elements.discoverGrid.innerHTML = `

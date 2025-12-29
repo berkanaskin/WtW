@@ -180,65 +180,37 @@
 
             <!-- Ne İzlesem? Section (What to Watch Recommendation Engine) -->
             <section class="content-section" id="discover-section" style="display: none;">
-                <!-- CINEMATIC DISCOVERY - Professional Wizard -->
-                <div class="cinematic-wizard" id="neizlesem-wizard">
+                <!-- DISCOVER WIZARD - Compact Professional Design -->
+                <div class="discover-wizard" id="neizlesem-wizard">
 
-                    <!-- Elegant Title -->
-                    <div class="cinematic-header">
-                        <h1 class="cinematic-title">CINEMATIC</h1>
-                        <p class="cinematic-subtitle" data-i18n="sectionDiscover">KEŞİF</p>
-                    </div>
+                    <!-- Title -->
+                    <h2 class="discover-title" data-i18n="sectionDiscover">NE İZLESEM?</h2>
 
-                    <!-- Sürpriz Yap - Top Standalone Button -->
-                    <button class="surprise-btn" id="surprise-btn">
-                        <span class="surprise-icon">🎲</span>
-                        <span class="surprise-text">Sürpriz Yap</span>
-                    </button>
-
-                    <!-- Type Toggle: Film / Series -->
-                    <div class="type-toggle-container">
-                        <button class="type-toggle-btn active" data-filter="type" data-value="movie">
-                            <span data-i18n="wizardTypeMovie">FILMS</span>
-                        </button>
-                        <button class="type-toggle-btn" data-filter="type" data-value="tv">
-                            <span data-i18n="wizardTypeTv">SERIES</span>
+                    <!-- Type Toggle + Sürpriz Row -->
+                    <div class="discover-row">
+                        <div class="type-toggle-container">
+                            <button class="type-toggle-btn active" data-filter="type" data-value="movie">
+                                <span data-i18n="wizardTypeMovie">Film</span>
+                            </button>
+                            <button class="type-toggle-btn" data-filter="type" data-value="tv">
+                                <span data-i18n="wizardTypeTv">Dizi</span>
+                            </button>
+                        </div>
+                        <button class="surprise-btn-sm" id="surprise-btn">
+                            <span>🎲</span> Sürpriz
                         </button>
                     </div>
 
-                    <!-- Category Icons (8 categories) -->
-                    <div class="category-grid">
-                        <button class="category-btn" data-filter="category" data-value="popular">
-                            <div class="category-icon trend">🔥</div>
-                            <span data-i18n="moodTrend">Trend</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="hollywood">
-                            <div class="category-icon blockbuster">🎬</div>
-                            <span data-i18n="moodBlockbuster">Blockbuster</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="festival">
-                            <div class="category-icon art">🎨</div>
-                            <span data-i18n="moodArt">Sanat</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="awarded">
-                            <div class="category-icon awarded">🏆</div>
-                            <span data-i18n="moodAwarded">Ödüllü</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="classic">
-                            <div class="category-icon classic">📽️</div>
-                            <span data-i18n="moodClassic">Klasik</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="local">
-                            <div class="category-icon local">🇹🇷</div>
-                            <span data-i18n="moodLocal">Yerli</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="nostalgia">
-                            <div class="category-icon nostalgia">📼</div>
-                            <span>Nostalji</span>
-                        </button>
-                        <button class="category-btn" data-filter="category" data-value="hidden">
-                            <div class="category-icon hidden-gem">💎</div>
-                            <span>Gizli Hazine</span>
-                        </button>
+                    <!-- Category Scroll -->
+                    <div class="category-scroll">
+                        <button class="category-chip" data-filter="category" data-value="popular">🔥 Trend</button>
+                        <button class="category-chip" data-filter="category" data-value="hollywood">🎬
+                            Blockbuster</button>
+                        <button class="category-chip" data-filter="category" data-value="festival">🎨 Sanat</button>
+                        <button class="category-chip" data-filter="category" data-value="awarded">🏆 Ödüllü</button>
+                        <button class="category-chip" data-filter="category" data-value="classic">📽️ Klasik</button>
+                        <button class="category-chip" data-filter="category" data-value="local">🇹🇷 Yerli</button>
+                        <button class="category-chip" data-filter="category" data-value="nostalgia">📼 Nostalji</button>
                     </div>
 
                     <!-- Filter Groups -->
@@ -277,7 +249,7 @@
 
                     <!-- Recommend Button -->
                     <button class="recommend-btn" id="neizlesem-generate">
-                        <span data-i18n="generateBtn">RECOMMEND</span>
+                        <span data-i18n="generateBtn">ÖNERİ AL</span>
                     </button>
                 </div>
 
