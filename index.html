@@ -180,105 +180,101 @@
 
             <!-- Ne İzlesem? Section (What to Watch Recommendation Engine) -->
             <section class="content-section" id="discover-section" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title"><span>🎯</span> <span data-i18n="sectionDiscover">Ne İzlesem?</span></h2>
-                </div>
+                <!-- Creative Filter Wizard - Redesigned -->
+                <div class="neizlesem-wizard-v2" id="neizlesem-wizard">
 
-                <!-- Creative Filter Wizard -->
-                <div class="neizlesem-wizard" id="neizlesem-wizard">
-                    <!-- Big Question: What to watch? -->
-                    <div class="wizard-question">
-                        <span class="question-emoji">🍿</span>
-                        <span class="question-text" data-i18n="wizardQuestion">Bu akşam ne izlemek istersin?</span>
+                    <!-- Header with Title -->
+                    <div class="wizard-header-v2">
+                        <h2 class="wizard-title-v2" data-i18n="sectionDiscover">Ne İzlesem?</h2>
                     </div>
 
-                    <!-- Type Selection - Large Cards -->
-                    <div class="wizard-cards">
-                        <button class="type-card active" data-filter="type" data-value="all">
-                            <span class="card-emoji">🎬</span>
-                            <span class="card-label" data-i18n="wizardTypeAll">İkisi de olur</span>
+                    <!-- Type Selection: Film / Dizi / Şaşırt Beni -->
+                    <div class="type-toggle-v2">
+                        <button class="type-btn-v2 active" data-filter="type" data-value="movie">
+                            <span data-i18n="wizardTypeMovie">FİLM</span>
                         </button>
-                        <button class="type-card" data-filter="type" data-value="movie">
-                            <span class="card-emoji">🎥</span>
-                            <span class="card-label" data-i18n="wizardTypeMovie">Film</span>
+                        <button class="type-btn-v2" data-filter="type" data-value="tv">
+                            <span data-i18n="wizardTypeTv">DİZİ</span>
                         </button>
-                        <button class="type-card" data-filter="type" data-value="tv">
-                            <span class="card-emoji">📺</span>
-                            <span class="card-label" data-i18n="wizardTypeTv">Dizi</span>
+                        <button class="random-btn-v2" id="random-mode-btn" title="Şaşırt Beni">
+                            <span>🎲</span>
                         </button>
                     </div>
 
-                    <!-- Mood/Style Selection - Visual Pills -->
-                    <div class="wizard-mood">
-                        <span class="mood-label">🎭 <span data-i18n="moodLabel">Ruh halin nasıl?</span></span>
-                        <div class="mood-pills">
-                            <button class="mood-pill active" data-filter="style" data-value="popular">
-                                <span>🔥</span> <span data-i18n="moodTrend">Trend</span>
+                    <!-- Main Categories - Icon Circles -->
+                    <div class="category-section-v2">
+                        <span class="section-label-v2" data-i18n="mainCategory">Ana Kategori</span>
+                        <div class="category-icons-v2">
+                            <button class="category-icon-btn" data-filter="category" data-value="popular">
+                                <div class="icon-circle trend">🔥</div>
+                                <span data-i18n="moodTrend">Trend</span>
                             </button>
-                            <button class="mood-pill" data-filter="style" data-value="random">
-                                <span>🎲</span> <span data-i18n="moodRandom">Rastgele</span>
+                            <button class="category-icon-btn" data-filter="category" data-value="hollywood">
+                                <div class="icon-circle blockbuster">🎬</div>
+                                <span data-i18n="moodBlockbuster">Blockbuster</span>
                             </button>
-                            <button class="mood-pill" data-filter="style" data-value="hollywood">
-                                <span>🎬</span> <span data-i18n="moodBlockbuster">Blockbuster</span>
+                            <button class="category-icon-btn" data-filter="category" data-value="festival">
+                                <div class="icon-circle art">🌟</div>
+                                <span data-i18n="moodArt">Sanat</span>
                             </button>
-                            <button class="mood-pill" data-filter="style" data-value="festival">
-                                <span>🌟</span> <span data-i18n="moodArt">Sanat</span>
+                            <button class="category-icon-btn" data-filter="category" data-value="awarded">
+                                <div class="icon-circle awarded">🏆</div>
+                                <span data-i18n="moodAwarded">Ödüllü</span>
                             </button>
-                            <button class="mood-pill" data-filter="style" data-value="awarded">
-                                <span>🏆</span> <span data-i18n="moodAwarded">Ödüllü</span>
+                            <button class="category-icon-btn" data-filter="category" data-value="classic">
+                                <div class="icon-circle classic">📽️</div>
+                                <span data-i18n="moodClassic">Klasik</span>
                             </button>
-                            <button class="mood-pill" data-filter="style" data-value="classic">
-                                <span>📽️</span> <span data-i18n="moodClassic">Klasik</span>
-                            </button>
-                            <button class="mood-pill" data-filter="style" data-value="local">
-                                <span>🇹🇷</span> <span data-i18n="moodLocal">Yerli</span>
+                            <button class="category-icon-btn" data-filter="category" data-value="local">
+                                <div class="icon-circle local">🇹🇷</div>
+                                <span data-i18n="moodLocal">Yerli</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Genre Pills -->
-                    <div class="wizard-genres">
-                        <span class="genre-label">🎪 <span data-i18n="genreLabel">Tür</span> <span
-                                class="optional">(<span data-i18n="genreOptional">seçmezsen hepsinden
-                                    gelir</span>)</span></span>
-                        <div class="genre-pills">
-                            <button class="genre-pill" data-filter="genre" data-value="28">💥 <span
+                    <div class="filter-section-v2">
+                        <span class="section-label-v2">🎪 <span data-i18n="genreLabel">Tür</span></span>
+                        <div class="filter-pills-v2">
+                            <button class="filter-pill-v2" data-filter="genre" data-value="28">💥 <span
                                     data-i18n="action">Aksiyon</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="35">😂 <span
+                            <button class="filter-pill-v2" data-filter="genre" data-value="35">😂 <span
                                     data-i18n="comedy">Komedi</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="18">🎭 <span
+                            <button class="filter-pill-v2" data-filter="genre" data-value="18">🎭 <span
                                     data-i18n="drama">Drama</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="27">👻 <span
+                            <button class="filter-pill-v2" data-filter="genre" data-value="27">👻 <span
                                     data-i18n="horror">Korku</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="878">🚀 <span
+                            <button class="filter-pill-v2" data-filter="genre" data-value="878">🚀 <span
                                     data-i18n="scifi">Sci-Fi</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="10749">💕 <span
-                                    data-i18n="romance">Aşk</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="53">🔪 <span
+                            <button class="filter-pill-v2" data-filter="genre" data-value="10749">💕 <span
+                                    data-i18n="romance">Romantik</span></button>
+                            <button class="filter-pill-v2" data-filter="genre" data-value="53">🔪 <span
                                     data-i18n="thriller">Gerilim</span></button>
-                            <button class="genre-pill" data-filter="genre" data-value="16">🎨 <span
+                            <button class="filter-pill-v2" data-filter="genre" data-value="16">🎨 <span
                                     data-i18n="animation">Animasyon</span></button>
+                            <button class="filter-pill-v2" data-filter="genre" data-value="anime">🎌 Anime</button>
                         </div>
                     </div>
 
                     <!-- Platform Selection -->
-                    <div class="wizard-platforms">
-                        <span class="platform-label">📱 <span data-i18n="platformLabel">Nerede
+                    <div class="filter-section-v2">
+                        <span class="section-label-v2">📱 <span data-i18n="platformLabel">Nerede
                                 izleyeceksin?</span></span>
-                        <div class="platform-chips">
-                            <button class="platform-chip" data-filter="platform" data-value="8">Netflix</button>
-                            <button class="platform-chip" data-filter="platform" data-value="337">Disney+</button>
-                            <button class="platform-chip" data-filter="platform" data-value="119">Prime</button>
-                            <button class="platform-chip" data-filter="platform" data-value="1899">Max</button>
-                            <button class="platform-chip" data-filter="platform" data-value="2">Apple TV+</button>
-                            <button class="platform-chip" data-filter="platform" data-value="1870">Exxen</button>
+                        <div class="filter-pills-v2">
+                            <button class="filter-pill-v2" data-filter="platform" data-value="all">🌐 <span
+                                    data-i18n="anyPlatform">Fark Etmez</span></button>
+                            <button class="filter-pill-v2" data-filter="platform" data-value="8">Netflix</button>
+                            <button class="filter-pill-v2" data-filter="platform" data-value="337">Disney+</button>
+                            <button class="filter-pill-v2" data-filter="platform" data-value="119">Prime</button>
+                            <button class="filter-pill-v2" data-filter="platform" data-value="1899">Max</button>
+                            <button class="filter-pill-v2" data-filter="platform" data-value="2">Apple TV+</button>
+                            <button class="filter-pill-v2" data-filter="platform" data-value="1870">Exxen</button>
                         </div>
                     </div>
 
-                    <!-- Generate Button - Floating Style -->
-                    <button class="neizlesem-generate-btn" id="neizlesem-generate">
-                        <span class="btn-icon">✨</span>
-                        <span class="btn-text" data-i18n="generateBtn">Sürpriz Yap!</span>
+                    <!-- Generate Button -->
+                    <button class="recommend-btn-v2" id="neizlesem-generate">
+                        <span data-i18n="generateBtn">ÖNERİ AL</span>
                     </button>
                 </div>
 

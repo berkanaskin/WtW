@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.9.2.2-beta';
+const APP_VERSION = '1.9.3.0-beta';
 
 // DOM Elements
 const elements = {
@@ -1080,7 +1080,91 @@ function setupNeIzlesemWizard() {
     const wizard = document.getElementById('neizlesem-wizard');
     if (!wizard) return;
 
-    // Type cards (single select)
+    // V2 Type buttons (single select - Film/Dizi)
+    wizard.querySelectorAll('.type-btn-v2').forEach(btn => {
+        btn.addEventListener('click', () => {
+            wizard.querySelectorAll('.type-btn-v2').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            neIzlesemFilters.type = btn.dataset.value;
+            // Turn off random mode when selecting type
+            const randomBtn = document.getElementById('random-mode-btn');
+            if (randomBtn) randomBtn.classList.remove('active');
+        });
+    });
+
+    // V2 Random button (toggle)
+    const randomBtn = document.getElementById('random-mode-btn');
+    if (randomBtn) {
+        randomBtn.addEventListener('click', () => {
+            randomBtn.classList.toggle('active');
+            if (randomBtn.classList.contains('active')) {
+                neIzlesemFilters.style = 'random';
+                neIzlesemFilters.type = 'all';
+                // Deselect type buttons
+                wizard.querySelectorAll('.type-btn-v2').forEach(b => b.classList.remove('active'));
+            } else {
+                neIzlesemFilters.style = 'popular';
+            }
+        });
+    }
+
+    // V2 Category icon buttons (single select for main category/style)
+    wizard.querySelectorAll('.category-icon-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            wizard.querySelectorAll('.category-icon-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            neIzlesemFilters.style = btn.dataset.value;
+            // Turn off random mode when selecting category
+            if (randomBtn) randomBtn.classList.remove('active');
+        });
+    });
+
+    // V2 Genre pills (multi-select)
+    wizard.querySelectorAll('.filter-pill-v2[data-filter="genre"]').forEach(pill => {
+        pill.addEventListener('click', () => {
+            pill.classList.toggle('selected');
+            const value = pill.dataset.value;
+            if (pill.classList.contains('selected')) {
+                if (!neIzlesemFilters.genres.includes(value)) {
+                    neIzlesemFilters.genres.push(value);
+                }
+            } else {
+                neIzlesemFilters.genres = neIzlesemFilters.genres.filter(g => g !== value);
+            }
+        });
+    });
+
+    // V2 Platform pills (multi-select for specific platforms, or 'all' for any)
+    wizard.querySelectorAll('.filter-pill-v2[data-filter="platform"]').forEach(pill => {
+        pill.addEventListener('click', () => {
+            const value = pill.dataset.value;
+
+            // If "Fark Etmez" (all) is clicked, deselect others and clear platforms
+            if (value === 'all') {
+                wizard.querySelectorAll('.filter-pill-v2[data-filter="platform"]').forEach(p => {
+                    p.classList.remove('selected');
+                });
+                pill.classList.add('selected');
+                neIzlesemFilters.platforms = [];
+                return;
+            }
+
+            // Deselect "Fark Etmez" when selecting specific platform
+            const allPill = wizard.querySelector('.filter-pill-v2[data-filter="platform"][data-value="all"]');
+            if (allPill) allPill.classList.remove('selected');
+
+            pill.classList.toggle('selected');
+            if (pill.classList.contains('selected')) {
+                if (!neIzlesemFilters.platforms.includes(value)) {
+                    neIzlesemFilters.platforms.push(value);
+                }
+            } else {
+                neIzlesemFilters.platforms = neIzlesemFilters.platforms.filter(p => p !== value);
+            }
+        });
+    });
+
+    // Legacy handlers for old elements (backward compatibility)
     wizard.querySelectorAll('.type-card').forEach(card => {
         card.addEventListener('click', () => {
             wizard.querySelectorAll('.type-card').forEach(c => c.classList.remove('active'));
@@ -1089,7 +1173,6 @@ function setupNeIzlesemWizard() {
         });
     });
 
-    // Mood pills (single select for style)
     wizard.querySelectorAll('.mood-pill').forEach(pill => {
         pill.addEventListener('click', () => {
             wizard.querySelectorAll('.mood-pill').forEach(p => p.classList.remove('active'));
@@ -1098,7 +1181,6 @@ function setupNeIzlesemWizard() {
         });
     });
 
-    // Genre pills (multi-select)
     wizard.querySelectorAll('.genre-pill').forEach(pill => {
         pill.addEventListener('click', () => {
             pill.classList.toggle('selected');
@@ -1113,7 +1195,6 @@ function setupNeIzlesemWizard() {
         });
     });
 
-    // Platform chips (multi-select)
     wizard.querySelectorAll('.platform-chip').forEach(chip => {
         chip.addEventListener('click', () => {
             chip.classList.toggle('selected');
