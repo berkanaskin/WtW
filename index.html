@@ -206,7 +206,7 @@
                         <div class="mood-prompt-icon">💭</div>
                         <div class="mood-prompt-text">
                             <h3>Nasıl Hissediyorsun?</h3>
-                            <p>Hislerini anlat, önerelim.</p>
+                            <p>Hislerini anlat, önerelim. Ya da aşağıdan seç.</p>
                         </div>
                         <div class="mood-prompt-edit">✏️</div>
                     </div>
@@ -215,8 +215,12 @@
                 <!-- Film/Dizi Toggle + Sürpriz Yap -->
                 <div class="type-surprise-row">
                     <div class="type-toggle-container">
+                        <button class="type-toggle-btn" data-filter="type" data-value="all">
+                            <span class="type-icon">🎬</span>
+                            <span>Karışık</span>
+                        </button>
                         <button class="type-toggle-btn active" data-filter="type" data-value="movie">
-                            <span class="type-icon">🎥</span>
+                            <span class="type-icon">🎬</span>
                             <span>Film</span>
                         </button>
                         <button class="type-toggle-btn" data-filter="type" data-value="tv">
@@ -226,7 +230,7 @@
                     </div>
                     <button class="surprise-btn-new" id="surprise-btn">
                         <span class="surprise-icon">🎲</span>
-                        <span>Sürpriz Yap</span>
+                        <span>Sürpriz</span>
                     </button>
                 </div>
 

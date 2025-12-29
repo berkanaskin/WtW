@@ -1164,21 +1164,21 @@ function setupNeIzlesemNewUI() {
         });
     }
 
-    // Sürpriz Yap button (new UI)
+    // Sürpriz Yap button (new UI) - always mixed
     const surpriseBtn = document.getElementById('surprise-btn');
     if (surpriseBtn) {
         surpriseBtn.addEventListener('click', () => {
-            // Random selection - clear filters and get random
+            // Random selection - mixed movies and TV shows
             neIzlesemFilters.style = 'random';
-            neIzlesemFilters.type = Math.random() > 0.5 ? 'movie' : 'tv';
+            neIzlesemFilters.type = 'all'; // Karışık - hem film hem dizi
             neIzlesemFilters.genres = [];
             neIzlesemFilters.platforms = [];
+            neIzlesemFilters.era = '';
             neIzlesemFilters.page = 1;
 
-            // Deselect all toggle buttons except one random
+            // Activate "Karışık" toggle button
             document.querySelectorAll('.type-toggle-btn').forEach(b => b.classList.remove('active'));
-            const typeToActivate = neIzlesemFilters.type === 'movie' ? 'movie' : 'tv';
-            document.querySelector(`.type-toggle-btn[data-value="${typeToActivate}"]`)?.classList.add('active');
+            document.querySelector('.type-toggle-btn[data-value="all"]')?.classList.add('active');
 
             generateNeIzlesemResults(false);
         });
@@ -1325,12 +1325,12 @@ async function loadFeaturedRecommendation() {
                 <h3 class="featured-card-title">${title}</h3>
                 <p class="featured-card-desc">${overview}</p>
                 <div class="featured-card-actions">
-                    <button class="featured-fav-btn" data-id="${itemId}" data-type="${mediaType}" data-title="${title}">
-                        <span>♡</span>
-                    </button>
                     <button class="featured-watch-btn" data-id="${itemId}" data-type="${mediaType}">
                         <span>▶</span>
                         <span>Detayları Gör</span>
+                    </button>
+                    <button class="featured-fav-btn" data-id="${itemId}" data-type="${mediaType}" data-title="${title}">
+                        <span>♡</span>
                     </button>
                     <button class="featured-add-btn" data-id="${itemId}" data-type="${mediaType}" data-title="${title}">
                         <span>+</span>
