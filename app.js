@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.9.4.0-beta';
+const APP_VERSION = '1.9.5.0-beta';
 
 // DOM Elements
 const elements = {
@@ -1080,51 +1080,47 @@ function setupNeIzlesemWizard() {
     const wizard = document.getElementById('neizlesem-wizard');
     if (!wizard) return;
 
-    // V2 Type buttons (single select - Film/Dizi)
-    wizard.querySelectorAll('.type-btn-v2').forEach(btn => {
+    // CINEMATIC Type toggle buttons (single select - Film/Dizi)
+    wizard.querySelectorAll('.type-toggle-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            wizard.querySelectorAll('.type-btn-v2').forEach(b => b.classList.remove('active'));
+            wizard.querySelectorAll('.type-toggle-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             neIzlesemFilters.type = btn.dataset.value;
-            // Turn off random mode when selecting type
-            const randomBtn = document.getElementById('random-mode-btn');
-            if (randomBtn) randomBtn.classList.remove('active');
         });
     });
 
-    // V2 Random button (toggle)
-    const randomBtn = document.getElementById('random-mode-btn');
-    if (randomBtn) {
-        randomBtn.addEventListener('click', () => {
-            randomBtn.classList.toggle('active');
-            if (randomBtn.classList.contains('active')) {
-                neIzlesemFilters.style = 'random';
-                neIzlesemFilters.type = 'all';
-                // Deselect type buttons
-                wizard.querySelectorAll('.type-btn-v2').forEach(b => b.classList.remove('active'));
-            } else {
-                neIzlesemFilters.style = 'popular';
-            }
+    // Sürpriz Yap button (surprise random)
+    const surpriseBtn = document.getElementById('surprise-btn');
+    if (surpriseBtn) {
+        surpriseBtn.addEventListener('click', () => {
+            neIzlesemFilters.style = 'random';
+            neIzlesemFilters.type = 'all';
+            neIzlesemFilters.genres = [];
+            neIzlesemFilters.platforms = [];
+            // Deselect everything
+            wizard.querySelectorAll('.type-toggle-btn').forEach(b => b.classList.remove('active'));
+            wizard.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+            wizard.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('selected'));
+            // Trigger generation immediately
+            generateRecommendations();
         });
     }
 
-    // V2 Category icon buttons (single select for main category/style)
-    wizard.querySelectorAll('.category-icon-btn').forEach(btn => {
+    // Category buttons (single select for main category/style)
+    wizard.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            wizard.querySelectorAll('.category-icon-btn').forEach(b => b.classList.remove('selected'));
+            wizard.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
             neIzlesemFilters.style = btn.dataset.value;
-            // Turn off random mode when selecting category
-            if (randomBtn) randomBtn.classList.remove('active');
         });
     });
 
-    // V2 Genre pills (multi-select)
-    wizard.querySelectorAll('.filter-pill-v2[data-filter="genre"]').forEach(pill => {
-        pill.addEventListener('click', () => {
-            pill.classList.toggle('selected');
-            const value = pill.dataset.value;
-            if (pill.classList.contains('selected')) {
+    // Genre filter chips (multi-select)
+    wizard.querySelectorAll('.filter-chip[data-filter="genre"]').forEach(chip => {
+        chip.addEventListener('click', () => {
+            chip.classList.toggle('selected');
+            const value = chip.dataset.value;
+            if (chip.classList.contains('selected')) {
                 if (!neIzlesemFilters.genres.includes(value)) {
                     neIzlesemFilters.genres.push(value);
                 }
@@ -1134,32 +1130,80 @@ function setupNeIzlesemWizard() {
         });
     });
 
-    // V2 Platform pills (multi-select for specific platforms, or 'all' for any)
-    wizard.querySelectorAll('.filter-pill-v2[data-filter="platform"]').forEach(pill => {
-        pill.addEventListener('click', () => {
-            const value = pill.dataset.value;
+    // Platform filter chips (multi-select for specific platforms, or 'all' for any)
+    wizard.querySelectorAll('.filter-chip[data-filter="platform"]').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const value = chip.dataset.value;
 
             // If "Fark Etmez" (all) is clicked, deselect others and clear platforms
             if (value === 'all') {
-                wizard.querySelectorAll('.filter-pill-v2[data-filter="platform"]').forEach(p => {
-                    p.classList.remove('selected');
+                wizard.querySelectorAll('.filter-chip[data-filter="platform"]').forEach(c => {
+                    c.classList.remove('selected');
                 });
-                pill.classList.add('selected');
+                chip.classList.add('selected');
                 neIzlesemFilters.platforms = [];
                 return;
             }
 
             // Deselect "Fark Etmez" when selecting specific platform
-            const allPill = wizard.querySelector('.filter-pill-v2[data-filter="platform"][data-value="all"]');
-            if (allPill) allPill.classList.remove('selected');
+            const allChip = wizard.querySelector('.filter-chip[data-filter="platform"][data-value="all"]');
+            if (allChip) allChip.classList.remove('selected');
 
-            pill.classList.toggle('selected');
-            if (pill.classList.contains('selected')) {
+            chip.classList.toggle('selected');
+            if (chip.classList.contains('selected')) {
                 if (!neIzlesemFilters.platforms.includes(value)) {
                     neIzlesemFilters.platforms.push(value);
                 }
             } else {
                 neIzlesemFilters.platforms = neIzlesemFilters.platforms.filter(p => p !== value);
+            }
+        });
+    });
+
+    // Legacy handlers for old elements (backward compatibility + V2 fallback)
+    wizard.querySelectorAll('.type-btn-v2').forEach(btn => {
+        btn.addEventListener('click', () => {
+            wizard.querySelectorAll('.type-btn-v2').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            neIzlesemFilters.type = btn.dataset.value;
+        });
+    });
+
+    wizard.querySelectorAll('.category-icon-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            wizard.querySelectorAll('.category-icon-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            neIzlesemFilters.style = btn.dataset.value;
+        });
+    });
+
+    wizard.querySelectorAll('.filter-pill-v2').forEach(pill => {
+        pill.addEventListener('click', () => {
+            const filter = pill.dataset.filter;
+            const value = pill.dataset.value;
+
+            if (filter === 'genre') {
+                pill.classList.toggle('selected');
+                if (pill.classList.contains('selected')) {
+                    if (!neIzlesemFilters.genres.includes(value)) neIzlesemFilters.genres.push(value);
+                } else {
+                    neIzlesemFilters.genres = neIzlesemFilters.genres.filter(g => g !== value);
+                }
+            } else if (filter === 'platform') {
+                if (value === 'all') {
+                    wizard.querySelectorAll('.filter-pill-v2[data-filter="platform"]').forEach(p => p.classList.remove('selected'));
+                    pill.classList.add('selected');
+                    neIzlesemFilters.platforms = [];
+                } else {
+                    const allPill = wizard.querySelector('.filter-pill-v2[data-filter="platform"][data-value="all"]');
+                    if (allPill) allPill.classList.remove('selected');
+                    pill.classList.toggle('selected');
+                    if (pill.classList.contains('selected')) {
+                        if (!neIzlesemFilters.platforms.includes(value)) neIzlesemFilters.platforms.push(value);
+                    } else {
+                        neIzlesemFilters.platforms = neIzlesemFilters.platforms.filter(p => p !== value);
+                    }
+                }
             }
         });
     });
@@ -1260,7 +1304,9 @@ async function generateNeIzlesemResults(append = false) {
             'festival': 'with_keywords=10714|293509|16154&sort_by=vote_average.desc&vote_count.gte=50', // Cannes, Sundance, Berlin
             'awarded': 'sort_by=vote_average.desc&vote_count.gte=1000&vote_average.gte=7.5',
             'classic': `primary_release_date.lte=2000-12-31&sort_by=vote_average.desc&vote_count.gte=500`,
-            'local': 'with_original_language=tr&sort_by=vote_average.desc&vote_count.gte=30'
+            'local': 'with_original_language=tr&sort_by=vote_average.desc&vote_count.gte=30',
+            'nostalgia': 'primary_release_date.gte=1990-01-01&primary_release_date.lte=2010-12-31&sort_by=popularity.desc&vote_count.gte=200',
+            'hidden': 'vote_average.gte=7.0&vote_count.gte=50&vote_count.lte=500&sort_by=vote_average.desc'
         };
 
         const baseQuery = styleQueries[neIzlesemFilters.style] || styleQueries['popular'];
