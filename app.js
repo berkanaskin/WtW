@@ -78,6 +78,7 @@ const state = {
     searchResults: [],
     searchResultsVisible: false,
     cameFromSearch: false,
+    skipNextHomePage: false, // Flag to prevent loadHomePage from overriding search restore
 
     // Auth State
     currentUser: null,
@@ -897,6 +898,13 @@ function hideAllSections() {
 }
 
 async function loadHomePage() {
+    // Check if we should skip this call (after search restore)
+    if (state.skipNextHomePage) {
+        console.log('Skipping loadHomePage - search restore active');
+        state.skipNextHomePage = false;
+        return;
+    }
+
     hideAllSections();
     elements.searchInput.value = '';
     elements.trendingSection.style.display = 'block';
@@ -2759,6 +2767,9 @@ function closeModal() {
                 handleAutocomplete();
             }, 100);
         }
+
+        // Prevent any subsequent loadHomePage from overriding restore
+        state.skipNextHomePage = true;
 
         // Reset flag AFTER restoring
         state.cameFromSearch = false;
