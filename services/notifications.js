@@ -185,4 +185,108 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         window.NotificationService.checkWatchlistForProviders();
     }, 3000);
+
+    // ============================================
+    // NOTIFICATION DROPDOWN UI
+    // ============================================
+    const notificationBtn = document.getElementById('notification-btn');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationList = document.getElementById('notification-list');
+    const notificationEmpty = document.getElementById('notification-empty');
+    const markAllReadBtn = document.getElementById('mark-all-read');
+
+    // Toggle dropdown
+    if (notificationBtn && notificationDropdown) {
+        notificationBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isVisible = notificationDropdown.classList.contains('visible');
+
+            // Close other dropdowns
+            document.querySelectorAll('.lang-dropdown-menu.visible, .user-dropdown.visible').forEach(d => {
+                d.classList.remove('visible');
+            });
+
+            if (!isVisible) {
+                notificationDropdown.classList.add('visible');
+                renderNotifications();
+            } else {
+                notificationDropdown.classList.remove('visible');
+            }
+        });
+    }
+
+    // Mark all as read
+    if (markAllReadBtn) {
+        markAllReadBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.NotificationService.markAllAsRead();
+            renderNotifications();
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (notificationDropdown && !e.target.closest('.notification-container')) {
+            notificationDropdown.classList.remove('visible');
+        }
+    });
+
+    // Render notifications list
+    function renderNotifications() {
+        const notifications = window.NotificationService.getAll();
+
+        if (notifications.length === 0) {
+            notificationList.innerHTML = '';
+            notificationList.style.display = 'none';
+            notificationEmpty.style.display = 'flex';
+            return;
+        }
+
+        notificationList.style.display = 'block';
+        notificationEmpty.style.display = 'none';
+
+        notificationList.innerHTML = notifications.map(n => `
+            <div class="notification-item ${n.read ? '' : 'unread'}" data-id="${n.id}" data-item-id="${n.itemId || ''}" data-item-type="${n.itemType || ''}">
+                <span class="notification-icon">${n.icon || '🔔'}</span>
+                <div class="notification-content">
+                    <div class="notification-item-title">${n.title}</div>
+                    <div class="notification-message">${n.message}</div>
+                    <div class="notification-time">${formatTimeAgo(n.timestamp)}</div>
+                </div>
+            </div>
+        `).join('');
+
+        // Add click handlers to notification items
+        notificationList.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const id = parseInt(item.dataset.id);
+                const itemId = item.dataset.itemId;
+                const itemType = item.dataset.itemType;
+
+                // Mark as read
+                window.NotificationService.markAsRead(id);
+                item.classList.remove('unread');
+
+                // If notification has associated content, open it
+                if (itemId && itemType && window.openDetail) {
+                    notificationDropdown.classList.remove('visible');
+                    window.openDetail(itemId, itemType);
+                }
+            });
+        });
+    }
+
+    // Format time ago
+    function formatTimeAgo(timestamp) {
+        const now = new Date();
+        const date = new Date(timestamp);
+        const seconds = Math.floor((now - date) / 1000);
+
+        if (seconds < 60) return 'Az önce';
+        if (seconds < 3600) return `${Math.floor(seconds / 60)} dakika önce`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)} saat önce`;
+        if (seconds < 604800) return `${Math.floor(seconds / 86400)} gün önce`;
+        return date.toLocaleDateString('tr-TR');
+    }
 });
+
