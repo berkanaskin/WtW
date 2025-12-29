@@ -181,12 +181,16 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: 50%;
     color: var(--white);
-    font-size: 1rem;
+    font-size: 1.4rem;
+    line-height: 1;
     cursor: pointer;
     width: 36px;
     height: 36px;
     padding: 0;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s ease;
 }
 
