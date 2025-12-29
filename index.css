@@ -1,5 +1,5 @@
 /* ============================================
-   NEREDE İZLERİM? beta 1.9.7.0
+   NEREDE İZLERİM? beta 1.9.8.0
    Mobile-First Responsive Design
    ============================================ */
 
@@ -212,8 +212,9 @@ body {
     width: 24px;
     height: 24px;
     object-fit: cover;
-    object-position: center;
+    object-position: center center;
     border-radius: 50%;
+    clip-path: circle(50% at center);
 }
 
 .lang-dropdown-menu {
@@ -265,6 +266,7 @@ body {
     border-radius: 50%;
     object-fit: cover;
     object-position: center center;
+    clip-path: circle(50% at center);
 }
 
 /* Unified Header Icon Button */
@@ -320,9 +322,10 @@ body {
 .notification-dropdown {
     position: absolute;
     top: calc(100% + 8px);
-    right: 0;
-    width: 320px;
-    max-width: 90vw;
+    right: -8px;
+    width: 280px;
+    max-width: calc(100vw - 32px);
+    max-height: 70vh;
     background: rgba(15, 15, 25, 0.98);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
@@ -4708,6 +4711,39 @@ a.rating-box.rt:hover {
     transform: rotate(180deg);
 }
 
+/* Öneride Bulun Button */
+.recommend-btn-container {
+    padding: 0 16px;
+    margin-bottom: 20px;
+}
+
+.recommend-btn {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+    transition: all 0.2s ease;
+}
+
+.recommend-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(124, 58, 237, 0.45);
+}
+
+.recommend-btn:active {
+    transform: translateY(0);
+}
+
 /* Filter Dropdowns Row */
 .filter-dropdowns-row {
     display: grid;
@@ -5000,6 +5036,39 @@ a.rating-box.rt:hover {
 
 .featured-add-btn:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+.featured-add-btn.active {
+    background: rgba(16, 185, 129, 0.4);
+    border-color: rgba(16, 185, 129, 0.6);
+}
+
+/* Fav button (heart) */
+.featured-fav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    font-size: 1.4rem;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.featured-fav-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.featured-fav-btn.active {
+    background: rgba(239, 68, 68, 0.4);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #ef4444;
 }
 
 .featured-loading {

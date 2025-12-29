@@ -1155,11 +1155,31 @@ function setupNeIzlesemNewUI() {
     // Filter Dropdowns
     setupFilterDropdowns();
 
-    // Show All Recommendations button
-    const showAllBtn = document.getElementById('show-all-recommendations');
-    if (showAllBtn) {
-        showAllBtn.addEventListener('click', () => {
+    // Öneride Bulun button
+    const recommendBtn = document.getElementById('recommend-btn');
+    if (recommendBtn) {
+        recommendBtn.addEventListener('click', () => {
             neIzlesemFilters.page = 1;
+            generateNeIzlesemResults(false);
+        });
+    }
+
+    // Sürpriz Yap button (new UI)
+    const surpriseBtn = document.getElementById('surprise-btn');
+    if (surpriseBtn) {
+        surpriseBtn.addEventListener('click', () => {
+            // Random selection - clear filters and get random
+            neIzlesemFilters.style = 'random';
+            neIzlesemFilters.type = Math.random() > 0.5 ? 'movie' : 'tv';
+            neIzlesemFilters.genres = [];
+            neIzlesemFilters.platforms = [];
+            neIzlesemFilters.page = 1;
+
+            // Deselect all toggle buttons except one random
+            document.querySelectorAll('.type-toggle-btn').forEach(b => b.classList.remove('active'));
+            const typeToActivate = neIzlesemFilters.type === 'movie' ? 'movie' : 'tv';
+            document.querySelector(`.type-toggle-btn[data-value="${typeToActivate}"]`)?.classList.add('active');
+
             generateNeIzlesemResults(false);
         });
     }
@@ -1233,32 +1253,55 @@ function setupFilterDropdowns() {
     });
 }
 
-// Load featured recommendation card with trending content
+// Load featured recommendation card with trending content - cached for 24 hours
 async function loadFeaturedRecommendation() {
     const featuredCard = document.getElementById('featured-recommendation-card');
     if (!featuredCard) return;
 
     try {
         const lang = state.currentLanguage;
-        const region = localStorage.getItem('detectedRegion') || 'TR';
 
-        // Get trending content
-        const response = await fetch(
-            `https://api.themoviedb.org/3/trending/all/day?api_key=${CONFIG.TMDB_API_KEY}&language=${lang}`
-        );
+        // Check for cached recommendation (24 hour cache)
+        const cached = localStorage.getItem('dailyRecommendation');
+        const cacheTimestamp = localStorage.getItem('dailyRecommendationTime');
+        const now = Date.now();
+        const dayInMs = 24 * 60 * 60 * 1000;
 
-        if (!response.ok) throw new Error('Failed to fetch trending');
+        let item;
 
-        const data = await response.json();
-        const items = data.results || [];
+        // Use cache if valid (less than 24 hours old and same day)
+        if (cached && cacheTimestamp) {
+            const cacheDate = new Date(parseInt(cacheTimestamp));
+            const today = new Date();
+            const isSameDay = cacheDate.toDateString() === today.toDateString();
 
-        if (items.length === 0) {
-            featuredCard.innerHTML = '<div class="featured-loading"><p>İçerik bulunamadı</p></div>';
-            return;
+            if (isSameDay) {
+                item = JSON.parse(cached);
+            }
         }
 
-        // Pick a random item from top 5
-        const item = items[Math.floor(Math.random() * Math.min(5, items.length))];
+        // Fetch new if no valid cache
+        if (!item) {
+            const response = await fetch(
+                `https://api.themoviedb.org/3/trending/all/day?api_key=${CONFIG.TMDB_API_KEY}&language=${lang}`
+            );
+
+            if (!response.ok) throw new Error('Failed to fetch trending');
+
+            const data = await response.json();
+            const items = data.results || [];
+
+            if (items.length === 0) {
+                featuredCard.innerHTML = '<div class="featured-loading"><p>İçerik bulunamadı</p></div>';
+                return;
+            }
+
+            // Pick a random item from top 10 and cache it
+            item = items[Math.floor(Math.random() * Math.min(10, items.length))];
+            localStorage.setItem('dailyRecommendation', JSON.stringify(item));
+            localStorage.setItem('dailyRecommendationTime', now.toString());
+        }
+
         const title = item.title || item.name || 'Bilinmeyen';
         const overview = item.overview || '';
         const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
@@ -1273,7 +1316,7 @@ async function loadFeaturedRecommendation() {
             <div class="featured-card-overlay"></div>
             <div class="featured-card-content">
                 <div class="featured-badges">
-                    <span class="featured-badge-new">YENİ</span>
+                    <span class="featured-badge-new">GÜNÜN SEÇİMİ</span>
                     <div class="featured-rating">
                         <span class="featured-rating-star">⭐</span>
                         <span>${rating}</span>
@@ -1282,6 +1325,9 @@ async function loadFeaturedRecommendation() {
                 <h3 class="featured-card-title">${title}</h3>
                 <p class="featured-card-desc">${overview}</p>
                 <div class="featured-card-actions">
+                    <button class="featured-fav-btn" data-id="${itemId}" data-type="${mediaType}" data-title="${title}">
+                        <span>♡</span>
+                    </button>
                     <button class="featured-watch-btn" data-id="${itemId}" data-type="${mediaType}">
                         <span>▶</span>
                         <span>Detayları Gör</span>
@@ -1296,19 +1342,45 @@ async function loadFeaturedRecommendation() {
         // Watch button clicks
         const watchBtn = featuredCard.querySelector('.featured-watch-btn');
         if (watchBtn) {
-            watchBtn.addEventListener('click', () => {
+            watchBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 openDetail(watchBtn.dataset.id, watchBtn.dataset.type);
             });
         }
 
-        // Add to favorites button
+        // Fav button (heart) - add to favorites
+        const favBtn = featuredCard.querySelector('.featured-fav-btn');
+        if (favBtn) {
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (typeof toggleFavorite === 'function') {
+                    toggleFavorite(favBtn.dataset.id, favBtn.dataset.type, favBtn.dataset.title);
+                    // Toggle heart icon
+                    const heartSpan = favBtn.querySelector('span');
+                    if (heartSpan.textContent === '♡') {
+                        heartSpan.textContent = '♥';
+                        favBtn.classList.add('active');
+                    } else {
+                        heartSpan.textContent = '♡';
+                        favBtn.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        // Add to watchlist button (+)
         const addBtn = featuredCard.querySelector('.featured-add-btn');
         if (addBtn) {
             addBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // Toggle favorite
-                if (typeof toggleFavorite === 'function') {
-                    toggleFavorite(addBtn.dataset.id, addBtn.dataset.type, addBtn.dataset.title);
+                // Add to watchlist (TODO: implement watchlist)
+                const plusSpan = addBtn.querySelector('span');
+                if (plusSpan.textContent === '+') {
+                    plusSpan.textContent = '✓';
+                    addBtn.classList.add('active');
+                } else {
+                    plusSpan.textContent = '+';
+                    addBtn.classList.remove('active');
                 }
             });
         }
