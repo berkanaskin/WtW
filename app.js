@@ -2696,33 +2696,53 @@ function closeModal() {
 
     // Restore search state if user came from search
     if (state.cameFromSearch && state.searchQuery) {
-        console.log('Restoring search state:', state.searchQuery, 'Results:', state.searchResults?.length, 'Scroll:', state.searchScrollPosition);
+        console.log('closeModal: Restoring search state:', state.searchQuery, 'Results:', state.searchResults?.length);
 
         // Store scroll position before any DOM changes
         const savedScrollPosition = state.searchScrollPosition;
 
+        // Get elements directly from DOM to avoid stale references
+        const searchInput = document.getElementById('search-input');
+        const searchClear = document.getElementById('search-clear');
+        const searchResultsSection = document.getElementById('search-results-section');
+        const resultsGrid = document.getElementById('results-grid');
+        const resultsTitle = document.getElementById('results-title');
+        const resultsCount = document.getElementById('results-count');
+
         // Show search clear button
-        if (elements.searchClear) {
-            elements.searchClear.style.display = 'block';
+        if (searchClear) {
+            searchClear.style.display = 'block';
         }
 
         // Restore search input value
-        if (elements.searchInput) {
-            elements.searchInput.value = state.searchQuery;
+        if (searchInput) {
+            searchInput.value = state.searchQuery;
+            console.log('closeModal: Input value set to:', searchInput.value);
         }
 
-        // Check if we have full search results
-        if (state.searchResults && state.searchResults.length > 0) {
-            // Full search results - show results section
+        // Check if we have search results
+        if (state.searchResults && state.searchResults.length > 0 && searchResultsSection && resultsGrid) {
+            console.log('closeModal: Showing results section with', state.searchResults.length, 'items');
+
+            // Hide all sections first
             hideAllSections();
-            elements.searchResultsSection.style.display = 'block';
-            elements.resultsTitle.textContent = `"${state.searchQuery}"`;
-            elements.resultsGrid.innerHTML = '';
+
+            // Show search results section
+            searchResultsSection.style.display = 'block';
+
+            if (resultsTitle) {
+                resultsTitle.textContent = `"${state.searchQuery}"`;
+            }
+
+            resultsGrid.innerHTML = '';
             state.searchResults.forEach(item => {
                 const card = createMovieCard(item, item.media_type || 'movie');
-                elements.resultsGrid.appendChild(card);
+                resultsGrid.appendChild(card);
             });
-            elements.resultsCount.textContent = `${state.searchResults.length} sonuç`;
+
+            if (resultsCount) {
+                resultsCount.textContent = `${state.searchResults.length} sonuç`;
+            }
 
             // Restore scroll position after DOM is fully updated
             if (savedScrollPosition) {
@@ -2733,6 +2753,7 @@ function closeModal() {
                 });
             }
         } else {
+            console.log('closeModal: No results, triggering autocomplete');
             // Autocomplete click - trigger autocomplete dropdown
             setTimeout(() => {
                 handleAutocomplete();
