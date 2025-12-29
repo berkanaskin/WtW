@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.9.1.6-beta';
+const APP_VERSION = '1.9.1.7-beta';
 
 // DOM Elements
 const elements = {
@@ -245,22 +245,22 @@ function updateAuthUI() {
             <div class="user-menu-container">
                 <button class="user-avatar-btn" id="user-menu-btn">
                     <span class="user-avatar">${initial}</span>
-                    <span class="user-name-text">${state.currentUser.name?.split(' ')[0] || 'Kullanıcı'}</span>
+                    <span class="user-name-text">${state.currentUser.name?.split(' ')[0] || i18n.t('guest')}</span>
                     <span class="dropdown-arrow">▼</span>
                 </button>
                 <div class="user-dropdown" id="user-dropdown">
                     <a href="#" class="dropdown-item" data-action="profile">
-                        <span class="dropdown-icon">👤</span> Profilim
+                        <span class="dropdown-icon">👤</span> ${i18n.t('sectionProfile')}
                     </a>
                     <a href="#" class="dropdown-item" data-action="favorites">
-                        <span class="dropdown-icon">❤️</span> Favorilerim
+                        <span class="dropdown-icon">❤️</span> ${i18n.t('navFavorites')}
                     </a>
                     <a href="#" class="dropdown-item ${!isPremium ? 'locked' : ''}" data-action="notifications">
-                        <span class="dropdown-icon">${isPremium ? '🔔' : '🔒'}</span> Bildirimler ${!isPremium ? '<small>(Premium)</small>' : ''}
+                        <span class="dropdown-icon">${isPremium ? '🔔' : '🔒'}</span> ${i18n.t('notify')} ${!isPremium ? '<small>(Premium)</small>' : ''}
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item logout" data-action="logout">
-                        <span class="dropdown-icon">🚪</span> Çıkış Yap
+                        <span class="dropdown-icon">🚪</span> ${i18n.t('logout')}
                     </a>
                 </div>
             </div>
@@ -309,7 +309,7 @@ function updateAuthUI() {
         });
     } else {
         // Guest - show login button
-        authArea.innerHTML = `<button class="login-btn" id="login-btn">👤 Giriş</button>`;
+        authArea.innerHTML = `<button class="login-btn" id="login-btn">👤 ${i18n.t('login')}</button>`;
         document.getElementById('login-btn')?.addEventListener('click', openLoginModal);
     }
 }
@@ -627,6 +627,9 @@ function applyLanguage(langCode) {
         i18n.setLanguage(langCode);
         i18n.updateTranslations();
     }
+
+    // Update auth UI to reflect new language (login button, dropdown menu)
+    updateAuthUI();
 }
 
 function handleLanguageChange(langCode) {
