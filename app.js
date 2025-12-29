@@ -3,7 +3,7 @@
 // Clean Mockup Design - Full Features
 // ============================================
 
-const APP_VERSION = '1.9.2.1-beta';
+const APP_VERSION = '1.9.2.2-beta';
 
 // DOM Elements
 const elements = {
@@ -2544,10 +2544,7 @@ function closeModal() {
 
     // Restore search state if user came from search
     if (state.cameFromSearch && state.searchQuery) {
-        // Restore search input value
-        if (elements.searchInput) {
-            elements.searchInput.value = state.searchQuery;
-        }
+        console.log('Restoring search state:', state.searchQuery, 'Results:', state.searchResults?.length);
 
         // Show search clear button
         if (elements.searchClear) {
@@ -2560,6 +2557,10 @@ function closeModal() {
 
         if (state.searchResults && state.searchResults.length > 0) {
             // Scenario 1: Full search results - show results section
+            // Restore search input value
+            if (elements.searchInput) {
+                elements.searchInput.value = state.searchQuery;
+            }
             hideAllSections();
             elements.searchResultsSection.style.display = 'block';
             elements.resultsTitle.textContent = `"${state.searchQuery}"`;
@@ -2570,8 +2571,15 @@ function closeModal() {
             });
             elements.resultsCount.textContent = `${state.searchResults.length} sonuç`;
         } else {
-            // Scenario 2: Autocomplete click - trigger autocomplete again
-            handleAutocomplete();
+            // Scenario 2: Autocomplete click - restore query and trigger autocomplete
+            // MUST set input value BEFORE calling handleAutocomplete
+            if (elements.searchInput) {
+                elements.searchInput.value = state.searchQuery;
+            }
+            // Small delay to ensure input value is set, then trigger autocomplete
+            setTimeout(() => {
+                handleAutocomplete();
+            }, 50);
         }
     }
 
