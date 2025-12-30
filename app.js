@@ -254,21 +254,40 @@ function updateAuthUI() {
                 <button class="user-avatar-btn" id="user-menu-btn">
                     <span class="user-avatar">${initial}</span>
                     <span class="user-name-text">${state.currentUser.name?.split(' ')[0] || i18n.t('guest')}</span>
-                    <span class="dropdown-arrow">▼</span>
+                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
                 </button>
                 <div class="user-dropdown" id="user-dropdown">
                     <a href="#" class="dropdown-item" data-action="profile">
-                        <span class="dropdown-icon">👤</span> ${i18n.t('sectionProfile')}
+                        <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        ${i18n.t('sectionProfile')}
                     </a>
                     <a href="#" class="dropdown-item" data-action="favorites">
-                        <span class="dropdown-icon">❤️</span> ${i18n.t('navFavorites')}
+                        <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        ${i18n.t('navFavorites')}
                     </a>
-                    <a href="#" class="dropdown-item ${!isPremium ? 'locked' : ''}" data-action="notifications">
-                        <span class="dropdown-icon">${isPremium ? '🔔' : '🔒'}</span> ${i18n.t('notify')} ${!isPremium ? '<small>(Premium)</small>' : ''}
+                    ${!isPremium ? `
+                    <a href="#" class="dropdown-item premium-upgrade" data-action="upgrade">
+                        <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        Premium'a Yükselt
                     </a>
+                    ` : ''}
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item logout" data-action="logout">
-                        <span class="dropdown-icon">🚪</span> ${i18n.t('logout')}
+                        <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        ${i18n.t('logout')}
                     </a>
                 </div>
             </div>
@@ -280,6 +299,7 @@ function updateAuthUI() {
 
         menuBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
+            closeAllDropdowns(); // Close other dropdowns first
             dropdown.classList.toggle('visible');
         });
 
@@ -297,12 +317,8 @@ function updateAuthUI() {
                     case 'favorites':
                         document.querySelector('.nav-item[data-page="favorites"]')?.click();
                         break;
-                    case 'notifications':
-                        if (isPremium) {
-                            alert('Bildirimler yakında!');
-                        } else {
-                            showPremiumModal();
-                        }
+                    case 'upgrade':
+                        showPremiumModal();
                         break;
                     case 'logout':
                         handleLogout();
@@ -316,8 +332,16 @@ function updateAuthUI() {
             dropdown?.classList.remove('visible');
         });
     } else {
-        // Guest - show login button
-        authArea.innerHTML = `<button class="login-btn" id="login-btn">👤 ${i18n.t('login')}</button>`;
+        // Guest - show login button with SVG icon
+        authArea.innerHTML = `
+            <button class="login-btn" id="login-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                ${i18n.t('login')}
+            </button>
+        `;
         document.getElementById('login-btn')?.addEventListener('click', openLoginModal);
     }
 }
@@ -965,14 +989,35 @@ async function showAllSection(sectionType) {
     hideAllSections();
     elements.searchResultsSection.style.display = 'block';
 
-    // Set title
+    // Set title with back button
     const titles = {
         'trending': 'Popüler İçerikler',
         'new-releases': 'Yeni Çıkanlar',
         'classics': 'Klasikler',
         'suggested': 'Sizin İçin Önerilenler'
     };
-    elements.resultsTitle.textContent = titles[sectionType] || 'Tümü';
+
+    // Add back button to header
+    const sectionHeader = elements.searchResultsSection.querySelector('.section-header');
+    if (sectionHeader) {
+        sectionHeader.innerHTML = `
+            <h2 class="section-title" id="results-title">${titles[sectionType] || 'Tümü'}</h2>
+            <span class="results-count" id="results-count"></span>
+            <button class="back-btn" id="view-all-back-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Geri
+            </button>
+        `;
+
+        // Add back button event
+        document.getElementById('view-all-back-btn')?.addEventListener('click', () => {
+            currentViewAllSection = null;
+            window.removeEventListener('scroll', handleInfiniteScroll);
+            loadHomePage();
+        });
+    }
 
     // Clear and load first page
     elements.resultsGrid.innerHTML = '';
