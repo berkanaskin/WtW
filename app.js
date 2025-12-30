@@ -570,6 +570,13 @@ function closePremiumModal() {
 function simulatePurchase() {
     state.userTier = 'premium';
     localStorage.setItem('userTier', 'premium');
+
+    // Also update AuthService user if logged in
+    if (window.AuthService && window.AuthService.currentUser) {
+        window.AuthService.currentUser.tier = 'premium';
+        window.AuthService.saveUser(window.AuthService.currentUser);
+    }
+
     closePremiumModal();
     alert('Tebrikler! Artık Premium üyesiniz! 🎉');
 
@@ -578,12 +585,15 @@ function simulatePurchase() {
         loadProfilePage();
     }
 
-    // If in detail modal, close and re-open to update features
-    if (elements.modal.classList.contains('visible') && state.currentItemId) {
-        const id = state.currentItemId;
-        const type = state.currentItemType;
-        closeModal();
-        setTimeout(() => openDetail(id, type), 100);
+    // Update auth UI
+    updateAuthUI();
+
+    // If in detail modal, update the notify button immediately
+    const notifyBtn = document.getElementById('notify-btn');
+    if (notifyBtn) {
+        notifyBtn.classList.remove('locked');
+        notifyBtn.disabled = false;
+        notifyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Haber Ver';
     }
 }
 
@@ -1687,9 +1697,25 @@ async function generateNeIzlesemResults(append = false) {
 
         hideLoading();
 
-        // Hide wizard, show results
-        if (wizard) wizard.style.display = 'none';
-        if (results) results.style.display = 'block';
+        // Switch to search results section (like main search)
+        hideAllSections();
+        elements.searchResultsSection.style.display = 'block';
+
+        // Build title based on filters
+        let filterDesc = 'Ne İzlesem Önerileri';
+        const filterParts = [];
+        if (neIzlesemFilters.era) {
+            const eraLabels = { '2020': '2020+', '2010': '2010\'lar', '2000': '2000\'ler', '1990': '90\'lar', '1980': '80\'ler', 'classic': 'Klasik' };
+            filterParts.push(eraLabels[neIzlesemFilters.era] || neIzlesemFilters.era);
+        }
+        if (neIzlesemFilters.type === 'movie') filterParts.push('Filmler');
+        else if (neIzlesemFilters.type === 'tv') filterParts.push('Diziler');
+
+        if (filterParts.length > 0) {
+            filterDesc = filterParts.join(' - ');
+        }
+
+        elements.resultsTitle.textContent = filterDesc;
 
         // Scroll to top when showing results
         if (!append) {
@@ -1697,60 +1723,27 @@ async function generateNeIzlesemResults(append = false) {
         }
 
         if (allResults.length === 0 && !append) {
-            elements.discoverGrid.innerHTML = `
+            elements.resultsGrid.innerHTML = `
                 <div class="empty-state visible" style="grid-column: 1/-1;">
                     <span class="empty-icon">🎭</span>
                     <p>Bu kriterlere uygun içerik bulunamadı</p>
                 </div>
             `;
-            if (loadMoreContainer) loadMoreContainer.style.display = 'none';
+            elements.resultsCount.textContent = '';
             return;
         }
 
-        // Render results
-        const cardsHtml = allResults.map(item => {
-            const title = item.title || item.name;
-            const originalTitle = item.original_title || item.original_name || '';
-            const rating = item.vote_average?.toFixed(1) || '?';
-            const year = (item.release_date || item.first_air_date || '').substring(0, 4);
-            const poster = item.poster_path ? `https://image.tmdb.org/t/p/w342${item.poster_path}` : null;
-            const typeLabel = item.media_type === 'movie' ? 'Film' : 'Dizi';
-
-            return `
-                <div class="movie-card" data-id="${item.id}" data-type="${item.media_type}" data-title="${title}" data-year="${year}" data-original="${originalTitle}">
-                    <div class="movie-poster">
-                        ${poster ? `<img src="${poster}" alt="${title}" loading="lazy">` : '<div class="no-image">🎬</div>'}
-                        <span class="card-badge">${typeLabel}</span>
-                        <span class="rating-badge">⭐ ${rating}</span>
-                    </div>
-                    <div class="movie-info">
-                        <h3 class="movie-title">${title}</h3>
-                        <span class="movie-year">${year}</span>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        if (append) {
-            elements.discoverGrid.insertAdjacentHTML('beforeend', cardsHtml);
-        } else {
-            elements.discoverGrid.innerHTML = cardsHtml;
+        // Render results using createMovieCard (same as main search)
+        if (!append) {
+            elements.resultsGrid.innerHTML = '';
         }
 
-        // Show load more if there are results
-        if (loadMoreContainer) {
-            loadMoreContainer.style.display = allResults.length >= 10 ? 'flex' : 'none';
-        }
-
-        // Add click handlers to new cards
-        elements.discoverGrid.querySelectorAll('.movie-card').forEach(card => {
-            if (!card.hasAttribute('data-listener')) {
-                card.setAttribute('data-listener', 'true');
-                card.addEventListener('click', () => {
-                    openDetail(card.dataset.id, card.dataset.type, card.dataset.title, card.dataset.year, card.dataset.original);
-                });
-            }
+        allResults.forEach(item => {
+            const card = createMovieCard(item, item.media_type || 'movie');
+            elements.resultsGrid.appendChild(card);
         });
+
+        elements.resultsCount.textContent = `${elements.resultsGrid.children.length} sonuç`;
 
     } catch (e) {
         hideLoading();
