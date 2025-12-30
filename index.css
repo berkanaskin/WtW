@@ -187,10 +187,10 @@ body {
 }
 
 .lang-dropdown-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
     border-radius: 50%;
     background: var(--glass);
     border: 1px solid var(--glass-border);
@@ -209,10 +209,10 @@ body {
 }
 
 .lang-dropdown-btn .lang-flag {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
     object-fit: cover;
     object-position: center center;
     border-radius: 50%;
@@ -273,8 +273,8 @@ body {
 
 /* Unified Header Icon Button */
 .header-icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -288,8 +288,8 @@ body {
 }
 
 .header-icon-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
 }
 
 .header-icon-btn:hover {
