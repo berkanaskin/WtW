@@ -201,10 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const isVisible = notificationDropdown.classList.contains('visible');
 
-            // Close other dropdowns
-            document.querySelectorAll('.lang-dropdown-menu.visible, .user-dropdown.visible').forEach(d => {
-                d.classList.remove('visible');
-            });
+            // Close all dropdowns first
+            if (window.closeAllDropdowns) window.closeAllDropdowns();
 
             if (!isVisible) {
                 notificationDropdown.classList.add('visible');

@@ -669,6 +669,26 @@ function handleLanguageChange(langCode) {
 }
 
 // ============================================
+// CLOSE ALL DROPDOWNS
+// ============================================
+function closeAllDropdowns() {
+    // Close language dropdown
+    const langDropdownMenu = document.getElementById('lang-dropdown-menu');
+    if (langDropdownMenu) langDropdownMenu.classList.remove('visible');
+
+    // Close notification dropdown
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    if (notificationDropdown) notificationDropdown.classList.remove('visible');
+
+    // Close user dropdown
+    const userDropdown = document.getElementById('user-dropdown');
+    if (userDropdown) userDropdown.classList.remove('visible');
+}
+
+// Expose to window for use in other scripts
+window.closeAllDropdowns = closeAllDropdowns;
+
+// ============================================
 // EVENT LISTENERS
 // ============================================
 
@@ -687,6 +707,7 @@ function setupEventListeners() {
         // Toggle dropdown
         langDropdownBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            closeAllDropdowns();
             langDropdownMenu.classList.toggle('visible');
         });
 
@@ -867,6 +888,14 @@ function setupEventListeners() {
         });
     }
 
+    // View All buttons
+    document.querySelectorAll('.view-all-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const section = btn.dataset.section;
+            showAllSection(section);
+        });
+    });
+
     // Bottom Navigation
     setupBottomNav();
 }
@@ -919,6 +948,105 @@ function hideAllSections() {
     // Also hide classics and suggested on non-home pages
     if (elements.classicsSection) elements.classicsSection.style.display = 'none';
     if (elements.suggestedSection) elements.suggestedSection.style.display = 'none';
+}
+
+// ============================================
+// SHOW ALL SECTION - Infinite Scroll
+// ============================================
+let currentViewAllSection = null;
+let currentViewAllPage = 1;
+let isLoadingMore = false;
+
+async function showAllSection(sectionType) {
+    currentViewAllSection = sectionType;
+    currentViewAllPage = 1;
+
+    // Switch to search results view
+    hideAllSections();
+    elements.searchResultsSection.style.display = 'block';
+
+    // Set title
+    const titles = {
+        'trending': 'Popüler İçerikler',
+        'new-releases': 'Yeni Çıkanlar',
+        'classics': 'Klasikler',
+        'suggested': 'Sizin İçin Önerilenler'
+    };
+    elements.resultsTitle.textContent = titles[sectionType] || 'Tümü';
+
+    // Clear and load first page
+    elements.resultsGrid.innerHTML = '';
+    showLoading();
+    await loadMoreViewAll();
+    hideLoading();
+
+    // Setup infinite scroll
+    setupInfiniteScroll();
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function loadMoreViewAll() {
+    if (isLoadingMore || !currentViewAllSection) return;
+    isLoadingMore = true;
+
+    try {
+        let data;
+        const lang = state.currentLanguage;
+        const page = currentViewAllPage;
+
+        switch (currentViewAllSection) {
+            case 'trending':
+                data = await API.fetchTMDB(`/trending/all/week?language=${lang}&page=${page}`);
+                break;
+            case 'new-releases':
+                data = await API.fetchTMDB(`/movie/now_playing?language=${lang}&page=${page}`);
+                break;
+            case 'classics':
+                data = await API.fetchTMDB(`/discover/movie?language=${lang}&primary_release_date.lte=2000-12-31&sort_by=vote_average.desc&vote_count.gte=500&page=${page}`);
+                break;
+            case 'suggested':
+                // For suggested, we'll use the smart algorithm for page 1, then popular for more
+                if (page === 1 && state.userTier !== 'guest') {
+                    const smartResults = await generateSmartSuggestions();
+                    data = { results: smartResults };
+                } else {
+                    data = await API.fetchTMDB(`/trending/all/week?language=${lang}&page=${page}`);
+                }
+                break;
+        }
+
+        const results = data.results || [];
+        results.forEach(item => {
+            const card = createMovieCard(item, item.media_type || 'movie');
+            elements.resultsGrid.appendChild(card);
+        });
+
+        elements.resultsCount.textContent = `${elements.resultsGrid.children.length} sonuç`;
+        currentViewAllPage++;
+
+    } catch (error) {
+        console.error('Load more error:', error);
+    }
+
+    isLoadingMore = false;
+}
+
+function setupInfiniteScroll() {
+    // Remove previous listener if exists
+    window.removeEventListener('scroll', handleInfiniteScroll);
+    window.addEventListener('scroll', handleInfiniteScroll);
+}
+
+function handleInfiniteScroll() {
+    if (!currentViewAllSection) return;
+
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const threshold = document.documentElement.scrollHeight - 500;
+
+    if (scrollPosition >= threshold && !isLoadingMore) {
+        loadMoreViewAll();
+    }
 }
 
 // ============================================
@@ -2125,16 +2253,11 @@ function showAutocomplete(results) {
             const year = item.dataset.year;
             const original = item.dataset.original;
 
-            // Save the ORIGINAL search query before any changes
-            const originalQuery = elements.searchInput.value.trim();
-            if (originalQuery) {
-                state.searchQuery = originalQuery;
-                // Store autocomplete results for restoration
-                state.searchResults = results;
-                state.searchResultsVisible = true;
-                state.cameFromSearch = true; // Mark that user came from search
-                state.searchScrollPosition = window.scrollY;
-            }
+            // Mark that user came from autocomplete (not search results)
+            state.cameFromAutocomplete = true;
+            state.cameFromSearch = false;
+            state.searchQuery = '';
+            state.searchResults = [];
 
             hideAutocomplete();
             openDetail(id, type, title, year, original);
@@ -3128,6 +3251,15 @@ function closeModal() {
     // Show bottom nav when modal closes
     const bottomNav = document.querySelector('.bottom-nav');
     if (bottomNav) bottomNav.style.display = 'flex';
+
+    // If came from autocomplete, reset and go to home page
+    if (state.cameFromAutocomplete) {
+        state.cameFromAutocomplete = false;
+        elements.searchInput.value = '';
+        document.getElementById('search-clear').style.display = 'none';
+        loadHomePage();
+        return;
+    }
 
     // Restore search state if user came from search
     if (state.cameFromSearch && state.searchQuery) {
