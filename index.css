@@ -49,6 +49,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 html {
@@ -1327,6 +1329,45 @@ body {
     background: #7c4fe6;
 }
 
+/* Compact Icon-Only Action Buttons (for modal, günün önerisi style) */
+.modal-actions-compact {
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.action-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--glass-border);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--white);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn-icon:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent);
+    transform: scale(1.1);
+}
+
+.action-btn-icon.like-btn.active {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.action-btn-icon.watchlist-btn.active {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: #22c55e;
+    color: #22c55e;
+}
+
 /* ============================================
    STAR RATING SYSTEM
 /* Rating Container */
@@ -2297,6 +2338,49 @@ a.rating-box.rt:hover {
     background: var(--accent);
     border-color: var(--accent);
     color: white;
+}
+
+/* Fav Tab Icons */
+.fav-tab svg {
+    flex-shrink: 0;
+}
+
+.fav-tab.active svg {
+    fill: currentColor;
+}
+
+/* Empty List Message - Elegant */
+.empty-list-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    margin: 16px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(6, 182, 212, 0.05) 100%);
+    border: 1px dashed rgba(139, 92, 246, 0.3);
+    border-radius: var(--radius-xl);
+}
+
+.empty-list-message svg {
+    opacity: 0.4;
+    margin-bottom: 16px;
+    color: var(--accent);
+}
+
+.empty-list-message p {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--white-soft);
+    margin-bottom: 6px;
+}
+
+.empty-list-message small {
+    font-size: 0.8rem;
+    color: var(--white-muted);
+    max-width: 280px;
+    line-height: 1.5;
 }
 
 /* ============================================

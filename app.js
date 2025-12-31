@@ -734,8 +734,11 @@ function setupEventListeners() {
         // Toggle dropdown
         langDropdownBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            const isOpen = langDropdownMenu.classList.contains('visible');
             closeAllDropdowns();
-            langDropdownMenu.classList.toggle('visible');
+            if (!isOpen) {
+                langDropdownMenu.classList.add('visible');
+            }
         });
 
         // Language option click
@@ -1618,40 +1621,63 @@ async function loadFeaturedRecommendation() {
             });
         }
 
-        // Fav button (heart) - add to favorites
+        // Fav button (heart) - add to liked items
         const favBtn = featuredCard.querySelector('.featured-fav-btn');
         if (favBtn) {
+            // Check initial state
+            const likedItems = JSON.parse(localStorage.getItem('liked_items') || '[]');
+            const isLiked = likedItems.some(i => i.id === itemId);
+            if (isLiked) {
+                favBtn.querySelector('span').textContent = '♥';
+                favBtn.classList.add('active');
+            }
+
             favBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (typeof toggleFavorite === 'function') {
-                    toggleFavorite(favBtn.dataset.id, favBtn.dataset.type, favBtn.dataset.title);
-                    // Toggle heart icon
-                    const heartSpan = favBtn.querySelector('span');
-                    if (heartSpan.textContent === '♡') {
-                        heartSpan.textContent = '♥';
-                        favBtn.classList.add('active');
-                    } else {
-                        heartSpan.textContent = '♡';
-                        favBtn.classList.remove('active');
-                    }
+                let items = JSON.parse(localStorage.getItem('liked_items') || '[]');
+                const existingIdx = items.findIndex(i => i.id === itemId);
+                const heartSpan = favBtn.querySelector('span');
+
+                if (existingIdx >= 0) {
+                    items.splice(existingIdx, 1);
+                    heartSpan.textContent = '♡';
+                    favBtn.classList.remove('active');
+                } else {
+                    items.push({ id: itemId, type: mediaType, title, poster_path: item.poster_path, addedAt: Date.now() });
+                    heartSpan.textContent = '♥';
+                    favBtn.classList.add('active');
                 }
+                localStorage.setItem('liked_items', JSON.stringify(items));
             });
         }
 
         // Add to watchlist button (+)
         const addBtn = featuredCard.querySelector('.featured-add-btn');
         if (addBtn) {
+            // Check initial state
+            const watchlistItems = JSON.parse(localStorage.getItem('watchlist_items') || '[]');
+            const isInWatchlist = watchlistItems.some(i => i.id === itemId);
+            if (isInWatchlist) {
+                addBtn.querySelector('span').textContent = '✓';
+                addBtn.classList.add('active');
+            }
+
             addBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // Add to watchlist (TODO: implement watchlist)
+                let items = JSON.parse(localStorage.getItem('watchlist_items') || '[]');
+                const existingIdx = items.findIndex(i => i.id === itemId);
                 const plusSpan = addBtn.querySelector('span');
-                if (plusSpan.textContent === '+') {
-                    plusSpan.textContent = '✓';
-                    addBtn.classList.add('active');
-                } else {
+
+                if (existingIdx >= 0) {
+                    items.splice(existingIdx, 1);
                     plusSpan.textContent = '+';
                     addBtn.classList.remove('active');
+                } else {
+                    items.push({ id: itemId, type: mediaType, title, poster_path: item.poster_path, addedAt: Date.now() });
+                    plusSpan.textContent = '✓';
+                    addBtn.classList.add('active');
                 }
+                localStorage.setItem('watchlist_items', JSON.stringify(items));
             });
         }
 
@@ -2789,22 +2815,12 @@ function renderDetail(details, providers, type, itemId) {
                 ${crewHtml}
 
                 <div class="modal-actions-container">
-                    <div class="modal-actions">
-                        <button class="action-btn like-btn ${isLiked ? 'active' : ''}" id="like-btn" data-id="${itemId}" data-type="${type}" data-title="${title}" title="Beğen">
-                            <svg viewBox="0 0 24 24" fill="${isLiked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                            </svg>
-                            <span>${isLiked ? 'Beğendin' : 'Beğen'}</span>
+                    <div class="modal-actions modal-actions-compact">
+                        <button class="action-btn-icon like-btn ${isLiked ? 'active' : ''}" id="like-btn" data-id="${itemId}" data-type="${type}" data-title="${title}" title="Beğen">
+                            <span>${isLiked ? '♥' : '♡'}</span>
                         </button>
-                        <button class="action-btn watchlist-btn ${isInWatchlist ? 'active' : ''}" id="watchlist-btn" data-id="${itemId}" data-type="${type}" data-title="${title}" title="İzleyeceğim">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                                ${isInWatchlist ? '<polyline points="20 6 9 17 4 12"/>' : '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>'}
-                            </svg>
-                            <span>${isInWatchlist ? 'Listede' : 'İzleyeceğim'}</span>
-                        </button>
-                        <button class="action-btn notify-btn ${!isPremium ? 'locked' : ''}" id="notify-btn" ${!isMember ? 'disabled' : ''} title="Haber Ver">
-                            ${isPremium ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'}
-                            <span>${isPremium ? 'Haber Ver' : 'Premium'}</span>
+                        <button class="action-btn-icon watchlist-btn ${isInWatchlist ? 'active' : ''}" id="watchlist-btn" data-id="${itemId}" data-type="${type}" data-title="${title}" title="İzleyeceğim">
+                            <span>${isInWatchlist ? '✓' : '+'}</span>
                         </button>
                     </div>
                     ${isMember ? `
@@ -2874,17 +2890,16 @@ function renderDetail(details, providers, type, itemId) {
 
         let likedItems = JSON.parse(localStorage.getItem('liked_items') || '[]');
         const existingIndex = likedItems.findIndex(item => item.id === id);
+        const iconSpan = this.querySelector('span');
 
         if (existingIndex >= 0) {
             likedItems.splice(existingIndex, 1);
             this.classList.remove('active');
-            this.querySelector('svg').setAttribute('fill', 'none');
-            this.querySelector('span').textContent = 'Beğen';
+            iconSpan.textContent = '♡';
         } else {
             likedItems.push({ id, type, title, poster_path: details.poster_path, addedAt: Date.now() });
             this.classList.add('active');
-            this.querySelector('svg').setAttribute('fill', 'currentColor');
-            this.querySelector('span').textContent = 'Beğendin';
+            iconSpan.textContent = '♥';
         }
 
         localStorage.setItem('liked_items', JSON.stringify(likedItems));
@@ -2898,17 +2913,16 @@ function renderDetail(details, providers, type, itemId) {
 
         let watchlistItems = JSON.parse(localStorage.getItem('watchlist_items') || '[]');
         const existingIndex = watchlistItems.findIndex(item => item.id === id);
+        const iconSpan = this.querySelector('span');
 
         if (existingIndex >= 0) {
             watchlistItems.splice(existingIndex, 1);
             this.classList.remove('active');
-            this.querySelector('svg').innerHTML = '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>';
-            this.querySelector('span').textContent = 'İzleyeceğim';
+            iconSpan.textContent = '+';
         } else {
             watchlistItems.push({ id, type, title, poster_path: details.poster_path, addedAt: Date.now() });
             this.classList.add('active');
-            this.querySelector('svg').innerHTML = '<polyline points="20 6 9 17 4 12"/>';
-            this.querySelector('span').textContent = 'Listede';
+            iconSpan.textContent = '✓';
         }
 
         localStorage.setItem('watchlist_items', JSON.stringify(watchlistItems));
