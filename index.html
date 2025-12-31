@@ -409,7 +409,7 @@
                         <div class="mood-modal-header">
                             <div class="mood-modal-icon">🧠</div>
                             <h3>Nasıl Hissediyorsun?</h3>
-                            <p>Ruh halini anlat, sana en uygun içeriği bulalım.</p>
+                            <p>Nasıl hissettiğini anlat, ya da seç.</p>
                         </div>
                         <textarea class="mood-textarea" id="mood-textarea"
                             placeholder="Örn: Biraz yorgunum ama gülmek istiyorum..."></textarea>
@@ -421,18 +421,45 @@
                 </div>
             </section>
 
-            <!-- Favorites Section (hidden) -->
+            <!-- Listem Section (hidden) -->
             <section class="content-section" id="favorites-section" style="display: none;">
                 <div class="section-header">
-                    <h2 class="section-title"><span>❤️</span> <span data-i18n="sectionFavorites">Favorilerim</span></h2>
+                    <h2 class="section-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                            height="20">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                        </svg>
+                        <span>Listem</span>
+                    </h2>
                     <span class="results-count" id="favorites-count"></span>
                 </div>
                 <div class="favorites-tabs">
-                    <button class="fav-tab active" data-type="all" data-i18n="favAll">Tümü</button>
-                    <button class="fav-tab" data-type="movie" data-i18n="favMovies">Filmler</button>
-                    <button class="fav-tab" data-type="tv" data-i18n="favSeries">Diziler</button>
+                    <button class="fav-tab active" data-list="liked">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
+                            height="16">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                        Beğendiklerim
+                    </button>
+                    <button class="fav-tab" data-list="watchlist">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
+                            height="16">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        İzleyeceklerim
+                    </button>
                 </div>
                 <div class="movie-grid" id="favorites-grid"></div>
+                <div class="empty-list-message" id="empty-list-message" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48"
+                        height="48">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
+                    <p>Henüz içerik eklemediniz</p>
+                    <small>Film ve dizileri beğenin veya izleyeceklerinize ekleyin</small>
+                </div>
             </section>
 
             <!-- Profile Section (hidden) -->
@@ -477,12 +504,10 @@
             <div class="nav-item" data-page="favorites">
                 <div class="nav-icon-wrap">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                        </path>
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                     </svg>
                 </div>
-                <span class="nav-label" data-i18n="navFavorites">Favorilerim</span>
+                <span class="nav-label">Listem</span>
             </div>
             <div class="nav-item" data-page="profile">
                 <div class="nav-icon-wrap">
