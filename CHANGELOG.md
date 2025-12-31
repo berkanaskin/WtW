@@ -7,6 +7,26 @@ Sürümleme: Major.Minor.Patch.Build (örn: 1.9.6.1)
 
 ---
 
+## [1.9.9.0] - 2025-12-31
+
+### FAZ 4: Teknik ve Tasarım Revizyonları
+
+**Düzeltilen:**
+
+- **Dil Dropdown Toggle**: İkinci tıklamada düzgün şekilde kapanıyor
+- **Çift Tıklama Zoom**: `touch-action: manipulation` ile mobilde zoom engellendi
+- **Günün Önerisi Butonları**: Beğen (♡) ve İzle (+) butonları localStorage ile senkronize
+- **Geri Navigasyon**: Kategori ve Sürpriz sonuçlarından Ne İzlesem'e dönüş düzgün çalışıyor
+
+**Değişen:**
+
+- **Modal Butonlar Sadeliği**: Detay modalındaki beğen/izle butonları artık sadece ikon (♡/+), metin yok
+- **Premium Butonu Kaldırıldı**: Detay modalından "Haber Ver (Premium)" butonu kaldırıldı
+- **Listem Tasarımı**: Elegant boş durum görünümü (gradient çerçeve)
+- **Profil Tasarımı**: Modern ve dengeli bilgi dağılımı
+
+---
+
 ## [1.9.8.0] - 2025-12-30
 
 ### FAZ 1 Revizyonları
