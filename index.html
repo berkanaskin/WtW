@@ -1,474 +1,104 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Film ve dizi arama - Hangi platformda izleyebileceğinizi öğrenin">
-    <meta name="theme-color" content="#0a0a0f">
+    <meta name="description" content="Lumi - Film ve dizi keşfi için premium platform">
+    <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Nerede İzlerim?</title>
+    <title>Lumi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index_lumi.css">
 </head>
-
 <body>
+    <!-- Ambient Glows (The Soul) -->
+    <div class="ambient-glow ambient-glow-violet"></div>
+    <div class="ambient-glow ambient-glow-blue"></div>
+
     <div class="app">
-        <!-- Header with WtW branding -->
-        <header class="app-header">
-            <div class="logo-title" id="logo-home" style="cursor: pointer;">
-                <img src="assets/wtw-alt.png" alt="WtW" class="wtw-logo-img">
-            </div>
-            <div class="header-right">
-                <!-- Custom Language Dropdown -->
-                <div class="lang-dropdown-container" id="lang-dropdown-container">
-                    <button class="lang-dropdown-btn" id="lang-dropdown-btn">
-                        <img src="https://flagcdn.com/w40/tr.png" alt="TR" class="lang-flag" id="current-lang-flag">
-                    </button>
-                    <div class="lang-dropdown-menu" id="lang-dropdown-menu">
-                        <button class="lang-option" data-lang="tr">
-                            <img src="https://flagcdn.com/w40/tr.png" alt="TR" class="lang-flag">
-                            <span>Türkçe</span>
-                        </button>
-                        <button class="lang-option" data-lang="en">
-                            <img src="https://flagcdn.com/w40/us.png" alt="EN" class="lang-flag">
-                            <span>English</span>
-                        </button>
-                        <button class="lang-option" data-lang="de">
-                            <img src="https://flagcdn.com/w40/de.png" alt="DE" class="lang-flag">
-                            <span>Deutsch</span>
-                        </button>
-                        <button class="lang-option" data-lang="fr">
-                            <img src="https://flagcdn.com/w40/fr.png" alt="FR" class="lang-flag">
-                            <span>Français</span>
-                        </button>
-                        <button class="lang-option" data-lang="es">
-                            <img src="https://flagcdn.com/w40/es.png" alt="ES" class="lang-flag">
-                            <span>Español</span>
-                        </button>
-                        <button class="lang-option" data-lang="ja">
-                            <img src="https://flagcdn.com/w40/jp.png" alt="JA" class="lang-flag">
-                            <span>日本語</span>
-                        </button>
-                        <button class="lang-option" data-lang="zh">
-                            <img src="https://flagcdn.com/w40/cn.png" alt="ZH" class="lang-flag">
-                            <span>中文</span>
-                        </button>
-                        <button class="lang-option" data-lang="ko">
-                            <img src="https://flagcdn.com/w40/kr.png" alt="KO" class="lang-flag">
-                            <span>한국어</span>
-                        </button>
+        <!-- ============================================
+             VIEW: HOME
+             ============================================ -->
+        <section id="view-home" class="view active">
+            <!-- Hero Section -->
+            <div class="hero" id="hero-section">
+                <div class="hero-poster" id="hero-poster" style="background-image: url('https://image.tmdb.org/t/p/original/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg');"></div>
+                <div class="hero-gradient-top"></div>
+                <div class="hero-gradient-bottom"></div>
+                <div class="hero-content">
+                    <h1 class="hero-title" id="hero-title">Loading...</h1>
+                    <div class="hero-meta" id="hero-meta">
+                        <span class="badge" id="hero-genre">—</span>
+                        <span class="dot"></span>
+                        <span id="hero-runtime">—</span>
+                        <span class="dot"></span>
+                        <span id="hero-year">—</span>
                     </div>
-                </div>
-                <!-- Notification Bell with Dropdown -->
-                <div class="notification-container" id="notification-container">
-                    <button class="header-icon-btn" id="notification-btn" title="Bildirimler">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                        </svg>
-                        <span class="notification-badge" id="notification-badge" style="display: none;">0</span>
-                    </button>
-                    <div class="notification-dropdown" id="notification-dropdown">
-                        <div class="notification-header">
-                            <span class="notification-title">Bildirimler</span>
-                            <button class="mark-all-read-btn" id="mark-all-read">Tümünü Okundu İşaretle</button>
-                        </div>
-                        <div class="notification-list" id="notification-list">
-                            <!-- Notifications will be dynamically populated -->
-                        </div>
-                        <div class="notification-empty" id="notification-empty">
-                            <span class="empty-icon">🔔</span>
-                            <span>Henüz bildirim yok</span>
-                        </div>
-                    </div>
-                </div>
-                <!-- Theme Toggle -->
-                <button class="header-icon-btn" id="theme-toggle">
-                    <svg id="theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="5" />
-                        <path
-                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                    </svg>
-                    <svg id="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        style="display:none">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                    </svg>
-                </button>
-                <!-- Auth Area -->
-                <div id="auth-area">
-                    <button class="login-btn" id="login-btn">
-                        <svg class="login-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                        </svg>
-                        <span data-i18n="login">Giriş</span>
-                    </button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Search Section -->
-        <section class="search-section">
-            <div class="search-wrapper">
-                <div class="search-box">
-                    <div class="search-box-inner">
-                        <span class="search-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="m21 21-4.35-4.35" />
+                    <div class="hero-actions">
+                        <button class="hero-btn hero-btn-primary" id="hero-trailer-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
                             </svg>
-                        </span>
-                        <input type="text" class="search-input" id="search-input"
-                            placeholder="Film ve Diziler Nereden İzlenir? Ara..." autocomplete="off"
-                            data-i18n-placeholder="search">
-                        <button class="search-clear" id="search-clear" style="display: none;">✕</button>
+                            Fragman
+                        </button>
+                        <button class="hero-btn hero-btn-secondary" id="hero-list-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Listeme Ekle
+                        </button>
                     </div>
                 </div>
-                <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
             </div>
-        </section>
 
-        <!-- Content -->
-        <main class="content" id="main-content">
             <!-- Trending Section -->
-            <section class="content-section" id="trending-section">
+            <div class="content-section" id="trending-section">
                 <div class="section-header">
-                    <h2 class="section-title"><span>🔥</span> <span data-i18n="trending">Popüler</span></h2>
-                    <button class="view-all-btn" data-section="trending">Tümünü Gör →</button>
+                    <h2 class="section-title">🔥 Popüler</h2>
+                    <button class="section-link" data-section="trending">Tümünü Gör →</button>
                 </div>
-                <div class="slider-container">
-                    <button class="slider-arrow slider-arrow-left" data-slider="trending-slider">‹</button>
-                    <div class="movie-slider" id="trending-slider"></div>
-                    <button class="slider-arrow slider-arrow-right" data-slider="trending-slider">›</button>
-                </div>
-            </section>
+                <div class="movie-slider" id="trending-slider"></div>
+            </div>
 
             <!-- New Releases Section -->
-            <section class="content-section" id="new-releases-section">
+            <div class="content-section" id="new-releases-section">
                 <div class="section-header">
-                    <h2 class="section-title"><span>✨</span> <span data-i18n="newReleases">Yeni Çıkanlar</span></h2>
-                    <button class="view-all-btn" data-section="new-releases">Tümünü Gör →</button>
+                    <h2 class="section-title">✨ Yeni Çıkanlar</h2>
+                    <button class="section-link" data-section="new-releases">Tümünü Gör →</button>
                 </div>
-                <div class="slider-container">
-                    <button class="slider-arrow slider-arrow-left" data-slider="new-releases-slider">‹</button>
-                    <div class="movie-slider" id="new-releases-slider"></div>
-                    <button class="slider-arrow slider-arrow-right" data-slider="new-releases-slider">›</button>
-                </div>
-            </section>
+                <div class="movie-slider" id="new-releases-slider"></div>
+            </div>
 
             <!-- Classics Section -->
-            <section class="content-section" id="classics-section">
+            <div class="content-section" id="classics-section">
                 <div class="section-header">
-                    <h2 class="section-title"><span>🎬</span> <span data-i18n="classics">Klasikler</span></h2>
-                    <button class="view-all-btn" data-section="classics">Tümünü Gör →</button>
+                    <h2 class="section-title">🎬 Klasikler</h2>
+                    <button class="section-link" data-section="classics">Tümünü Gör →</button>
                 </div>
-                <div class="slider-container">
-                    <button class="slider-arrow slider-arrow-left" data-slider="classics-slider">‹</button>
-                    <div class="movie-slider" id="classics-slider"></div>
-                    <button class="slider-arrow slider-arrow-right" data-slider="classics-slider">›</button>
-                </div>
-            </section>
+                <div class="movie-slider" id="classics-slider"></div>
+            </div>
 
-            <!-- Suggested / Discover Section (Only for Members) -->
-            <section class="content-section" id="suggested-section" style="display: none;">
+            <!-- Suggested Section (Members Only) -->
+            <div class="content-section" id="suggested-section" style="display: none;">
                 <div class="section-header">
-                    <h2 class="section-title"><span>🌟</span> <span data-i18n="suggested">Sizin İçin Önerilenler</span>
-                    </h2>
-                    <button class="view-all-btn" data-section="suggested">Tümünü Gör →</button>
+                    <h2 class="section-title">🌟 Sizin İçin</h2>
+                    <button class="section-link" data-section="suggested">Tümünü Gör →</button>
                 </div>
-                <div class="slider-container">
-                    <button class="slider-arrow slider-arrow-left" data-slider="suggested-slider">‹</button>
-                    <div class="movie-slider" id="suggested-slider"></div>
-                    <button class="slider-arrow slider-arrow-right" data-slider="suggested-slider">›</button>
-                </div>
-            </section>
+                <div class="movie-slider" id="suggested-slider"></div>
+            </div>
 
-            <!-- Search Results (hidden by default) -->
-            <section class="content-section" id="search-results-section" style="display: none;">
+            <!-- Search Results Section -->
+            <div class="content-section" id="search-results-section" style="display: none;">
                 <div class="section-header">
-                    <h2 class="section-title" id="results-title" data-i18n="searchResults">Arama Sonuçları</h2>
+                    <h2 class="section-title" id="results-title">Arama Sonuçları</h2>
                     <span class="results-count" id="results-count"></span>
                 </div>
                 <div class="movie-grid" id="results-grid"></div>
-            </section>
-
-            <!-- Ne İzlesem? Section (What to Watch Recommendation Engine) -->
-            <section class="content-section" id="discover-section" style="display: none;">
-
-                <!-- AI Mood Prompt Card -->
-                <div class="mood-prompt-card" id="mood-prompt-trigger">
-                    <div class="mood-prompt-glow"></div>
-                    <div class="mood-prompt-content">
-                        <div class="mood-prompt-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z" />
-                                <circle cx="12" cy="10" r="1" />
-                                <circle cx="8" cy="10" r="1" />
-                                <circle cx="16" cy="10" r="1" />
-                            </svg>
-                        </div>
-                        <div class="mood-prompt-text">
-                            <h3>Nasıl Hissediyorsun?</h3>
-                            <p>Nasıl hissettiğini anlat ya da aşağıdan seç.</p>
-                        </div>
-                        <div class="mood-prompt-edit">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 20h9" />
-                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Film/Dizi Toggle + Sürpriz Yap -->
-                <div class="type-surprise-row">
-                    <div class="type-toggle-container">
-                        <button class="type-toggle-btn active" data-filter="type" data-value="all">
-                            <svg class="type-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="3" width="20" height="14" rx="2" />
-                                <path d="M8 21h8M12 17v4" />
-                            </svg>
-                            <span>Tümü</span>
-                        </button>
-                        <button class="type-toggle-btn" data-filter="type" data-value="movie">
-                            <svg class="type-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="2.18" />
-                                <path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" />
-                            </svg>
-                            <span>Film</span>
-                        </button>
-                        <button class="type-toggle-btn" data-filter="type" data-value="tv">
-                            <svg class="type-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="7" width="20" height="15" rx="2" />
-                                <polyline points="17 2 12 7 7 2" />
-                            </svg>
-                            <span>Dizi</span>
-                        </button>
-                    </div>
-                    <button class="surprise-btn-new" id="surprise-btn">
-                        <svg class="surprise-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="4" width="20" height="16" rx="2" />
-                            <circle cx="8" cy="10" r="1.5" fill="currentColor" />
-                            <circle cx="16" cy="10" r="1.5" fill="currentColor" />
-                            <circle cx="8" cy="16" r="1.5" fill="currentColor" />
-                            <circle cx="16" cy="16" r="1.5" fill="currentColor" />
-                            <circle cx="12" cy="13" r="1.5" fill="currentColor" />
-                        </svg>
-                        <span>Sürpriz</span>
-                    </button>
-                </div>
-
-                <!-- Filter Dropdowns Row -->
-                <div class="filter-dropdowns-row">
-                    <div class="filter-dropdown-wrapper">
-                        <button class="filter-dropdown" id="genre-filter-btn" data-filter="genre">
-                            <div class="filter-dropdown-left">
-                                <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                    stroke="#8b5cf6" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <circle cx="12" cy="12" r="3" />
-                                </svg>
-                                <span class="filter-label">Tür</span>
-                            </div>
-                            <span class="filter-arrow">▾</span>
-                        </button>
-                        <div class="filter-dropdown-menu" id="genre-dropdown-menu">
-                            <button class="filter-option" data-value="28">Aksiyon</button>
-                            <button class="filter-option" data-value="35">Komedi</button>
-                            <button class="filter-option" data-value="18">Drama</button>
-                            <button class="filter-option" data-value="27">Korku</button>
-                            <button class="filter-option" data-value="878">Sci-Fi</button>
-                            <button class="filter-option" data-value="10749">Romantik</button>
-                            <button class="filter-option" data-value="53">Gerilim</button>
-                            <button class="filter-option" data-value="16">Animasyon</button>
-                        </div>
-                    </div>
-                    <div class="filter-dropdown-wrapper">
-                        <button class="filter-dropdown" id="era-filter-btn" data-filter="era">
-                            <div class="filter-dropdown-left">
-                                <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                    stroke="#ec4899" stroke-width="2">
-                                    <rect x="3" y="4" width="18" height="18" rx="2" />
-                                    <line x1="16" y1="2" x2="16" y2="6" />
-                                    <line x1="8" y1="2" x2="8" y2="6" />
-                                    <line x1="3" y1="10" x2="21" y2="10" />
-                                </svg>
-                                <span class="filter-label">Dönem</span>
-                            </div>
-                            <span class="filter-arrow">▾</span>
-                        </button>
-                        <div class="filter-dropdown-menu" id="era-dropdown-menu">
-                            <button class="filter-option" data-value="2020">2020+</button>
-                            <button class="filter-option" data-value="2010">2010'lar</button>
-                            <button class="filter-option" data-value="2000">2000'ler</button>
-                            <button class="filter-option" data-value="1990">90'lar</button>
-                            <button class="filter-option" data-value="1980">80'ler</button>
-                            <button class="filter-option" data-value="classic">Klasik</button>
-                        </div>
-                    </div>
-                    <div class="filter-dropdown-wrapper">
-                        <button class="filter-dropdown" id="platform-filter-btn" data-filter="platform">
-                            <div class="filter-dropdown-left">
-                                <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                    stroke="#06b6d4" stroke-width="2">
-                                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                                    <line x1="8" y1="21" x2="16" y2="21" />
-                                    <line x1="12" y1="17" x2="12" y2="21" />
-                                </svg>
-                                <span class="filter-label">Platform</span>
-                            </div>
-                            <span class="filter-arrow">▾</span>
-                        </button>
-                        <div class="filter-dropdown-menu" id="platform-dropdown-menu">
-                            <button class="filter-option" data-value="all">Fark Etmez</button>
-                            <button class="filter-option" data-value="8">Netflix</button>
-                            <button class="filter-option" data-value="337">Disney+</button>
-                            <button class="filter-option" data-value="119">Prime Video</button>
-                            <button class="filter-option" data-value="1899">Max</button>
-                            <button class="filter-option" data-value="2">Apple TV+</button>
-                        </div>
-                    </div>
-                    <div class="filter-dropdown-wrapper">
-                        <button class="filter-dropdown" id="mood-filter-btn" data-filter="mood">
-                            <div class="filter-dropdown-left">
-                                <svg class="filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                    stroke="#f59e0b" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                                    <line x1="9" y1="9" x2="9.01" y2="9" />
-                                    <line x1="15" y1="9" x2="15.01" y2="9" />
-                                </svg>
-                                <span class="filter-label">Ruh Hali</span>
-                            </div>
-                            <span class="filter-arrow">▾</span>
-                        </button>
-                        <div class="filter-dropdown-menu" id="mood-dropdown-menu">
-                            <button class="filter-option" data-value="happy">Neşeli</button>
-                            <button class="filter-option" data-value="sad">Duygusal</button>
-                            <button class="filter-option" data-value="excited">Heyecanlı</button>
-                            <button class="filter-option" data-value="relaxed">Sakin</button>
-                            <button class="filter-option" data-value="scared">Korku Sever</button>
-                            <button class="filter-option" data-value="romantic">Romantik</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Öneride Bulun Button -->
-                <div class="recommend-btn-container">
-                    <button class="recommend-btn" id="recommend-btn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
-                        <span>Öneride Bulun</span>
-                    </button>
-                </div>
-
-                <!-- Günün Önerisi - Featured Card -->
-                <div class="featured-section">
-                    <div class="featured-header">
-                        <h2 class="featured-title">Günün Önerisi</h2>
-                    </div>
-                    <div class="featured-card" id="featured-recommendation-card">
-                        <!-- Dinamik olarak doldurulacak -->
-                        <div class="featured-loading">
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Results Grid -->
-                <div class="neizlesem-results" id="neizlesem-results" style="display: none;">
-                    <div class="results-header">
-                        <h3><span data-i18n="resultsTitle">Sizin İçin Seçtiklerimiz</span></h3>
-                        <button class="reset-filters-btn" id="reset-filters">🔄 <span data-i18n="resetFilters">Tekrar
-                                Seç</span></button>
-                    </div>
-                    <div class="movie-grid" id="discover-grid"></div>
-                    <div class="load-more-container" id="load-more-container" style="display: none;">
-                        <button class="load-more-btn" id="load-more-btn" data-i18n="loadMore">Daha Fazla Göster</button>
-                    </div>
-                </div>
-
-                <!-- Mood Modal -->
-                <div class="mood-modal" id="mood-modal">
-                    <div class="mood-modal-content">
-                        <button class="mood-modal-close" id="mood-modal-close">✕</button>
-                        <div class="mood-modal-header">
-                            <div class="mood-modal-icon">🧠</div>
-                            <h3>Nasıl Hissediyorsun?</h3>
-                            <p>Nasıl bir film ya da dizi izlemek istersin?</p>
-                        </div>
-                        <textarea class="mood-textarea" id="mood-textarea"
-                            placeholder="Örn: Biraz yorgunum ama gülmek istiyorum..."></textarea>
-                        <button class="mood-submit-btn" id="mood-submit-btn">
-                            <span>✨</span>
-                            <span>Önerileri Göster</span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Listem Section (hidden) -->
-            <section class="content-section" id="favorites-section" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
-                            height="20">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                        </svg>
-                        <span>Listem</span>
-                    </h2>
-                    <span class="results-count" id="favorites-count"></span>
-                </div>
-                <div class="favorites-tabs">
-                    <button class="fav-tab active" data-list="liked">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
-                            height="16">
-                            <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                        </svg>
-                        Beğendiklerim
-                    </button>
-                    <button class="fav-tab" data-list="watchlist">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
-                            height="16">
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                        İzleyeceklerim
-                    </button>
-                </div>
-                <div class="movie-grid" id="favorites-grid"></div>
-                <div class="empty-list-message" id="empty-list-message" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48"
-                        height="48">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                    </svg>
-                    <p>Henüz içerik eklemediniz</p>
-                    <small>Film ve dizileri beğenin veya izleyeceklerinize ekleyin</small>
-                </div>
-            </section>
-
-            <!-- Profile Section (hidden) -->
-            <section class="content-section" id="profile-section" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title"><span>👤</span> <span data-i18n="sectionProfile">Profil</span></h2>
-                </div>
-                <div id="profile-content"></div>
-            </section>
+            </div>
 
             <div class="loading-state" id="loading">
                 <div class="spinner"></div>
@@ -479,96 +109,308 @@
                 <span class="empty-icon">🎭</span>
                 <p data-i18n="noResults">Sonuç bulunamadı</p>
             </div>
-        </main>
+        </section>
 
-        <!-- Bottom Navigation -->
-        <nav class="bottom-nav">
-            <div class="nav-item active" data-page="home">
+        <!-- ============================================
+             VIEW: DISCOVER (Ne İzlesem?)
+             ============================================ -->
+        <section id="view-discover" class="view">
+            <div id="discover-section">
+                <div class="discover-header">
+                    <h2 class="discover-title">
+                        Bugün nasıl<br><span>hissediyorsun?</span>
+                    </h2>
+                    
+                    <!-- Mood Chips -->
+                    <div class="mood-chips">
+                        <button class="mood-chip active" data-mood="chill">
+                            <span>😌</span> Sakin
+                        </button>
+                        <button class="mood-chip" data-mood="adrenaline">
+                            <span>⚡</span> Heyecanlı
+                        </button>
+                        <button class="mood-chip" data-mood="emotional">
+                            <span>💧</span> Duygusal
+                        </button>
+                        <button class="mood-chip" data-mood="mindbending">
+                            <span>🧠</span> Zihin Açıcı
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Type Toggle -->
+                <div class="filter-chips" style="padding: 0 var(--space-lg); margin-bottom: var(--space-lg);">
+                    <button class="filter-chip active" data-filter="type" data-value="all">Tümü</button>
+                    <button class="filter-chip" data-filter="type" data-value="movie">Film</button>
+                    <button class="filter-chip" data-filter="type" data-value="tv">Dizi</button>
+                </div>
+
+                <!-- Mood Prompt Card -->
+                <div class="glass-panel" style="margin: 0 var(--space-lg); padding: var(--space-lg); border-radius: var(--radius-xl); margin-bottom: var(--space-lg);" id="mood-prompt-trigger">
+                    <div style="display: flex; align-items: center; gap: var(--space-md);">
+                        <div style="width: 48px; height: 48px; background: rgba(120, 90, 242, 0.2); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z"/>
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <h3 style="font-weight: 600; margin-bottom: 4px;">Nasıl Hissediyorsun?</h3>
+                            <p style="font-size: 0.875rem; color: var(--text-secondary);">Bize anlat, sana önerelim.</p>
+                        </div>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
+                            <path d="M12 20h9"/>
+                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Surprise Button -->
+                <div style="padding: 0 var(--space-lg); margin-bottom: var(--space-lg);">
+                    <button id="surprise-btn" class="hero-btn hero-btn-primary" style="width: 100%; max-width: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34"/>
+                            <path d="M3 15l4-8 4 8"/>
+                            <path d="M18 9v6"/>
+                            <path d="M21 12h-6"/>
+                        </svg>
+                        Sürpriz Yap!
+                    </button>
+                </div>
+
+                <!-- Featured Card -->
+                <div class="content-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⭐ Günün Önerisi</h2>
+                    </div>
+                    <div id="featured-recommendation-card" style="margin: 0 var(--space-lg);">
+                        <div class="loading-state" style="display: flex;">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discover Results -->
+                <div id="neizlesem-results" style="display: none;">
+                    <div class="section-header">
+                        <h2 class="section-title" data-i18n="resultsTitle">Sizin İçin Seçtiklerimiz</h2>
+                        <button class="section-link" id="reset-filters">🔄 Tekrar Seç</button>
+                    </div>
+                    <div class="movie-grid" id="discover-grid"></div>
+                    <div id="load-more-container" style="padding: var(--space-lg); text-align: center; display: none;">
+                        <button id="load-more-btn" class="hero-btn hero-btn-secondary" style="width: auto; padding: 0 var(--space-xl);">
+                            Daha Fazla Göster
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mood Modal -->
+                <div class="modal" id="mood-modal">
+                    <div class="modal-backdrop"></div>
+                    <div class="modal-content">
+                        <div class="modal-handle"></div>
+                        <button class="modal-close" id="mood-modal-close">✕</button>
+                        <div class="modal-body">
+                            <div style="text-align: center; padding: var(--space-lg) 0;">
+                                <div style="font-size: 3rem; margin-bottom: var(--space-md);">🧠</div>
+                                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-sm);">Nasıl Hissediyorsun?</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Nasıl bir film ya da dizi izlemek istersin?</p>
+                                <textarea id="mood-textarea" style="width: 100%; min-height: 100px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-md); color: var(--text-primary); font-family: var(--font-main); resize: none;" placeholder="Örn: Biraz yorgunum ama gülmek istiyorum..."></textarea>
+                                <button id="mood-submit-btn" class="hero-btn hero-btn-primary" style="width: 100%; margin-top: var(--space-md);">
+                                    ✨ Önerileri Göster
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             VIEW: FAVORITES (Listem)
+             ============================================ -->
+        <section id="view-favorites" class="view">
+            <div id="favorites-section">
+                <div style="padding: calc(var(--safe-top) + 60px) var(--space-lg) var(--space-lg);">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Listem
+                    </h2>
+                    
+                    <div class="favorites-tabs">
+                        <button class="fav-tab active" data-list="liked">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                            Beğendiklerim
+                        </button>
+                        <button class="fav-tab" data-list="watchlist">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            İzleyeceklerim
+                        </button>
+                    </div>
+                    <span class="results-count" id="favorites-count"></span>
+                </div>
+
+                <div class="movie-grid" id="favorites-grid"></div>
+
+                <div class="empty-state" id="empty-list-message" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48" style="opacity: 0.5; margin-bottom: var(--space-md);">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <p>Henüz içerik eklemediniz</p>
+                    <small style="color: var(--text-muted);">Film ve dizileri beğenin veya izleyeceklerinize ekleyin</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             VIEW: PROFILE
+             ============================================ -->
+        <section id="view-profile" class="view">
+            <div id="profile-section">
+                <div style="padding: calc(var(--safe-top) + 60px) var(--space-lg) var(--space-lg);">
+                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg);">
+                        👤 Profil
+                    </h2>
+                </div>
+                <div id="profile-content"></div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             BOTTOM NAVIGATION
+             ============================================ -->
+        <nav class="bottom-nav" id="bottom-nav">
+            <button class="nav-item active" data-page="home">
                 <div class="nav-icon-wrap">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
                     </svg>
                 </div>
-                <span class="nav-label" data-i18n="navHome">Ana Sayfa</span>
-            </div>
-            <div class="nav-item" data-page="discover">
+            </button>
+            <button class="nav-item" data-page="search">
                 <div class="nav-icon-wrap">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
                     </svg>
                 </div>
-                <span class="nav-label" data-i18n="navDiscover">Ne İzlesem</span>
-            </div>
-            <div class="nav-item" data-page="favorites">
+            </button>
+            <button class="nav-item" data-page="discover">
                 <div class="nav-icon-wrap">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
                     </svg>
                 </div>
-                <span class="nav-label">Listem</span>
-            </div>
-            <div class="nav-item" data-page="profile">
+            </button>
+            <button class="nav-item" data-page="favorites">
                 <div class="nav-icon-wrap">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
                     </svg>
                 </div>
-                <span class="nav-label" data-i18n="navProfile">Profil</span>
-            </div>
+            </button>
+            <button class="nav-item" data-page="profile">
+                <div class="nav-icon-wrap">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+            </button>
         </nav>
+    </div>
 
-        <!-- Modal -->
-        <div class="modal" id="detail-modal">
-            <div class="modal-content">
-                <button class="modal-close" id="modal-close">✕</button>
-                <div id="modal-body"></div>
-            </div>
-        </div>
-
-        <!-- Login Modal -->
-        <div class="login-modal" id="login-modal">
-            <div class="login-modal-content">
-                <h2 class="login-modal-title" data-i18n="loginTitle">Hoş Geldiniz</h2>
-                <p class="login-modal-subtitle" data-i18n="loginSubtitle">Devam etmek için giriş yapın</p>
-                <div class="social-login-btns">
-                    <button class="social-btn google" data-provider="google">
-                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                                fill="#4285F4" />
-                            <path
-                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                                fill="#34A853" />
-                            <path
-                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                                fill="#FBBC05" />
-                            <path
-                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                                fill="#EA4335" />
-                        </svg>
-                        <span data-i18n="continueWithGoogle">Google ile devam et</span>
-                    </button>
-                    <button class="social-btn facebook" data-provider="facebook">
-                        <svg class="social-icon" viewBox="0 0 24 24" fill="#1877F2">
-                            <path
-                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                        </svg>
-                        <span data-i18n="continueWithFacebook">Facebook ile devam et</span>
-                    </button>
-                    <button class="social-btn apple" data-provider="apple">
-                        <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor">
-                            <path
-                                d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-                        </svg>
-                        <span data-i18n="continueWithApple">Apple ile devam et</span>
-                    </button>
+    <!-- ============================================
+         SEARCH OVERLAY
+         ============================================ -->
+    <div class="search-overlay" id="search-overlay">
+        <div class="search-header">
+            <div class="search-input-wrapper">
+                <div class="search-box">
+                    <div class="search-box-inner">
+                        <span class="search-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                            </svg>
+                        </span>
+                        <input type="text" class="search-input" id="search-input" placeholder="Film veya dizi ara..." autocomplete="off" data-i18n-placeholder="search">
+                        <button class="search-clear" id="search-clear" style="display: none;">✕</button>
+                    </div>
+                    <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
                 </div>
-                <button class="login-modal-close" id="login-modal-close" data-i18n="close">Kapat</button>
+                <button class="search-cancel" id="search-cancel">İptal</button>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filter-chips" id="search-filter-chips">
+                <button class="filter-chip active" data-filter="search-type" data-value="all">Tümü</button>
+                <button class="filter-chip" data-filter="search-type" data-value="movie">Filmler</button>
+                <button class="filter-chip" data-filter="search-type" data-value="tv">Diziler</button>
             </div>
         </div>
+
+        <div id="search-results-container" style="flex: 1; overflow-y: auto; padding: var(--space-md);">
+            <div class="movie-grid" id="search-grid"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         DETAIL MODAL (Bottom Sheet)
+         ============================================ -->
+    <div class="modal" id="detail-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <button class="modal-close" id="modal-close">✕</button>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         LOGIN MODAL
+         ============================================ -->
+    <div class="login-modal" id="login-modal">
+        <div class="login-modal-content">
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-sm);" data-i18n="loginTitle">Hoş Geldiniz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);" data-i18n="loginSubtitle">Devam etmek için giriş yapın</p>
+            <div class="social-login-btns">
+                <button class="social-btn google" data-provider="google">
+                    <svg width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span data-i18n="continueWithGoogle">Google ile devam et</span>
+                </button>
+                <button class="social-btn apple" data-provider="apple">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    <span data-i18n="continueWithApple">Apple ile devam et</span>
+                </button>
+            </div>
+            <button style="margin-top: var(--space-lg); width: 100%; padding: var(--space-md); background: transparent; border: 1px solid var(--glass-border); border-radius: var(--radius-lg); color: var(--text-secondary); cursor: pointer;" id="login-modal-close" data-i18n="close">Kapat</button>
+        </div>
+    </div>
+
+    <!-- Hidden elements for legacy app.js compatibility -->
+    <div style="display: none;">
+        <select id="language-select"></select>
+        <div id="lang-dropdown-container"></div>
+        <div id="notification-container"></div>
+        <button id="theme-toggle"></button>
+        <div id="auth-area"></div>
+        <button id="login-btn"></button>
     </div>
 
     <script src="config.js"></script>
@@ -578,31 +420,113 @@
     <script src="api.js"></script>
     <script src="app.js"></script>
     <script>
-        // Use a single DOMContentLoaded listener for all inline logic
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // --- Slider Arrow Functionality ---
-            document.querySelectorAll('.slider-arrow').forEach(arrow => {
-                arrow.addEventListener('click', function () {
-                    const sliderId = this.dataset.slider;
-                    const slider = document.getElementById(sliderId);
-                    if (!slider) return;
-
-                    const scrollAmount = 300;
-                    const direction = this.classList.contains('slider-arrow-left') ? -1 : 1;
-                    slider.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+        // Lumi SPA Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bottom Nav Click Handlers
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    
+                    if (page === 'search') {
+                        // Open search overlay
+                        document.getElementById('search-overlay').classList.add('active');
+                        document.getElementById('search-input').focus();
+                        return;
+                    }
+                    
+                    // Switch view
+                    switchView('view-' + page);
+                    
+                    // Update nav state
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                    this.classList.add('active');
                 });
             });
 
+            // Search Overlay Close
+            document.getElementById('search-cancel')?.addEventListener('click', function() {
+                document.getElementById('search-overlay').classList.remove('active');
+            });
 
-            // --- REMOVED: Search clearing on modal close ---
-            // This was conflicting with search restore functionality in app.js
-            // The closeModal function in app.js now handles search state restoration properly
+            // Modal backdrop close
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                backdrop.addEventListener('click', function() {
+                    this.closest('.modal').classList.remove('active');
+                });
+            });
 
+            // Modal close buttons
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.modal').classList.remove('active');
+                });
+            });
 
+            // Mood modal trigger
+            document.getElementById('mood-prompt-trigger')?.addEventListener('click', function() {
+                document.getElementById('mood-modal').classList.add('active');
+            });
 
+            // Filter chip toggle
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const group = this.parentElement;
+                    group.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Mood chip toggle
+            document.querySelectorAll('.mood-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Favorites tab toggle
+            document.querySelectorAll('.fav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.fav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
         });
+
+        // SPA View Router (exposed globally for app.js)
+        function switchView(viewId) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show target view
+            const target = document.getElementById(viewId);
+            if (target) {
+                target.classList.add('active');
+            }
+
+            // Close search overlay if open
+            document.getElementById('search-overlay')?.classList.remove('active');
+        }
+
+        // Override openModal for bottom sheet behavior
+        const originalOpenModal = window.openModal;
+        window.openModal = function(mediaType, id) {
+            document.getElementById('detail-modal').classList.add('active');
+            if (typeof originalOpenModal === 'function') {
+                originalOpenModal(mediaType, id);
+            }
+        };
+
+        // Override closeModal for bottom sheet behavior
+        const originalCloseModal = window.closeModal;
+        window.closeModal = function() {
+            document.getElementById('detail-modal').classList.remove('active');
+            if (typeof originalCloseModal === 'function') {
+                originalCloseModal();
+            }
+        };
     </script>
 </body>
-
 </html>
