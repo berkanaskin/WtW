@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My List - WtW</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#785af2",
+                        "primary-glow": "rgba(120, 90, 242, 0.4)",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#050505", /* Void Dark */
+                        "glass-bg": "rgba(255, 255, 255, 0.05)",
+                        "glass-border": "rgba(255, 255, 255, 0.1)",
+                        "surface-dark": "#0a0a0f",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        /* Custom scrollbar hide */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen overflow-x-hidden">
+<!-- Sticky Header -->
+<header class="fixed top-0 left-0 right-0 z-50 glass-nav px-4 pt-12 pb-3 flex items-center justify-between">
+<div class="w-10"></div> <!-- Spacer for center alignment -->
+<h2 class="text-white text-xl font-bold tracking-widest uppercase glow-text">My List</h2>
+<button class="w-10 h-10 flex items-center justify-center rounded-full glass-panel active:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-white/80" style="font-size: 20px;">settings</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="relative z-10 w-full min-h-screen pt-28 pb-24 px-4 flex flex-col">
+<!-- Segmented Control -->
+<div class="sticky top-28 z-40 mb-6 flex justify-center">
+<div class="glass-panel p-1 rounded-full flex w-full max-w-[320px] shadow-lg shadow-primary/10">
+<label class="flex-1 relative cursor-pointer">
+<input checked="" class="peer sr-only" name="list_type" type="radio" value="watchlist"/>
+<div class="w-full py-2.5 rounded-full text-center text-sm font-medium text-white/60 transition-all duration-300 peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-[0_0_15px_rgba(120,90,242,0.5)] hover:text-white">
+                        Watchlist
+                    </div>
+</label>
+<label class="flex-1 relative cursor-pointer">
+<input class="peer sr-only" name="list_type" type="radio" value="liked"/>
+<div class="w-full py-2.5 rounded-full text-center text-sm font-medium text-white/60 transition-all duration-300 peer-checked:bg-primary peer-checked:text-white peer-checked:shadow-[0_0_15px_rgba(120,90,242,0.5)] hover:text-white">
+                        Liked
+                    </div>
+</label>
+</div>
+</div>
+<!-- Populated Grid Section (Watchlist) -->
+<!-- This grid is visible by default -->
+<div class="grid grid-cols-3 gap-3 w-full animate-fade-in" id="grid-content">
+<!-- Movie 1 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Dark moody cinematic movie poster with blue tones" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAyf0RHn1JMCpfdJwAxBsOPMBgVbwoF1ciDe3qYSXDXGu-bFWQa5BtD1ztmoEfqJHs6VRwlNJcdZ8dk1dP_i5F8Ecpxk81E4r-tbTI8C4HBFdP7ET8OUHzupS5sZ3YHJo4Zpu6ajZ7hEEVQimuN4Z499SwnBVDa3zk94YGak1C8mmypyqCVL6RQlNVLlPxiB5E5t7EXngjLlAoqCuQj4nJrkDIyNdL8tbw9DjGCroxmtr0ewTl-E10IvqN4UbbpsE6g1hmte4sy260c');">
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl flex flex-col justify-end p-2">
+<span class="text-xs font-bold text-white truncate">Blade Runner 2049</span>
+<span class="text-[10px] text-gray-300">2017</span>
+</div>
+</div>
+<!-- Movie 2 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Abstract sci-fi neon movie poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBTLS2J4tzRSYi_cbu7mJYhhwoQp0NeEhbbr_r9dhmpc7Swt4qD4LwN-jZqsbSqp7M_7VfbAT_C5qUh6JDSBNdM6hWzMA19rJAUdGO70OTC911zS-4kHUK30Y2eXMzvXFeMQc6mRsRSZfDXjarRq-f45q1ivDjYIxKHsyQtNHkPYxYLatBO68zfOBL94LsNxcENz5-7rX0LHXTiyE_f02vupViHNdtpStw3ZNq1sE5hh4eKUTKbidy5CEz07ySmi5BhdYskCRaKXYlr');">
+</div>
+</div>
+<!-- Movie 3 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Vintage retro aesthetic movie poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAnIFEBH21JACXWFJhFLg145z76PZHoUNe-XqYYz620UdJDMN4-0-6NCCFGwdaRVVlTPU8x1grZOlxEbODKujcvsOPvpUOl-keMtD5J4Ypd5pyQK-GDAO0946iZVohhZ5nSwDhaKeUcOGCyz1JLiq5C1QFjKtPCyKesLaxXfAuHUVsaILW4HkWG5ZlZok12y41gtYhOx1WLvy4M_qH5COA3arN1HSG-puHSfQF3sdO37AxOxixPOKvB9P3PLwMs4FAX5yulRAkH1Eda');">
+</div>
+<div class="absolute top-1 right-1 bg-black/60 backdrop-blur-sm rounded-md px-1.5 py-0.5 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-yellow-400 text-[10px]" style="font-size: 10px;">star</span>
+<span class="text-[10px] font-bold text-white">8.2</span>
+</div>
+</div>
+<!-- Movie 4 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Black and white classic film poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBa3pKF9o5B4dOS24xz46KMg5DWlSIUjyX4Glb28EK9jTDFhy27w7FKAHAM3AvnQwRhs0TrFY_PG_Z7CEbjabUJujClfElNUpBYxW26DX40Oro5v7RmNiuR0Jmfa9WrMLvRdKTnoLfSf25fRCiRHy3915_cN2WCNmfP54xlH3m1s6tZ_O5MsvsvwwCAhb1SBIr0hdVgjloScHBQDO1Z8-MoFnQhSvI9joE-lASNpi5EFwgvrMBbT65jwy7Pfgz2JdwIuEgU58I-5mt2');">
+</div>
+</div>
+<!-- Movie 5 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Modern action movie poster with red accents" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCG9EKKmn9eVTOxZfL6tJVuSaePDovlWkXXHI-Zlu0muQVDIxuJ_uTtbGi7tIo09F58UANSW-1rRiL5Hk0lMbfUjOjOOnuT18Reu8SsfCHl-4aRkhJ2BJ5fcZ_fSh-PZVDmIqFiYfqWF1gRffyC6L_sgdNdQL1qB0DWyMBoGc8ykK2nDgB8V6w51jzzx5Zxd07rvtWhLMM4dwd3Eki2ajJdi2UoiF7wWssG2c0zDwZpUx_J3qLNAJme1VJGvB9FgURGUB-i7lsWMPXT');">
+</div>
+</div>
+<!-- Movie 6 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Atmospheric thriller movie poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkxts00PCBDY0ggRXgv8HsPRD1u9x-SYrur1wIcrqonq7k0fUdPbq3lCOY_qzEey6inW2eud0YkDBoyECrMrhq30yKX2z6sDkY9Jz2BVrt5EhdE602ve5BRxdC7rWlZSz8mZi1C-eEbLyBCCUnNrCSOWnZSaze7F-S7Ha-HThPO1CdNyMSukvWqlOlL9VzoMhYW7Tm_9xz6Kg8gXuw8YYWywMrfOlHaevCFPQEX4pYoeebQlO5eczuTS_i2_HYTwvi7lIBFRC1JfaG');">
+</div>
+</div>
+<!-- Movie 7 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Fantasy landscape movie poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBCLt3t8renv959Nne8fjchC_vRKS20_2EWqgfXqZC3op9H8r6D0-EDJ6dkM2LZ1BTxvSsCRUp50TPxxWgL-xoEnEgoe-sGJU8MkQwFDo3LesM1sJ3lhCG69GCWOwxzM-j9qjqgsL9uPE6C8nhADFHiEGmgIUNxSsv5t9wGGrAI6wjHHm-rdj9XPpBBlBv7FQVQyAx4iA6j7UyXBpjgLRMmP_V8iHaozTz_1EFYA4DA45aw5K3W6G6GT27DcaJM0xNH0NO4ZSLHppju');">
+</div>
+</div>
+<!-- Movie 8 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Dramatic war film poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAU_al11hS_swbFRs6MTm0AZ2KvIzAz7zwnJ79QCW8lV-Hq_nnw_9X1pzWWQN35VQMM3OAUaREHsqL-L8zD_FILtxf5E3TMDFPhpu2dk3PEKZTlvogdfV7xxaoVHMtxemYu92IuHWzIR1KfdTisG-521XJSwDdEut5ZAddW-w3_1izPXAYw8__LJvNMhjRfmZa5LRXIulY8xHn9jH_FIHPlhvq8j3WhAqlCNT_ENQI7lyN8adrNlvqQyw81vytTjCO1pm0xD2EyYj3i');">
+</div>
+</div>
+<!-- Movie 9 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Romance movie poster with soft lighting" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDq2T3xl7yGhlStCANftL5vlGoH5DxbhMEyEzy6E5CwR56-V3acN_Vy9f1wC9BxPvWN5LuofPcNZq27eKUBzWQwzagI4tP8FAGyymdXlA3Epi1sm-b5BbUr_wUX5Jv9aa6fW1w5d2QWJplyGoD2I9vS9szCjqKxinHDAHS5wF3hTp41RRYmM_87zQoWsk3BoxtaexACi7K1MyC9j2wV26ud182uj9RYUcVrg8eoD-Khs3Tx0j7QOjHF_K9S5lY5KQRi9QaXM8S7QhlQ');">
+</div>
+</div>
+<!-- Movie 10 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Documentary film poster nature" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCiaiF7_9l6O_rbtPptBJUUEKnYlPJVVwSNsVCFa1Te-2SucjtaFvL0Rs-QMFGebrkle4MiJgRngbU6YzMoC7JRcYy-qDCRyW5vrtJflJ8oh0IAOPreQrPLqXmxVpLMotmDYDd_x6MVwXQm04ZbgdTvndh6pfIOQf3jf1tNZRyMCevnsIk4pJLMJ_7pxvIBH6aGU2PXQdEBRF053zblKfVHcCHHtzNwAvi59Z8Gf3UhY_ZBoxbcjgY6LxIuTFnRCnsv9h0fqOvddklz');">
+</div>
+</div>
+<!-- Movie 11 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Animation movie poster colorful" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC7xS3PaRw4PUsH9ngqYbymEDf9z8rhAiNokvNWx0InwkjML_illx7VE8NcyuCJHxXO_0j32XQINvu_PG2Uu7qEJNZDvkmdhdUouyOASaprxsd_hyaNvcLoQ3rQdPTL3kWM11Z-Iui16rYStvQJutNC5YjoCG2lrqWl84NWfRuF1BtLjvNUKi_SxM0KvKnOXNYsxIzlca60CCONgMGmNYosZU1smcvHM-R6yiO-OFBzn0rKZ4u_yQqXnchZ9f7xCX21XSVd0uuQzpUT');">
+</div>
+</div>
+<!-- Movie 12 -->
+<div class="relative aspect-[2/3] group cursor-pointer">
+<div class="absolute inset-0 bg-cover bg-center rounded-xl border border-white/5 transition-transform duration-300 group-active:scale-95" data-alt="Cyberpunk glitch art poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCmXH6ETApJSUOdcTvnE9_UXsIxKwGSEYNNtbAp9PzE7wjKPe6eNEk9TLOX81ocySukNQeqCHTvOy0avxpM6af7al0EOxx_8N129HnoQyzXgDP2n_wtU6A3c1TM6dE88BI_wcFbIubB-UC2_n87FPz5Wo9w-iWnYSb2EzBMiD_huNy_9pg5nmYj7GAU60xbRi_2b0yQVP8PP5e2Vd5xhsPt4CJ6XdLoFYKceDUy-IgLbYYC5cYpATl_3590NiRi1rUMMPmgV4xfMozt');">
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown conceptually as example for "Liked" tab if Javascript was active) -->
+<div class="hidden flex-col items-center justify-center py-12 px-4 text-center animate-fade-in" id="empty-state">
+<div class="w-48 h-48 mb-6 relative">
+<div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
+<div class="relative z-10 w-full h-full bg-contain bg-center bg-no-repeat opacity-80" data-alt="Abstract illustration of searching for content" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBeg20xkkeQl6A6JlAj1gUwhZrtnxNXnawmXxeyVxgwJUXrNaLSxMG1hklmdl1s9kPi5WAcaHFAnxH5vNPUzdTii6SEbfxqFyTmOafmLrFFna9jwP75Y167h9MkSi9-54Dty46jjMtNyOB3xIARoBqCMMEHaMNbMf0gCpx7XX9rlbiqJcOvrEym6NE47c9NDR8Qgb5Ydwj9fbIyshnGKzrHBrjEmQ5zgnHiIYbpyzOtiki-X9s_cZGXsOjCyJzJqyzXNcb6swEm4EX2');">
+</div>
+</div>
+<h3 class="text-white text-xl font-bold mb-2">Your list is empty</h3>
+<p class="text-white/60 text-sm mb-8 max-w-[280px]">It feels a bit empty here. Start saving movies to track what you want to watch.</p>
+<button class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-full shadow-[0_0_20px_rgba(120,90,242,0.4)] transition-all active:scale-95">
+                Explore Now
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-white/10 pb-6 pt-3 px-6">
+<ul class="flex justify-between items-center max-w-md mx-auto">
+<li>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 26px;">home</span>
+<!-- <span class="text-[10px] font-medium">Home</span> -->
+</a>
+</li>
+<li>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 26px;">search</span>
+<!-- <span class="text-[10px] font-medium">Search</span> -->
+</a>
+</li>
+<li>
+<a class="flex flex-col items-center gap-1 text-primary relative group" href="#">
+<div class="absolute -inset-2 bg-primary/10 blur-lg rounded-full opacity-75 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined fill-current relative z-10" style="font-variation-settings: 'FILL' 1; font-size: 26px;">bookmark</span>
+<!-- <span class="text-[10px] font-medium relative z-10">My List</span> -->
+</a>
+</li>
+<li>
+<a class="flex flex-col items-center gap-1 text-white/40 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-size: 26px;">person</span>
+<!-- <span class="text-[10px] font-medium">Profile</span> -->
+</a>
+</li>
+</ul>
+</nav>
+<!-- Background Gradient Ambience -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-blue-900/10 rounded-full blur-[120px]"></div>
+</div>
+</body></html>

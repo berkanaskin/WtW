@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Movie Detail View</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#785af2",
+              "background-light": "#f6f6f8",
+              "background-dark": "#141022",
+              "void": "#050505", 
+            },
+            fontFamily: {
+              "display": ["Spline Sans", "sans-serif"]
+            },
+            borderRadius: {
+                "DEFAULT": "1rem", 
+                "lg": "2rem", 
+                "xl": "3rem", 
+                "2xl": "4rem",
+                "full": "9999px"
+            },
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-button {
+            background: rgba(20, 16, 34, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-display antialiased overflow-hidden selection:bg-primary selection:text-white">
+<div class="relative w-full h-screen flex flex-col">
+<!-- Fixed Header Overlay -->
+<header class="absolute top-0 left-0 right-0 z-50 px-4 pt-12 pb-4 flex items-center justify-between pointer-events-none">
+<!-- Left: Back Button -->
+<button class="pointer-events-auto w-10 h-10 rounded-full glass-button flex items-center justify-center text-white hover:bg-white/10 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-2xl">keyboard_arrow_down</span>
+</button>
+<!-- Right: Actions -->
+<div class="flex items-center gap-3 pointer-events-auto">
+<button class="w-10 h-10 rounded-full glass-button flex items-center justify-center text-white hover:bg-white/10 transition-colors active:scale-95">
+<span class="material-symbols-outlined text-xl">ios_share</span>
+</button>
+<button class="w-10 h-10 rounded-full glass-button flex items-center justify-center text-white hover:bg-white/10 transition-colors active:scale-95 group">
+<span class="material-symbols-outlined text-xl group-hover:text-red-500 transition-colors">favorite</span>
+</button>
+</div>
+</header>
+<!-- Background Image (Fixed) -->
+<div class="absolute inset-0 z-0 w-full h-[65vh]">
+<div class="w-full h-full bg-cover bg-center" data-alt="Cinematic desert landscape with dramatic lighting, resembling a scene from a sci-fi movie" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBuRFnvyvXhM1F968KiTNuGY0mNRpapPY5JGwAthkjJLOQJMVpALEsN5QnsZ3ezaa_bKbUeo27BI1dbjOxaS7Sb3DfyCNr0XkGWwm_Vur5jAZ6piyPPM3gh7USTk7vcXi6OShu6twWyvGauIbRwOzZWMMNLf3GnFwH0IDSioawk3Rp2fgyIRoLHoWENT4_qIKQ6caNMgUH8wTCzCl_j9JzoTQxZnf2-u51JSkADuNyEr30NVbCSHK0z7ZPP_Fsflowfv-x5nz28wse3');">
+</div>
+<!-- Gradient Overlay for readability -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-background-dark"></div>
+<div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background-dark to-transparent"></div>
+</div>
+<!-- Main Scrollable Content (Sheet) -->
+<div class="relative z-10 w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory">
+<!-- Spacer to push content down -->
+<div class="h-[50vh] w-full shrink-0 snap-start pointer-events-none"></div>
+<!-- Content Card -->
+<div class="min-h-screen bg-background-dark/95 backdrop-blur-xl rounded-t-[2.5rem] border-t border-white/5 relative pb-24 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] snap-start">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center pt-4 pb-2">
+<div class="w-12 h-1.5 bg-white/20 rounded-full"></div>
+</div>
+<!-- Main Content Container -->
+<div class="px-6 pt-4 flex flex-col items-start">
+<!-- Title -->
+<h1 class="text-4xl font-bold tracking-tight text-white mb-2 leading-[1.1]">Dune: Part Two</h1>
+<!-- Meta Data Chips -->
+<div class="flex flex-wrap items-center gap-3 mt-3">
+<span class="text-gray-300 font-medium text-sm">2024</span>
+<div class="w-1 h-1 rounded-full bg-gray-500"></div>
+<span class="px-2 py-0.5 rounded bg-white/10 text-xs font-semibold tracking-wider text-gray-200 border border-white/5">PG-13</span>
+<div class="w-1 h-1 rounded-full bg-gray-500"></div>
+<div class="flex items-center gap-1 text-yellow-400">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-sm font-bold text-white">4.8</span>
+</div>
+<div class="ml-auto">
+<span class="text-primary font-bold text-sm tracking-wide drop-shadow-[0_0_8px_rgba(120,90,242,0.5)]">98% Match</span>
+</div>
+</div>
+<!-- Watch Providers & Play Action -->
+<div class="w-full mt-8 glass-panel p-4 rounded-3xl flex items-center justify-between gap-4">
+<div class="flex items-center gap-3 pl-1">
+<!-- Provider Logos -->
+<div class="flex -space-x-3">
+<div class="w-8 h-8 rounded-full border border-background-dark bg-black overflow-hidden relative" title="Netflix">
+<img class="w-full h-full object-cover opacity-80" data-alt="Abstract red N pattern representing Netflix" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN-UAFRBMLLms7d18t2SWAElD4Hcs2h5cRuuc2Me0s60ktsuH1eTL3WxVnN_VrH_lR1h8G83Z-b9tpcDtMplqkof5bWuLH_oonrI0T60WyhvVNvcxZtcp1aD1UeoqVw6yvoBVb3LYnHxJJUKtNBmio7XcDVynh9xnlSgwdikAQAy8GrsSdK1rWHwprgAbvZGna3tiGsBUvQRzmnWYrdHxhnMQy49hHxmYgtbve8h5IIishS18cbk04ZZZBALh17TIBCl8lAD67xVz4"/>
+</div>
+<div class="w-8 h-8 rounded-full border border-background-dark bg-blue-900 overflow-hidden relative" title="Prime Video">
+<img class="w-full h-full object-cover opacity-80" data-alt="Abstract blue smile pattern representing Prime Video" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXMp7CIBdB5bmIOf24eAhoIG36y1elZRQbzFSTid8oA27LM3lhQCYIbnfiyd1c5NuRMggALxQlIi6mie_BInpeN1e8fdkx-ZjJBdAsjIadKJXMi50B8UIP1m8g1pS8boDfdP535zMMsONdvVovQXaJ8xZ_a7W3cMCboyr8v5eUgxDkJf0am8OWQzTkNfe5IsUQ-LcRFJW12_3H5mHxfMPoPfrYQQ2XTedhLZkZ1JEp5iQx7YFsx0Ry2lGFCoaNeSzPPDshodaoztmr"/>
+</div>
+<div class="w-8 h-8 rounded-full border border-background-dark bg-gray-800 overflow-hidden relative flex items-center justify-center">
+<span class="text-[10px] font-bold text-gray-400">+2</span>
+</div>
+</div>
+<span class="text-xs text-gray-400 font-medium">Stream now</span>
+</div>
+<!-- Play Button -->
+<button class="flex-1 bg-primary hover:bg-[#684bd6] active:scale-95 transition-all text-white h-12 rounded-full flex items-center justify-center gap-2 font-bold shadow-[0_4px_20px_rgba(120,90,242,0.4)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span>Play</span>
+</button>
+</div>
+<!-- Tabs -->
+<div class="w-full mt-8 border-b border-white/10 flex items-center gap-6 sticky top-0 z-20 bg-background-dark/95 backdrop-blur-xl -mx-6 px-6 pt-2">
+<button class="pb-3 border-b-2 border-primary text-white font-semibold text-sm">Overview</button>
+<button class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white transition-colors font-medium text-sm">Cast</button>
+<button class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white transition-colors font-medium text-sm">Trailers</button>
+<button class="pb-3 border-b-2 border-transparent text-gray-400 hover:text-white transition-colors font-medium text-sm">More</button>
+</div>
+<!-- Overview Text -->
+<div class="mt-6">
+<p class="text-gray-300 text-[15px] leading-7 font-light">
+                            Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family. Facing a choice between the love of his life and the fate of the known universe, he endeavors to prevent a terrible future only he can foresee.
+                        </p>
+</div>
+<!-- Top Cast Section -->
+<div class="w-full mt-8">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-white">Top Cast</h3>
+<button class="text-xs text-primary font-semibold">See all</button>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2 -mx-6 px-6">
+<!-- Cast Member 1 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden border-2 border-white/10">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young man looking serious" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAt0bOmh5tH5cmoIJoMVpgCGADggGHlOLa4SWl_Y0j1mWydPjTSGQR-WGYjMFLMEyl8QpiOLqi7gsHwy24zhWK5DUFqDTfHatLRjIWqK6pvjUnB8ea7yQcy3oqNUPSJjgXZHxTDDswGV7KPZhYCBjyPNQhOQ-acg40DuQej2R7O0jW32jQO1uJZBh7vxUWsq9fPQo_3CTh0ZSe2K6lnODcG_YDSGmgvsP_2525yI9rpBz3GybHIvYTbUfMrtZIvtIjgi_EA69v4q-V"/>
+</div>
+<span class="text-xs text-center text-gray-300 w-full truncate">Timothée</span>
+</div>
+<!-- Cast Member 2 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden border-2 border-white/10">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young woman with intense gaze" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoFKhCdj-vS9U9aw45RQWr7RYJ0dEEC7PilYGGORQDZAOT_oBn7V9kajmsJudcIzhq8Wo0rxTk3Q-dMpgXpWo6k6BGcBdjowhijNUu0y2Bd3gNVCM0Rh9Jaj_GcLiFEFphDTg-q6u9PUAAZj5TLozGFcxfGttdHrn1WN4USNrrghmnrCQLUaUnMIz16cb8_Y587zFJ1KLiNNnWn9U7dWJE7F_-CWBDigkMeIp4Djvv-0JQkTyypvpRCroXNbebwj2KcL4Pu64U2j21"/>
+</div>
+<span class="text-xs text-center text-gray-300 w-full truncate">Zendaya</span>
+</div>
+<!-- Cast Member 3 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden border-2 border-white/10">
+<img class="w-full h-full object-cover" data-alt="Portrait of a middle aged man with beard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLM7bcMfQ5sj6KrnBRyklkHXeTWCPjcj8eqHCLsjUR-l4tdlH5J18QyQcaaJAEXifz8EaBnyvGK9U7vxq9ErAe3hWc87MOr-prh4o-Zoat6uDfty0SSRtK8BhcypWAsQVh4Z7HGthVwmqZOiu45QUMlEMb1ZxBU0ni3h9isW5lsYhELNnqzW6rInmWOvuRzPyfhsI8wpV-aVpSsdu9YpWquX0jY71mKhryQOIUYqoUg77TQMehHCa3E4KFBBxEbzmmD8iYhfABNVA2"/>
+</div>
+<span class="text-xs text-center text-gray-300 w-full truncate">Rebecca</span>
+</div>
+<!-- Cast Member 4 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden border-2 border-white/10">
+<img class="w-full h-full object-cover" data-alt="Portrait of a man with sunglasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4kkVtivhAz115Lx0yDxZyYKr2GTcNPyJb8hQcu-zqcHYkc4AAJslnm44RM5gg0gai2yf-fKpP6fsA72_SuuAERdi2-E6KMQqsJeu-_-snxt4GbR3euNvZDoxAeF19VnP3GI631S2wIdDJ4ij9lNufUHg3nQ6iyS2M4kGn9TNwCaXPKYQiXNnaPfdiWssZMUjZ_3l0mQcWy7PR16e53hC4Pk5TKV91HfQhCd_UH58fypDxAg-LISq08HOHL1uo5Hco4yK5NNk_jbN4"/>
+</div>
+<span class="text-xs text-center text-gray-300 w-full truncate">Josh</span>
+</div>
+<!-- Cast Member 5 -->
+<div class="flex flex-col items-center gap-2 min-w-[72px]">
+<div class="w-[72px] h-[72px] rounded-full overflow-hidden border-2 border-white/10">
+<img class="w-full h-full object-cover" data-alt="Portrait of a woman smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwsVWPG2CEEQY3HhsKVkK4DgiWG0aC6Rsmjk-Jxs6TgwcK_Dxi_K7pR7FbPHrjOXZR6od0mqu7997BRblRksTwhO_PzlE5axCxqtnzOxMvFJdQJO2UCgRT8BNi90VXYyZsCvhAJku0jZzj_ddkHqrVc6FvTbDb1Va235e9j_a8vHJdyB7jLT7qqTKAVwm0x3E1qJ4O8xtlIsGCS2cu4yRGg1pqNZKJf1NSGYBcUUgzYU4tsjVRyFDblgpQsFoq2dOMSA3nSMioN26W"/>
+</div>
+<span class="text-xs text-center text-gray-300 w-full truncate">Florence</span>
+</div>
+</div>
+</div>
+<!-- Additional Info (e.g. Director) -->
+<div class="w-full mt-8 grid grid-cols-2 gap-4">
+<div class="glass-panel p-4 rounded-2xl">
+<p class="text-xs text-gray-400 mb-1">Director</p>
+<p class="text-sm font-medium text-white">Denis Villeneuve</p>
+</div>
+<div class="glass-panel p-4 rounded-2xl">
+<p class="text-xs text-gray-400 mb-1">Budget</p>
+<p class="text-sm font-medium text-white">$190,000,000</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

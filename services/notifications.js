@@ -1,12 +1,12 @@
 // ============================================
-// WtW NOTIFICATION SERVICE
+// LUMI NOTIFICATION SERVICE
 // Platform availability notifications + general notifications
 // ============================================
 
 class NotificationService {
     constructor() {
-        this.notificationsKey = 'wtw_notifications';
-        this.watchlistKey = 'wtw_platform_watchlist';
+        this.notificationsKey = 'lumi_notifications';
+        this.watchlistKey = 'lumi_platform_watchlist';
         this.maxNotifications = 50;
     }
 

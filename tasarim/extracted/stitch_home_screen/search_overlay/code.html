@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Search Overlay - WtW</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#785af2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#141022",
+                        "surface-glass": "rgba(25, 25, 35, 0.65)",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-display overflow-hidden h-screen w-full relative selection:bg-primary/30">
+<!-- Background Layer to simulate "Overlay" context -->
+<!-- We put a blurred poster image behind everything to create the glassmorphism base -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-background-dark/80 z-10"></div>
+<div class="w-full h-full bg-cover bg-center filter blur-xl scale-110 opacity-60" data-alt="Abstract cinematic background with dark blue and purple lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2UtF6gnxcy2uyzeYt8Eeu1WsJrNVm1e2jaCX-us9BkYiqyXyZe812RiEJjQCr__4CYpDV3EzH8TedUJXQeNm930FFsxA4ztPuWcbnDCN-jCVufGdwo1LNoWH8Ie2J6D-eQIbN1giVqTJhuc5nOvLN4VIZKv86tXLYulPcMcxogxeRivY9lspnWq6OJtBr4zwvK6vzFukEpUlaC0c0gVkoF7CV5dVXXcjEmO_nvFmBzdzfUVg11FEblbn9VHYezGwonKMUo0YTQEJ2');"></div>
+</div>
+<!-- Main Overlay Content -->
+<div class="relative z-20 flex flex-col h-full w-full backdrop-blur-3xl bg-background-dark/70">
+<!-- Search Header Area -->
+<div class="pt-12 pb-2 px-4 flex flex-col gap-4 bg-gradient-to-b from-background-dark/90 to-transparent">
+<!-- Search Input -->
+<div class="flex items-center gap-3">
+<div class="relative flex-1 group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">search</span>
+</div>
+<input autofocus="" class="block w-full rounded-full border-none bg-white/10 py-3 pl-12 pr-10 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/50 focus:bg-white/15 transition-all duration-300 backdrop-blur-md" placeholder="Dune" type="text" value="Dune"/>
+<div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+<button class="p-1 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+</button>
+</div>
+</div>
+<button class="text-white font-medium text-base active:opacity-70 transition-opacity whitespace-nowrap">
+                    Cancel
+                </button>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="flex shrink-0 items-center justify-center px-5 py-2 rounded-full bg-primary text-white text-sm font-medium shadow-[0_0_15px_rgba(120,90,242,0.4)] transition-transform active:scale-95">
+                    All
+                </button>
+<button class="flex shrink-0 items-center justify-center px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm font-medium hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm">
+                    Movies
+                </button>
+<button class="flex shrink-0 items-center justify-center px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm font-medium hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm">
+                    TV Shows
+                </button>
+<button class="flex shrink-0 items-center justify-center px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm font-medium hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm">
+                    People
+                </button>
+<button class="flex shrink-0 items-center justify-center px-5 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 text-sm font-medium hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm">
+                    Collections
+                </button>
+</div>
+</div>
+<!-- Search Results (Masonry Layout) -->
+<div class="flex-1 overflow-y-auto px-4 pb-4 no-scrollbar">
+<h3 class="text-sm font-semibold text-gray-400 mb-3 px-1">Top Results</h3>
+<!-- Masonry Grid using columns -->
+<div class="columns-2 gap-4 space-y-4 pb-32">
+<!-- Result Card 1 -->
+<div class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="aspect-[2/3] w-full bg-gray-800 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Dune Part Two movie poster atmosphere" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIWQKbSc-i3HSh3jesj9EFlYPny-Tjl3jYxrW7JbMll3i_DaDTy8Rkzv76VKJFNvJlzc-K_iczAyap6jBArSKAEMC4iGSKN2_7K_YsqkoxmQ-LBaxj1y-Wv6G8EnkVvV2IuNuSQE8hYqUHxavoPLHG-HlucePaIOrfQ1hVzvHkdcTrtmsI6d7p-es7_ELaj6X9R_mXLj4SeEXJGzVMSJ-b-Oxd-QslcY0Y9Ela5ZSeFDa1YdY7NzIgBObFXB6jfOP_fEs84i2ntLv3');"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+</div>
+<div class="p-3">
+<p class="text-white font-semibold text-sm leading-tight mb-1">Dune: Part Two</p>
+<div class="flex items-center gap-2 text-xs text-gray-400">
+<span>2024</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span class="flex items-center text-yellow-400 gap-0.5">
+<span class="material-symbols-outlined text-[12px] fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+                                8.8
+                            </span>
+</div>
+</div>
+</div>
+<!-- Result Card 2 -->
+<div class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="aspect-[2/3] w-full bg-gray-800 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Poor Things surreal aesthetic poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCngC4dTKxSX-3r9IpuGiLeVEj74DHWr2TwKVG8HDb81gzD83viT2x65wbD5WLDG1K2noDFhjhK3Vl5X1_4k8Ajf3MR-U21VTEVJArPjQFfpjzvCcuzzngXZ6tQFaJa3pwJ9X8_thaRm1OyFNYg3tZKU-DS4LnDnSwDQlGdw6hVMRWoAUqDQkLVLbwhnt0V_33G1U--fzlsgy6BCEsO0cQEz7FBbXYu1Hv6I81xDyZyQnwRYbC0S-NywSDnnsoP-A24V5sJcQBc0tHm');"></div>
+</div>
+<div class="p-3">
+<p class="text-white font-semibold text-sm leading-tight mb-1">Poor Things</p>
+<div class="flex items-center gap-2 text-xs text-gray-400">
+<span>2023</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span class="flex items-center text-yellow-400 gap-0.5">
+<span class="material-symbols-outlined text-[12px] fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+                                8.1
+                            </span>
+</div>
+</div>
+</div>
+<!-- Result Card 3 (Person/Actor) -->
+<div class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="aspect-square w-full bg-gray-800 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Portrait of an actor" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDH1vTdcrmJnAepiRcUp6vRx8PsKzIblw-j-z8iJ3jJfJFKNu2SxwDQhYiQasZ9-USBvCpavgOPSa7kQ334KA4iP0Z4V-PwWR_lpK-lq3ag7KTijcYZpgLO9Ky80-_xTRWbSe3reEOgnHuw_HAc4WNNfoRx6SI258Zt7o79lRbWgRp7y1ppiKYT0D0L5WZu_pkCBc57blkBC5FQ40u16Wq28HLBBGz8BdxITuWEKdBkeqVxeB70VxvHFq2mopEP7Qh4qLkI8uHE6yPG');"></div>
+</div>
+<div class="p-3">
+<p class="text-white font-semibold text-sm leading-tight mb-1">Timothée C.</p>
+<div class="flex items-center gap-2 text-xs text-gray-400">
+<span>Actor</span>
+</div>
+</div>
+</div>
+<!-- Result Card 4 -->
+<div class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="aspect-[2/3] w-full bg-gray-800 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="The Bear chaotic kitchen atmosphere" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA0iA9qCudBilR3POCw3HxV1AgB-OI5aXRfys2XKWN3sNKFJ9ZO2h2-NPZKVoqCExG2Rm3sDycLZp9fCp9u8cLPwVFb9BkhNgSh_Nutvl4pey5NK43x49ie9OSMx3AiMDDAKilGCBZ9yU3wMejBrDqd9sY2ETc0jAo7oKiVXdbTgWtE8rXplue3BsmBBPROzxhznQoUB8V5gdPWAAVZF4nafK4PBdXX4Ij5KyXaE-zHgZenK-qlyGmRdW5POnETimZl2ys0dM74hzgQ');"></div>
+</div>
+<div class="p-3">
+<p class="text-white font-semibold text-sm leading-tight mb-1">The Bear</p>
+<div class="flex items-center gap-2 text-xs text-gray-400">
+<span>TV Series</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span class="flex items-center text-yellow-400 gap-0.5">
+<span class="material-symbols-outlined text-[12px] fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+                                8.9
+                            </span>
+</div>
+</div>
+</div>
+<!-- Result Card 5 -->
+<div class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="aspect-[2/3] w-full bg-gray-800 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Oppenheimer dramatic explosion poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgoma4kAe1GL_37vc1ZnE6M-AjY10-5DskvgDB2KXssfdFp7JEXzSAH934B0uvxg3jE9XhSnQyRAIcVinS9jL8i4JEMAvWZw2jf_W8WggGxFihRz_KFoGCXM9p1HeXMOsOvkYlJnO1jVsnw9-ObhWBtnRX-AnlscEMQQiK6bvwejpAzqOy6h19r9OShtVyeLlQfYHKrlQrMPDLx6lD65hRou0JQ6hBHjKjJpykRyVHesxhIgiqW0OzlS4TvjioaB_8dr9ffU03rpmK');"></div>
+</div>
+<div class="p-3">
+<p class="text-white font-semibold text-sm leading-tight mb-1">Oppenheimer</p>
+<div class="flex items-center gap-2 text-xs text-gray-400">
+<span>2023</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span class="flex items-center text-yellow-400 gap-0.5">
+<span class="material-symbols-outlined text-[12px] fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+                                8.5
+                            </span>
+</div>
+</div>
+</div>
+<!-- Result Card 6 -->
+<div class="break-inside-avoid group relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/5 active:scale-[0.98] transition-all duration-200">
+<div class="aspect-[2/3] w-full bg-gray-800 relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Godzilla monster movie poster" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAKA_7rQfVCRM5Z794XSuXme7wVLFsBtkGAnzv-pspsH9XLw3TIDZopgZH5FOH0f1fgS5ysXBPuVlhV8w_6kLROryDB6AFtUy-zB9y-KXAvzjjUu4IOd4J5VQFvdDKaiwH51p6GN1RGxOVk8LDXfGHs9hZ0AK5yectUxeQcCi_kA8ioj9CXKVt5oGWLJ43cNXTsFZd1i92bEvzXJGW6Q2z_dRR4WiHvz6ZpLp435Lqg5_olqwDtrxsXiCb_T2nB2SbG6li3ugxyd5Va');"></div>
+</div>
+<div class="p-3">
+<p class="text-white font-semibold text-sm leading-tight mb-1">Godzilla Minus One</p>
+<div class="flex items-center gap-2 text-xs text-gray-400">
+<span>2023</span>
+<span class="w-1 h-1 rounded-full bg-gray-600"></span>
+<span class="flex items-center text-yellow-400 gap-0.5">
+<span class="material-symbols-outlined text-[12px] fill-current" style="font-variation-settings: 'FILL' 1;">star</span>
+                                8.3
+                            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- iOS Keyboard Area (Simulation) -->
+<div class="w-full bg-[#1c1c1e]/90 backdrop-blur-xl border-t border-white/5 pb-2 pt-2 relative z-50">
+<!-- Predictive Text Strip -->
+<div class="flex justify-center gap-4 py-2 border-b border-white/5 mb-1">
+<span class="text-white text-sm font-normal">Dune 2</span>
+<span class="text-white/50 w-[1px] h-4 bg-white/10"></span>
+<span class="text-white text-sm font-normal">"dune"</span>
+<span class="text-white/50 w-[1px] h-4 bg-white/10"></span>
+<span class="text-white text-sm font-normal">Dune (2021)</span>
+</div>
+<!-- Keyboard Image Placeholder -->
+<div class="w-full aspect-[390/250] bg-center bg-contain bg-no-repeat" data-alt="iOS dark mode keyboard layout" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3pghd_F1Ef50NZecQbPp7akPY4UgTLpw9omWSKDMew6NqK-lIAPNelC8Ed63FlQWz2T6QRTytQYbapVb-vUS_2NBPcvHN_2lbyxoFPs2XPNeD4-Vg9Tn98lqdHFMziDoOAflrGHq7iiZqrmYDDkwey-TLNzha4OcavzPsBm8rz0pBfPwhQC3Pycnn-c0KICY91n2Tz7KHs5ahlp33xAUPujc3rDCcy679LSRmivhtmYfY8doFFyVsXqFaCse4hzXKnsSiO1da_doM');">
+</div>
+</div>
+</div>
+</body></html>

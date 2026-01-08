@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumi Home Screen V2</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#5959f3",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101022", // Keeping strictly to config, will overlay darker void feels
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem", 
+                        "lg": "2rem", 
+                        "xl": "3rem", 
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(89, 89, 243, 0.5)',
+                        'glow-sm': '0 0 10px rgba(89, 89, 243, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Utilities for Hide Scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Glassmorphism helpers since tailwind backdrop-blur utility needs alpha bg */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-high {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-chip {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #5959f3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-white">
+<!-- Ambient Background Glow -->
+<div class="fixed top-[-10%] left-[-10%] w-[60%] h-[40%] rounded-full bg-primary/20 blur-[120px] pointer-events-none z-0"></div>
+<div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[40%] rounded-full bg-blue-600/10 blur-[100px] pointer-events-none z-0"></div>
+<!-- Main Container -->
+<div class="relative z-10 flex flex-col w-full max-w-md mx-auto min-h-screen pb-24">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 pt-14 pb-4">
+<div class="flex flex-col">
+<h2 class="text-white text-2xl font-bold tracking-[0.1em] leading-none uppercase">Lumi</h2>
+</div>
+<button class="relative group rounded-full p-0.5 shadow-glow-sm transition-transform active:scale-95">
+<div class="absolute inset-0 rounded-full bg-gradient-to-tr from-primary to-blue-400 opacity-70 blur-sm"></div>
+<div class="relative h-10 w-10 rounded-full overflow-hidden border border-white/20">
+<img alt="User profile avatar with soft lighting" class="h-full w-full object-cover" data-alt="User profile avatar with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWa94tMm3LvJmfLgYRoBPGnIshists1hN-6-jQz09S9RMhB2f3ui-SJ-INg28rFdd5S9an9ZzPgj7bdRSlg0q6HEmNnuFiI2n1SI5WaYryR_gLuNfHJoDBG__9sBVgDT4CpXYxPWY8QUoi7-4OG0kbOZqqxEH_PfA-tdRslcbVFWxM5jwalLMCNUCOFBiI5e-dA6aCTpchNJVYxgkQy-_1DAThm41sqgJ8DYMOGIJl8-csdYwdVSQIvzb4HnQ5ad7JXwONthPlOFh8"/>
+</div>
+</button>
+</header>
+<!-- Hero Section -->
+<section class="flex flex-col px-6 mt-6 mb-8">
+<!-- Greeting -->
+<h1 class="text-[36px] font-bold leading-[1.1] mb-8 tracking-tight">
+<span class="text-gradient">What are we<br/>watching today?</span>
+</h1>
+<!-- Search Bar -->
+<div class="relative w-full group">
+<div class="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-blue-500/50 rounded-full blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+<div class="relative flex items-center w-full h-16 glass-high rounded-full px-5 transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+<span class="material-symbols-outlined text-white/50 mr-3 text-[28px]">search</span>
+<input class="flex-1 bg-transparent border-none text-white placeholder-white/40 text-lg font-medium focus:ring-0 p-0 h-full w-full" placeholder="Search movies, genres, actors..." type="text"/>
+<button class="p-2 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[24px]">mic</span>
+</button>
+</div>
+</div>
+<!-- Chips -->
+<div class="flex gap-3 mt-8 overflow-x-auto no-scrollbar py-2 -mx-6 px-6 snap-x">
+<button class="snap-start shrink-0 h-10 px-6 rounded-full bg-primary border border-primary text-white text-sm font-semibold shadow-glow tracking-wide">
+                    All
+                </button>
+<button class="snap-start shrink-0 h-10 px-6 rounded-full glass-chip text-white/90 text-sm font-medium hover:bg-white/10 active:scale-95 transition-all">
+                    Action
+                </button>
+<button class="snap-start shrink-0 h-10 px-6 rounded-full glass-chip text-white/90 text-sm font-medium hover:bg-white/10 active:scale-95 transition-all">
+                    Comedy
+                </button>
+<button class="snap-start shrink-0 h-10 px-6 rounded-full glass-chip text-white/90 text-sm font-medium hover:bg-white/10 active:scale-95 transition-all">
+                    Sci-Fi
+                </button>
+<button class="snap-start shrink-0 h-10 px-6 rounded-full glass-chip text-white/90 text-sm font-medium hover:bg-white/10 active:scale-95 transition-all">
+                    Drama
+                </button>
+<button class="snap-start shrink-0 h-10 px-6 rounded-full glass-chip text-white/90 text-sm font-medium hover:bg-white/10 active:scale-95 transition-all">
+                    Anime
+                </button>
+</div>
+</section>
+<!-- Trending Now Rail -->
+<section class="flex flex-col mb-8">
+<div class="flex items-center justify-between px-6 mb-4">
+<h3 class="text-white text-xl font-bold tracking-tight">Trending Now</h3>
+<button class="text-primary text-sm font-semibold hover:text-white transition-colors">See All</button>
+</div>
+<div class="flex gap-5 overflow-x-auto no-scrollbar px-6 pb-4 snap-x">
+<!-- Card 1 -->
+<div class="snap-start shrink-0 w-[160px] flex flex-col gap-3 group">
+<div class="relative aspect-[2/3] rounded-[24px] overflow-hidden shadow-lg bg-gray-800">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Dune movie poster abstract desert art" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Dune movie poster abstract desert art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChawErgHnuuYHXAoRGPTxsJdytEH8Exidxj7nuK-dbR-K_vGUj0EkrfoJd8snDmxvukeEyuDEt6mNBEQkxJg1_72qKzC9yMDYTw0Y4Zp0lvXOEN178CIm8NOIVA8ug1lAHa8hNixqgIH_iPm-uwD_5Up4k6d_CBTDNd6L0eQ0U3Oj6XqqBFufNeBBIhcKhFooy0au5iVEORUpj4MAYN5GMFTIBVQuLLbcxd039qwhBUS5Bo6LX98269W9wZkxY6Eb-p6GNINMhpVPO"/>
+<div class="absolute top-3 right-3 z-20 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10">
+<span class="text-xs font-bold text-amber-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span> 8.8
+                            </span>
+</div>
+</div>
+<div>
+<h4 class="text-white font-semibold text-base truncate">Dune: Part Two</h4>
+<p class="text-white/40 text-xs font-medium">Sci-Fi • Adventure</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="snap-start shrink-0 w-[160px] flex flex-col gap-3 group">
+<div class="relative aspect-[2/3] rounded-[24px] overflow-hidden shadow-lg bg-gray-800">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Oppenheimer movie poster abstract fire art" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Oppenheimer movie poster abstract fire art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBosCLFRU-pBPN2r49eNCh07CWI6QC-_4j61j0tb-K1A7UKtVZsEZIMEhr_ZF0Mu5O2Jgl68BHYsktXvZsUZ6VxZEYFOLbIxDhf4gSeZCNDc8armj2KnAuq_JMYJ-tO2zXtDfB8uXMzma4tMxxnUfyFnDParvASFf-UvRRDVN5cbHTXUSYp0YI96QyVRM-0wqsQ0uYXkIn6jSJnVYHphR2ugalnHR-Qlj1TgGC93vgT_KOFpbpXp5lpK2727kKSheghOioJA8FnKUtu"/>
+<div class="absolute top-3 right-3 z-20 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10">
+<span class="text-xs font-bold text-amber-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span> 9.1
+                            </span>
+</div>
+</div>
+<div>
+<h4 class="text-white font-semibold text-base truncate">Oppenheimer</h4>
+<p class="text-white/40 text-xs font-medium">Biographical • Drama</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="snap-start shrink-0 w-[160px] flex flex-col gap-3 group">
+<div class="relative aspect-[2/3] rounded-[24px] overflow-hidden shadow-lg bg-gray-800">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Spiderman animation style abstract art" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Spiderman animation style abstract art" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCm1t32zmVZ1-77inI4TBuvRcEZvPB9bdhUFiQP5VisxgdYAiyPOQJj18MK_lvgjO4D5MqUZLSoWsxLGC704bX8vy_OVVWrXpstTY8u_iowzM6-HtiAVTsWgyWENubq5rLhbpZohUSpu3fD7MEJFbIuxdWwkEg4k6GuI-Fbg3J7vIGXqSjxM43mGSdqw8Buc7tjekh0FN9lsDTyb-xHn9l-xRTA2QK4KE8FYJPegGMfgwF3wRk9DAc4hNwKL69Ppbaeja6_q1GJeINM"/>
+<div class="absolute top-3 right-3 z-20 bg-black/40 backdrop-blur-md px-2 py-1 rounded-lg border border-white/10">
+<span class="text-xs font-bold text-amber-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] fill-current">star</span> 8.6
+                            </span>
+</div>
+</div>
+<div>
+<h4 class="text-white font-semibold text-base truncate">Spider-Man: ATSV</h4>
+<p class="text-white/40 text-xs font-medium">Animation • Action</p>
+</div>
+</div>
+</div>
+</section>
+<!-- New Releases Rail -->
+<section class="flex flex-col">
+<div class="flex items-center justify-between px-6 mb-4">
+<h3 class="text-white text-xl font-bold tracking-tight">New Releases</h3>
+<button class="text-primary text-sm font-semibold hover:text-white transition-colors">See All</button>
+</div>
+<div class="flex gap-5 overflow-x-auto no-scrollbar px-6 pb-4 snap-x">
+<!-- Card 4 -->
+<div class="snap-start shrink-0 w-[160px] flex flex-col gap-3 group">
+<div class="relative aspect-[2/3] rounded-[24px] overflow-hidden shadow-lg bg-gray-800">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Abstract blue futuristic city" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Abstract blue futuristic city" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV3aHHpZPB8trWAR3vZYXcECi0qEKq_S6b7-Bh6_7uyP381Qtrnyn5Oi3aCELqjvPj3yG5nEstvTCXZrQA9_A5EiZ4H6IM1M7grdiUGOLyvMz0GNQw0-xPPB1n8Zb-OnMZ6GbxYVWUlDQkNSA6q9-Tuk3fBqhtdsJKEIkhDmF-ADXpJzXPcLBnXC6Atgs4gk39entsCppDYET1os8YbSoU8NY6Xesw2XnWXsmaW0VYSVuHYXOUMgkesez1DBbsBgVl5TIO0AzWrsrQ"/>
+<div class="absolute top-3 right-2 z-20">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-glow-sm uppercase tracking-wide">New</span>
+</div>
+</div>
+<div>
+<h4 class="text-white font-semibold text-base truncate">The Creator</h4>
+<p class="text-white/40 text-xs font-medium">Sci-Fi • Action</p>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="snap-start shrink-0 w-[160px] flex flex-col gap-3 group">
+<div class="relative aspect-[2/3] rounded-[24px] overflow-hidden shadow-lg bg-gray-800">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 z-10"></div>
+<img alt="Abstract pink and purple gradient" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Abstract pink and purple gradient" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHrgzw0nLmCleM8WXzcfLm0_LGYFIJB8fG-Hy0ub0mFIzY1jUor0TS1LUlMnvdJaxqU47MeAv-ZT8wfiszzYqHHjCYODLsJWhHk3kEGeyOXBHVKoaD0v2WAyA4_1fPEkieA4JIbFtKAAstSEP2TA49hgjQNIINvw79ObNUtn4H8NfrklTQZnjg2UF8ksizilJQcuTa1An7LCUDVjxyR3co8nNTiiHNFfBiSRyFmIh_0NIgRHbSfCuYxstvxCpt8tdyOgmDRXM0mwxC"/>
+<div class="absolute top-3 right-2 z-20">
+<span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-glow-sm uppercase tracking-wide">New</span>
+</div>
+</div>
+<div>
+<h4 class="text-white font-semibold text-base truncate">Barbie</h4>
+<p class="text-white/40 text-xs font-medium">Comedy • Fantasy</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Floating Bottom Navigation -->
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+<div class="glass flex items-center gap-1 rounded-full p-2 pl-4 pr-4 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]">
+<button class="flex flex-col items-center justify-center w-12 h-12 rounded-full bg-primary text-white shadow-glow">
+<span class="material-symbols-outlined">home</span>
+</button>
+<button class="flex flex-col items-center justify-center w-12 h-12 rounded-full text-white/50 hover:text-white transition-colors hover:bg-white/5">
+<span class="material-symbols-outlined">explore</span>
+</button>
+<button class="flex flex-col items-center justify-center w-12 h-12 rounded-full text-white/50 hover:text-white transition-colors hover:bg-white/5">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+<button class="flex flex-col items-center justify-center w-12 h-12 rounded-full text-white/50 hover:text-white transition-colors hover:bg-white/5">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</nav>
+</div>
+</body></html>

@@ -403,7 +403,7 @@ function showLegalPage(type) {
                 <p class="legal-date">Son Güncelleme: 28 Aralık 2024</p>
                 
                 <h3>1. Toplanan Veriler</h3>
-                <p>WtW uygulaması aşağıdaki verileri toplar ve işler:</p>
+                <p>Lumi uygulaması aşağıdaki verileri toplar ve işler:</p>
                 <ul>
                     <li><strong>Kullanıcı Tercihleri:</strong> Tema seçimi, dil tercihi</li>
                     <li><strong>Favoriler:</strong> Kaydedilen film ve diziler (yerel depolama)</li>
@@ -438,7 +438,7 @@ function showLegalPage(type) {
                 </ul>
                 
                 <h3>6. İletişim</h3>
-                <p>📧 <a href="mailto:privacy@wtw-app.com">privacy@wtw-app.com</a></p>
+                <p>📧 <a href="mailto:privacy@lumi-app.com">privacy@lumi-app.com</a></p>
             </div>
         `,
         terms: `
@@ -447,7 +447,7 @@ function showLegalPage(type) {
                 <p class="legal-date">Son Güncelleme: 28 Aralık 2024</p>
                 
                 <h3>1. Hizmet Tanımı</h3>
-                <p>WtW (Where to Watch / Nerede İzlerim?), kullanıcıların film ve dizilerin hangi streaming platformlarında izlenebileceğini öğrenmelerini sağlayan bir keşif uygulamasıdır.</p>
+                <p>Lumi (Where to Watch / Nerede İzlerim?), kullanıcıların film ve dizilerin hangi streaming platformlarında izlenebileceğini öğrenmelerini sağlayan bir keşif uygulamasıdır.</p>
                 
                 <h3>2. Kabul</h3>
                 <p>Bu uygulamayı kullanarak, aşağıdaki şartları kabul etmiş sayılırsınız.</p>
@@ -518,13 +518,13 @@ function updateThemeIcon() {
     updateLogoForTheme();
 }
 
-// Update WtW logo based on theme
+// Update Lumi logo based on theme
 function updateLogoForTheme() {
-    const logo = document.getElementById('wtw-logo');
+    const logo = document.getElementById('lumi-logo');
     if (logo) {
         logo.src = state.currentTheme === 'dark'
-            ? 'assets/wtw-logo-dark.png'
-            : 'assets/wtw-logo-light.png';
+            ? 'assets/lumi-logo-dark.png'
+            : 'assets/lumi-logo-light.png';
     }
 }
 
