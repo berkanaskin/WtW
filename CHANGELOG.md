@@ -3,7 +3,57 @@
 Tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
-Sürümleme: Major.Minor.Patch.Build (örn: 1.9.6.1)
+Sürümleme: Major.Minor.Patch.Build (örn: 2.1.0.0)
+
+---
+
+## [2.1.0.0] - 2026-01-08
+
+### Lumi Infinity Feed UI Dönüşümü
+
+**Yeni Özellikler:**
+
+- **Infinity Feed (Masonry Grid)**: Slider'lar yerine Pinterest tarzı 2 sütunlu poster grid
+- **Karışık İçerik Algoritması**: Trending + Now Playing + Top Rated verilerini birleştirip shuffle
+- **Sticky Search Header**: Glassmorphism arama pill'i, üstte sabit gradient overlay ile
+- **3-Icon Floating Nav**: Home / Favorites / Profile - floating pill tasarım
+- **Search Overlay**: Full-screen arama deneyimi, filter chips (All/Movies/TV/People)
+- **Material Symbols**: Icon font olarak Material Symbols Outlined eklendi
+
+**Tasarım Değişiklikleri:**
+
+- **Primary Color**: `#5858f3` (Electric Violet, Stitch tasarımlarına uygun)
+- **Hero Section Kaldırıldı**: Infinity Feed ile değiştirildi
+- **Slider'lar Kaldırıldı**: Masonry grid yapısına geçildi
+- **Bottom Nav Sadeleştirildi**: 5 icon → 3 icon (Home, Favorites, Profile)
+
+**Teknik İyileştirmeler:**
+
+- `loadInfinityFeed()`: Çoklu API birleştirme + shuffle algoritması
+- `handleOverlaySearch()`: Debounced search with filter support
+- Poster olmayan içerikler otomatik filtreleniyor
+- `onerror` ile hatalı poster'lar gizleniyor (görsel bütünlük)
+
+---
+
+## [2.0.0.0] - 2026-01-08
+
+### WtW → Lumi Rebrand
+
+**Değişen:**
+
+- **Proje Adı**: WtW → Lumi
+- **Asset Dosyaları**: `wtw-logo*.png` → `lumi-logo*.png`
+- **localStorage Keys**: `wtw_*` → `lumi_*`
+- **Legal Sayfalar**: WtW referansları Lumi ile güncellendi
+- **GitHub Repo**: `berkanaskin/WtW` → `berkanaskin/lumi`
+
+**CSS Tasarım Sistemi:**
+
+- `index_lumi.css`: Void Dark + Glassmorphism design system
+- Ambient Glows (violet/blue blur circles)
+- SPA View System (4 sayfa arası geçiş)
+- Bottom Sheet Modal
 
 ---
 
