@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lumi Immersive Home</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#5858f3",
+              "background-light": "#f6f6f8",
+              "background-dark": "#050505", // Deep black for immersive feel
+            },
+            fontFamily: {
+              "display": ["Spline Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        /* Hide scrollbar for a cleaner mobile experience */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Gradient overlay for better text visibility in status bar area */
+        .status-bar-gradient {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-display overflow-x-hidden antialiased relative min-h-screen">
+<!-- Top Status Bar & Search Area Overlay -->
+<!-- Positioned fixed to float over content. Includes gradient for status bar legibility -->
+<div class="fixed top-0 left-0 right-0 z-50 pointer-events-none">
+<div class="absolute inset-0 h-32 status-bar-gradient"></div>
+<!-- Search Pill -->
+<div class="relative pt-14 px-6 pb-2 w-full flex justify-center pointer-events-auto">
+<div class="w-full max-w-sm backdrop-blur-xl bg-white/10 border border-white/10 rounded-full shadow-lg flex items-center overflow-hidden transition-all duration-300 focus-within:bg-black/40 focus-within:border-primary/50 group">
+<div class="pl-4 pr-2 text-white/70 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-white placeholder-white/50 focus:ring-0 py-3 text-sm font-medium h-12" placeholder="Search..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Masonry Grid Content -->
+<!-- Content flows behind status bar (pt-0) and extends full width. columns-2 creates masonry layout. -->
+<div class="w-full min-h-screen columns-2 gap-0 bg-background-dark pb-32">
+<!-- Movie Poster 1 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Dark moody cinematic movie poster with mysterious atmosphere" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Dark moody cinematic movie poster with mysterious atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBILTkNvPASju-h0YZl_Lv00jjAtkI90w2n7IcyrqBuYjYX10yn8NfFUeDqid7CXsu-BAHHohSRSHTeDvuZqXExLmHhj9urQCGvF6wfBsEm5IGuIKfdV6HMKbszcUfaD3EJ8xXCLMp8qYhwczipXYIF_9goEb2E8Az40We0fuInEddmZa2717U1OiROieH345uaOnbbRenw6F1dTOmA5vsEcnn330w2yRJpBx0HP4PS4rmLwcrDg-6S7nQVPXE9AhekGXVoclNugbu9"/>
+</div>
+<!-- Movie Poster 2 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Neon noir sci-fi movie poster with futuristic cityscape" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Neon noir sci-fi movie poster with futuristic cityscape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOCZBxuXlnYBcPJ3lOEow-z1d93ALqwD3cAXigWJOdpT3LvSSjDVf93D88qzeWRBV3c_2mZHSpnLq7tDZvVFvlbyPli4jqhnt4M71n3PTkSJKbvczZry0lXyXzJz85XjNQCo2uad-eYIttBjSSdBWdafqb9n9n5igGBunh9eKCCZ1zCHAj07KLNDwi8wWYoXowDx1d0r9POTrNr2nzkynh2z_LBNwPIakVsa3u6-wH7K7JYi4WyHM41xlpDR6mCM3W_tq2jAQVVBYD"/>
+</div>
+<!-- Movie Poster 3 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Abstract colorful artistic movie poster with vibrant gradients" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Abstract colorful artistic movie poster with vibrant gradients" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn3TWJeXPil66BP9pfyhNg76iXqtkVqdmXAUc2tpFH6bBnTmfKGEv-JWT64EKWWIp7s2bOI3jJzjopFUpO6wvPlrS9yaYyP9-SV4L2rx4h3CKv5xQTCRmQ0DIW_Ed3wucVp487PNRhnOLik_yr7cF6E3oIueEi4VpiplszoCd9Yih0U-J5k2qmSAn1m6yA9TEx6LfU8TOib94hR5LsVdhk_1iahiQ_ksZha3THJvPgEFFYvPK4wdz6G84tIQyDKsxSE1v9nHhSd2NG"/>
+</div>
+<!-- Movie Poster 4 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Minimalist drama movie poster with single subject" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Minimalist drama movie poster with single subject" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ47xInhFb06JQ3bata-Z1eDfwyw-tqUG4IFg0UmLdeKCyLSzO27wZp45Sa5srasZCHL4NRvHvho68KhtkceGaFPCgJqdhSx6TWepLptiSiUhvpU8DAi6WPvX2kcywmMDYjPnLIv7K8iWa7YEM21CQKRwRYVclh0J8MRxjwDgO325rF-rG8MijnSdrUUZPzZ5cw3X5TSVpRPWxGrl2b-cepknk7y5q5IxQWqQufCCUtJ6AZk1htzD9TFNO66zupkVGFOIumY7C3wsq"/>
+</div>
+<!-- Movie Poster 5 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Action thriller movie poster with high contrast black and white" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Action thriller movie poster with high contrast black and white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2jo-lBT1dOYna0eVHX4TEzO9SlBEaTlsYUpWm-bYNMBeeiqWKlxP9H9R2UpQoGASJtGHaCCcbjiWMrNYoGXX3ngk5biszwjIQqMjuKW-xBwBpWOCy9HPr-lmdHVotKt2hTfpi5ZVkD9JbiFm-GEvKST7t8eXIJ7FqOv5ivNnjX-r9KAVZfrWn_bdPc-M8mQI1TKlyxQ-KtY8uwsS639tHzTzqQwU_nz6OiCAzzKBAXvLEZ9zeEIwQIwjge4D5uwT8u-8CmPvy4Tom"/>
+</div>
+<!-- Movie Poster 6 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Surreal fantasy movie poster with dreamlike red lighting" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Surreal fantasy movie poster with dreamlike red lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1Z8dz6qSTWKbMi65AeSpPQfQH3xqtu6zeLobEuo6VYGbwN9wIfDbq6H3LTZmFGjL4l2SUWEBzBdsLCRlNQ6bRUWdZvS87vtfr78Tt0WHkhi3JT_rTgyVCncutKWeb5P0BRIsONIjxzWz5BZVfa8PRQ2-huib9J-2E3RATZkpuX8Op6czvdIhIw9igpgCcKFwe1S08Nfzge-jurZ2XmnT_komVnwUkkLXBtqm_NWoZwXyCeG0tg9Mj7rT0-IsluMDeZa8Xvv3YqSt7"/>
+</div>
+<!-- Movie Poster 7 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Abstract fluid art movie poster resembling deep space" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Abstract fluid art movie poster resembling deep space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD35SSd3UlqLMTrObUYOwtO_55HBMf5qzTuRI-xHH_gKZM-BJ61sbTTzJ9hYVlBCel-a-FkWi5JRAIUCv6lmpKyJircEm9bonpY3jXo1yqzHxqeuw9yi3HQu-6Yt5v26WbUACFAmWuqSJA9EC5uZqlv7VHoHxWHmQl1GqG0Toz_dByPDuUbS5jd23j97E9tp0ssfy9ffnlAtRkvsL8XiF0WsogdYsSb_VMt01vWEgTO6gzzpx86xzSqh-3FQjYTuAuy2_1toxqYN1Am"/>
+</div>
+<!-- Movie Poster 8 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Horror movie poster with dark distorted face silhouette" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Horror movie poster with dark distorted face silhouette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHq2j1oXg1vEVWU0COb33tmwgGrg8ldtJdkQOFfB4Ya9hwkEaKyxIsexLlVeemBGrWbMui3mGL-U5ZBAnZrXhCl5eUW8cimXIBk0Ch8eQxaNg8-tQX7aRWDK0-mo0dW7lH40WmF1aAk5gl-UqwtdhI3d8Mw6qJ1L18xvuVRjNbDKC22sqQRsqUotfiwtfjUu4aRupextDH8iwRo7wFHQ9FI-8LYT3yYj18DVVh8FK5jm8_f1GZhUSbl6Mus64ztS4m572ZlHQE_sS7"/>
+</div>
+<!-- Movie Poster 9 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Coming of age movie poster with soft aesthetic pastel colors" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Coming of age movie poster with soft aesthetic pastel colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBpyxXyejDvqhd0MyLbKvPlRe5Rpf-65C97A48luekg0gSkBo8ZQdAAW7U8V5MTTREdPMu3wl8N-nxfeeE250hy3AJYAkkpJDo2EIft-CRylvewDlbsELnpZVE-zWA7RR2h7j8IH2Q_lw8mZXvk2Lt18trT4myBm32Th-NHvYaiv7VgglmuHxdsO76oQKemDFIDlhT2w7s33nIfVFZVbjl2oTDUfYaDLHiyDtzk2rtrXY1T4cS1vHQXmmQUiIUnN_dwuUmQss-8Xnq"/>
+</div>
+<!-- Movie Poster 10 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Cyberpunk movie poster with bright neon lights and rain" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Cyberpunk movie poster with bright neon lights and rain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnVSGHlkvUEEx31rtXsA_3hZtJB5QI974i0zxvR9b85HyiJU3qZPTkUs2RPUv0X5P6m4kYD8ExfgiYzAfTTsgY77ARnf1zUSRfSgefnrog9wkJ-xpyjo2NNmy1SgzcY-4njOlGqAerfaqqIjay2IQ-gc9w88PjKSyUUcD1iUcpBeGn5PluihfWlx98qVlmapA7FOKBE-iFqLdnxGbenlPXjMhF00G8nvopVV3slrAxQdqeGdse1DbagLydoVyE-aCu4E5D3qJ8TZJZ"/>
+</div>
+<!-- Movie Poster 11 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Documentary movie poster featuring abstract nature texture" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Documentary movie poster featuring abstract nature texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8VGXZYSc9TZ7xcEuiiGfG60PyV5zhSGShkgh85GXhpJskVxAMrG9_IgOjKjorVAiBJkYZbWvRlLtCbM_CW25ATpupbWiwjf1jj_Ey8jIqS6olXsBph3Pd5e2_0vXjMhzj1t_uvVyMPtHQtGvfkFCtppOTzAmL7XCKzJiWuf3Wy1mcBjehVAbIdJbJ2_kLeRHRYisEGf--80xX2MAPTQZ3-lRjvJxeYdJoblzz-_R4ZloakWtPgVlrdbNOHKuPaGHT-doz8abS0Fej"/>
+</div>
+<!-- Movie Poster 12 -->
+<div class="break-inside-avoid w-full mb-0 relative group cursor-pointer">
+<img alt="Indie film poster with candid photography style" class="w-full h-auto object-cover brightness-90 group-hover:brightness-110 transition-all duration-500" data-alt="Indie film poster with candid photography style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAer5Wr2U01XuIarH6R0yoSDZ41F891jyWwb3AjODS5pQjj_X8wZmCeWsGx2UK54VMusEzEGEXoufGl7VTRvVnvYHgte5XNHpYf1_Tn6InyVYMP0t4_jHSulKh_laZarDkGiDT1-rHnU04H4PkD-TFnBLDCBTdt5tgByQ122NMgGt1hZIUK1aEi2gGbYPtQ_i9hGKQLqIjH119vgcxIEcjwV3g8Kzklq-t8y9BXA7iOa7Sgy-aSDFXkJ0om3Q4NnOi8uPMPjvPkQN5D"/>
+</div>
+</div>
+<!-- Floating Bottom Navigation -->
+<!-- Detached, floating pill shape with glassmorphism -->
+<div class="fixed bottom-8 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+<div class="pointer-events-auto flex items-center gap-10 bg-black/60 backdrop-blur-2xl border border-white/5 rounded-full px-8 py-4 shadow-2xl shadow-black/50">
+<!-- Home (Active) -->
+<button class="group flex flex-col items-center justify-center text-primary relative">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="absolute -bottom-2 w-1 h-1 bg-primary rounded-full"></span>
+</button>
+<!-- Favorites -->
+<button class="group flex flex-col items-center justify-center text-white/50 hover:text-white transition-colors duration-200">
+<span class="material-symbols-outlined text-[28px]">favorite</span>
+</button>
+<!-- Profile -->
+<button class="group flex flex-col items-center justify-center text-white/50 hover:text-white transition-colors duration-200">
+<span class="material-symbols-outlined text-[28px]">person</span>
+</button>
+</div>
+</div>
+</body></html>

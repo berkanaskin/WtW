@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="description" content="Lumi - Film ve dizi keşfi için premium platform">
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index_lumi.css">
 </head>
 <body>
@@ -20,207 +21,27 @@
 
     <div class="app">
         <!-- ============================================
-             VIEW: HOME
+             STICKY SEARCH HEADER
              ============================================ -->
-        <section id="view-home" class="view active">
-            <!-- Hero Section -->
-            <div class="hero" id="hero-section">
-                <div class="hero-poster" id="hero-poster" style="background-image: url('https://image.tmdb.org/t/p/original/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg');"></div>
-                <div class="hero-gradient-top"></div>
-                <div class="hero-gradient-bottom"></div>
-                <div class="hero-content">
-                    <h1 class="hero-title" id="hero-title">Loading...</h1>
-                    <div class="hero-meta" id="hero-meta">
-                        <span class="badge" id="hero-genre">—</span>
-                        <span class="dot"></span>
-                        <span id="hero-runtime">—</span>
-                        <span class="dot"></span>
-                        <span id="hero-year">—</span>
-                    </div>
-                    <div class="hero-actions">
-                        <button class="hero-btn hero-btn-primary" id="hero-trailer-btn">
-                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                                <polygon points="5 3 19 12 5 21 5 3"/>
-                            </svg>
-                            Fragman
-                        </button>
-                        <button class="hero-btn hero-btn-secondary" id="hero-list-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-                                <line x1="12" y1="5" x2="12" y2="19"/>
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                            </svg>
-                            Listeme Ekle
-                        </button>
-                    </div>
+        <div class="sticky-search-header">
+            <div class="status-bar-gradient"></div>
+            <div class="search-pill-container">
+                <div class="search-pill" id="search-trigger">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="search-input" placeholder="Search..." autocomplete="off" readonly>
                 </div>
             </div>
-
-            <!-- Trending Section -->
-            <div class="content-section" id="trending-section">
-                <div class="section-header">
-                    <h2 class="section-title">🔥 Popüler</h2>
-                    <button class="section-link" data-section="trending">Tümünü Gör →</button>
-                </div>
-                <div class="movie-slider" id="trending-slider"></div>
-            </div>
-
-            <!-- New Releases Section -->
-            <div class="content-section" id="new-releases-section">
-                <div class="section-header">
-                    <h2 class="section-title">✨ Yeni Çıkanlar</h2>
-                    <button class="section-link" data-section="new-releases">Tümünü Gör →</button>
-                </div>
-                <div class="movie-slider" id="new-releases-slider"></div>
-            </div>
-
-            <!-- Classics Section -->
-            <div class="content-section" id="classics-section">
-                <div class="section-header">
-                    <h2 class="section-title">🎬 Klasikler</h2>
-                    <button class="section-link" data-section="classics">Tümünü Gör →</button>
-                </div>
-                <div class="movie-slider" id="classics-slider"></div>
-            </div>
-
-            <!-- Suggested Section (Members Only) -->
-            <div class="content-section" id="suggested-section" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title">🌟 Sizin İçin</h2>
-                    <button class="section-link" data-section="suggested">Tümünü Gör →</button>
-                </div>
-                <div class="movie-slider" id="suggested-slider"></div>
-            </div>
-
-            <!-- Search Results Section -->
-            <div class="content-section" id="search-results-section" style="display: none;">
-                <div class="section-header">
-                    <h2 class="section-title" id="results-title">Arama Sonuçları</h2>
-                    <span class="results-count" id="results-count"></span>
-                </div>
-                <div class="movie-grid" id="results-grid"></div>
-            </div>
-
-            <div class="loading-state" id="loading">
-                <div class="spinner"></div>
-                <p data-i18n="loading">Yükleniyor...</p>
-            </div>
-
-            <div class="empty-state" id="no-results">
-                <span class="empty-icon">🎭</span>
-                <p data-i18n="noResults">Sonuç bulunamadı</p>
-            </div>
-        </section>
+        </div>
 
         <!-- ============================================
-             VIEW: DISCOVER (Ne İzlesem?)
+             VIEW: HOME (Infinity Feed)
              ============================================ -->
-        <section id="view-discover" class="view">
-            <div id="discover-section">
-                <div class="discover-header">
-                    <h2 class="discover-title">
-                        Bugün nasıl<br><span>hissediyorsun?</span>
-                    </h2>
-                    
-                    <!-- Mood Chips -->
-                    <div class="mood-chips">
-                        <button class="mood-chip active" data-mood="chill">
-                            <span>😌</span> Sakin
-                        </button>
-                        <button class="mood-chip" data-mood="adrenaline">
-                            <span>⚡</span> Heyecanlı
-                        </button>
-                        <button class="mood-chip" data-mood="emotional">
-                            <span>💧</span> Duygusal
-                        </button>
-                        <button class="mood-chip" data-mood="mindbending">
-                            <span>🧠</span> Zihin Açıcı
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Type Toggle -->
-                <div class="filter-chips" style="padding: 0 var(--space-lg); margin-bottom: var(--space-lg);">
-                    <button class="filter-chip active" data-filter="type" data-value="all">Tümü</button>
-                    <button class="filter-chip" data-filter="type" data-value="movie">Film</button>
-                    <button class="filter-chip" data-filter="type" data-value="tv">Dizi</button>
-                </div>
-
-                <!-- Mood Prompt Card -->
-                <div class="glass-panel" style="margin: 0 var(--space-lg); padding: var(--space-lg); border-radius: var(--radius-xl); margin-bottom: var(--space-lg);" id="mood-prompt-trigger">
-                    <div style="display: flex; align-items: center; gap: var(--space-md);">
-                        <div style="width: 48px; height: 48px; background: rgba(120, 90, 242, 0.2); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10z"/>
-                            </svg>
-                        </div>
-                        <div style="flex: 1;">
-                            <h3 style="font-weight: 600; margin-bottom: 4px;">Nasıl Hissediyorsun?</h3>
-                            <p style="font-size: 0.875rem; color: var(--text-secondary);">Bize anlat, sana önerelim.</p>
-                        </div>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2">
-                            <path d="M12 20h9"/>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Surprise Button -->
-                <div style="padding: 0 var(--space-lg); margin-bottom: var(--space-lg);">
-                    <button id="surprise-btn" class="hero-btn hero-btn-primary" style="width: 100%; max-width: none;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34"/>
-                            <path d="M3 15l4-8 4 8"/>
-                            <path d="M18 9v6"/>
-                            <path d="M21 12h-6"/>
-                        </svg>
-                        Sürpriz Yap!
-                    </button>
-                </div>
-
-                <!-- Featured Card -->
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">⭐ Günün Önerisi</h2>
-                    </div>
-                    <div id="featured-recommendation-card" style="margin: 0 var(--space-lg);">
-                        <div class="loading-state" style="display: flex;">
-                            <div class="spinner"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Discover Results -->
-                <div id="neizlesem-results" style="display: none;">
-                    <div class="section-header">
-                        <h2 class="section-title" data-i18n="resultsTitle">Sizin İçin Seçtiklerimiz</h2>
-                        <button class="section-link" id="reset-filters">🔄 Tekrar Seç</button>
-                    </div>
-                    <div class="movie-grid" id="discover-grid"></div>
-                    <div id="load-more-container" style="padding: var(--space-lg); text-align: center; display: none;">
-                        <button id="load-more-btn" class="hero-btn hero-btn-secondary" style="width: auto; padding: 0 var(--space-xl);">
-                            Daha Fazla Göster
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Mood Modal -->
-                <div class="modal" id="mood-modal">
-                    <div class="modal-backdrop"></div>
-                    <div class="modal-content">
-                        <div class="modal-handle"></div>
-                        <button class="modal-close" id="mood-modal-close">✕</button>
-                        <div class="modal-body">
-                            <div style="text-align: center; padding: var(--space-lg) 0;">
-                                <div style="font-size: 3rem; margin-bottom: var(--space-md);">🧠</div>
-                                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: var(--space-sm);">Nasıl Hissediyorsun?</h3>
-                                <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Nasıl bir film ya da dizi izlemek istersin?</p>
-                                <textarea id="mood-textarea" style="width: 100%; min-height: 100px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: var(--space-md); color: var(--text-primary); font-family: var(--font-main); resize: none;" placeholder="Örn: Biraz yorgunum ama gülmek istiyorum..."></textarea>
-                                <button id="mood-submit-btn" class="hero-btn hero-btn-primary" style="width: 100%; margin-top: var(--space-md);">
-                                    ✨ Önerileri Göster
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <section id="view-home" class="view active">
+            <!-- Masonry Infinity Grid -->
+            <div class="masonry-grid no-scrollbar scroll-touch" id="feed-grid">
+                <!-- Content will be dynamically loaded -->
+                <div class="loading-state" id="feed-loading" style="display: flex; grid-column: 1 / -1; height: 100vh;">
+                    <div class="spinner"></div>
                 </div>
             </div>
         </section>
@@ -229,42 +50,30 @@
              VIEW: FAVORITES (Listem)
              ============================================ -->
         <section id="view-favorites" class="view">
-            <div id="favorites-section">
-                <div style="padding: calc(var(--safe-top) + 60px) var(--space-lg) var(--space-lg);">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg);">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" style="vertical-align: middle; margin-right: 8px;">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                        </svg>
-                        Listem
-                    </h2>
-                    
-                    <div class="favorites-tabs">
-                        <button class="fav-tab active" data-list="liked">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                            </svg>
-                            Beğendiklerim
-                        </button>
-                        <button class="fav-tab" data-list="watchlist">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <line x1="12" y1="5" x2="12" y2="19"/>
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                            </svg>
-                            İzleyeceklerim
-                        </button>
-                    </div>
-                    <span class="results-count" id="favorites-count"></span>
+            <div class="favorites-header">
+                <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-lg);">
+                    <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">bookmark</span>
+                    Listem
+                </h1>
+                
+                <div class="favorites-tabs">
+                    <button class="fav-tab active" data-list="liked">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">favorite</span>
+                        Beğendiklerim
+                    </button>
+                    <button class="fav-tab" data-list="watchlist">
+                        <span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+                        İzleyeceklerim
+                    </button>
                 </div>
+            </div>
 
-                <div class="movie-grid" id="favorites-grid"></div>
+            <div class="favorites-grid" id="favorites-grid"></div>
 
-                <div class="empty-state" id="empty-list-message" style="display: none;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48" style="opacity: 0.5; margin-bottom: var(--space-md);">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    <p>Henüz içerik eklemediniz</p>
-                    <small style="color: var(--text-muted);">Film ve dizileri beğenin veya izleyeceklerinize ekleyin</small>
-                </div>
+            <div class="empty-state" id="empty-list-message" style="display: none;">
+                <span class="material-symbols-outlined" style="font-size: 64px; opacity: 0.3; margin-bottom: var(--space-md);">bookmark</span>
+                <p>Henüz içerik eklemediniz</p>
+                <small style="color: var(--text-muted);">Film ve dizileri beğenin veya izleyeceklerinize ekleyin</small>
             </div>
         </section>
 
@@ -272,58 +81,52 @@
              VIEW: PROFILE
              ============================================ -->
         <section id="view-profile" class="view">
-            <div id="profile-section">
-                <div style="padding: calc(var(--safe-top) + 60px) var(--space-lg) var(--space-lg);">
-                    <h2 class="section-title" style="font-size: 1.5rem; margin-bottom: var(--space-lg);">
-                        👤 Profil
-                    </h2>
+            <div class="profile-header">
+                <div class="profile-avatar-container">
+                    <div class="profile-avatar-glow"></div>
+                    <div class="profile-avatar" id="profile-avatar">
+                        <img src="https://via.placeholder.com/120" alt="Avatar" id="profile-avatar-img">
+                    </div>
                 </div>
-                <div id="profile-content"></div>
+                <h1 class="profile-name" id="profile-name">Misafir</h1>
+                <div class="profile-badge" id="profile-badge" style="display: none;">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+                    LUMI PREMIUM
+                </div>
             </div>
+
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <span class="material-symbols-outlined">movie</span>
+                    </div>
+                    <div class="stat-label">İzlenen Film</div>
+                    <div class="stat-value" id="stat-movies">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <span class="material-symbols-outlined">schedule</span>
+                    </div>
+                    <div class="stat-label">Toplam Süre</div>
+                    <div class="stat-value" id="stat-hours">0h</div>
+                </div>
+            </div>
+
+            <div id="profile-content" style="padding: 0 var(--space-lg);"></div>
         </section>
 
         <!-- ============================================
-             BOTTOM NAVIGATION
+             FLOATING BOTTOM NAVIGATION (3 Icons)
              ============================================ -->
         <nav class="bottom-nav" id="bottom-nav">
             <button class="nav-item active" data-page="home">
-                <div class="nav-icon-wrap">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                        <polyline points="9 22 9 12 15 12 15 22"/>
-                    </svg>
-                </div>
-            </button>
-            <button class="nav-item" data-page="search">
-                <div class="nav-icon-wrap">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                </div>
-            </button>
-            <button class="nav-item" data-page="discover">
-                <div class="nav-icon-wrap">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
-                    </svg>
-                </div>
+                <span class="material-symbols-outlined">home</span>
             </button>
             <button class="nav-item" data-page="favorites">
-                <div class="nav-icon-wrap">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                    </svg>
-                </div>
+                <span class="material-symbols-outlined">favorite</span>
             </button>
             <button class="nav-item" data-page="profile">
-                <div class="nav-icon-wrap">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                        <circle cx="12" cy="7" r="4"/>
-                    </svg>
-                </div>
+                <span class="material-symbols-outlined">person</span>
             </button>
         </nav>
     </div>
@@ -336,30 +139,28 @@
             <div class="search-input-wrapper">
                 <div class="search-box">
                     <div class="search-box-inner">
-                        <span class="search-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"/>
-                                <path d="m21 21-4.35-4.35"/>
-                            </svg>
-                        </span>
-                        <input type="text" class="search-input" id="search-input" placeholder="Film veya dizi ara..." autocomplete="off" data-i18n-placeholder="search">
-                        <button class="search-clear" id="search-clear" style="display: none;">✕</button>
+                        <span class="material-symbols-outlined" style="color: var(--text-muted); margin-right: 8px;">search</span>
+                        <input type="text" id="search-input-overlay" placeholder="Film veya dizi ara..." autocomplete="off" style="flex: 1; background: none; border: none; color: white; font-size: 16px; outline: none;">
+                        <button class="search-clear" id="search-clear" style="display: none;">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">cancel</span>
+                        </button>
                     </div>
-                    <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
                 </div>
                 <button class="search-cancel" id="search-cancel">İptal</button>
             </div>
 
             <!-- Filter Chips -->
             <div class="filter-chips" id="search-filter-chips">
-                <button class="filter-chip active" data-filter="search-type" data-value="all">Tümü</button>
-                <button class="filter-chip" data-filter="search-type" data-value="movie">Filmler</button>
-                <button class="filter-chip" data-filter="search-type" data-value="tv">Diziler</button>
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="movie">Movies</button>
+                <button class="filter-chip" data-filter="tv">TV Shows</button>
+                <button class="filter-chip" data-filter="person">People</button>
             </div>
         </div>
 
-        <div id="search-results-container" style="flex: 1; overflow-y: auto; padding: var(--space-md);">
-            <div class="movie-grid" id="search-grid"></div>
+        <div id="search-results-container" style="flex: 1; overflow-y: auto; padding: var(--space-md);" class="no-scrollbar scroll-touch">
+            <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted); margin-bottom: var(--space-md); padding: 0 4px;">Top Results</h3>
+            <div class="search-results-grid" id="search-grid"></div>
         </div>
     </div>
 
@@ -370,7 +171,9 @@
         <div class="modal-backdrop"></div>
         <div class="modal-content">
             <div class="modal-handle"></div>
-            <button class="modal-close" id="modal-close">✕</button>
+            <button class="modal-close" id="modal-close">
+                <span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+            </button>
             <div class="modal-body" id="modal-body"></div>
         </div>
     </div>
@@ -380,8 +183,8 @@
          ============================================ -->
     <div class="login-modal" id="login-modal">
         <div class="login-modal-content">
-            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-sm);" data-i18n="loginTitle">Hoş Geldiniz</h2>
-            <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);" data-i18n="loginSubtitle">Devam etmek için giriş yapın</p>
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-sm);">Hoş Geldiniz</h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Devam etmek için giriş yapın</p>
             <div class="social-login-btns">
                 <button class="social-btn google" data-provider="google">
                     <svg width="20" height="20" viewBox="0 0 24 24">
@@ -390,16 +193,16 @@
                         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                     </svg>
-                    <span data-i18n="continueWithGoogle">Google ile devam et</span>
+                    <span>Google ile devam et</span>
                 </button>
                 <button class="social-btn apple" data-provider="apple">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                     </svg>
-                    <span data-i18n="continueWithApple">Apple ile devam et</span>
+                    <span>Apple ile devam et</span>
                 </button>
             </div>
-            <button style="margin-top: var(--space-lg); width: 100%; padding: var(--space-md); background: transparent; border: 1px solid var(--glass-border); border-radius: var(--radius-lg); color: var(--text-secondary); cursor: pointer;" id="login-modal-close" data-i18n="close">Kapat</button>
+            <button style="margin-top: var(--space-lg); width: 100%; padding: var(--space-md); background: transparent; border: 1px solid var(--glass-border); border-radius: var(--radius-lg); color: var(--text-secondary); cursor: pointer;" id="login-modal-close">Kapat</button>
         </div>
     </div>
 
@@ -411,6 +214,18 @@
         <button id="theme-toggle"></button>
         <div id="auth-area"></div>
         <button id="login-btn"></button>
+        <div id="results-grid"></div>
+        <div id="no-results"></div>
+        <div id="loading"></div>
+        <div id="trending-slider"></div>
+        <div id="new-releases-slider"></div>
+        <div id="classics-slider"></div>
+        <div id="suggested-slider"></div>
+        <div id="discover-grid"></div>
+        <div id="trending-section"></div>
+        <div id="new-releases-section"></div>
+        <div id="classics-section"></div>
+        <div id="suggested-section"></div>
     </div>
 
     <script src="config.js"></script>
@@ -420,21 +235,21 @@
     <script src="api.js"></script>
     <script src="app.js"></script>
     <script>
-        // Lumi SPA Navigation
+        // ============================================
+        // LUMI SPA NAVIGATION
+        // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            const feedGrid = document.getElementById('feed-grid');
+            const searchTrigger = document.getElementById('search-trigger');
+            const searchOverlay = document.getElementById('search-overlay');
+            const searchInputOverlay = document.getElementById('search-input-overlay');
+            const searchCancel = document.getElementById('search-cancel');
+            const searchClear = document.getElementById('search-clear');
+
             // Bottom Nav Click Handlers
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const page = this.dataset.page;
-                    
-                    if (page === 'search') {
-                        // Open search overlay
-                        document.getElementById('search-overlay').classList.add('active');
-                        document.getElementById('search-input').focus();
-                        return;
-                    }
-                    
-                    // Switch view
                     switchView('view-' + page);
                     
                     // Update nav state
@@ -443,64 +258,89 @@
                 });
             });
 
-            // Search Overlay Close
-            document.getElementById('search-cancel')?.addEventListener('click', function() {
-                document.getElementById('search-overlay').classList.remove('active');
+            // Search Trigger - Open Overlay
+            searchTrigger?.addEventListener('click', function() {
+                searchOverlay.classList.add('active');
+                searchInputOverlay.focus();
             });
 
-            // Modal backdrop close
+            // Search Cancel - Close Overlay
+            searchCancel?.addEventListener('click', function() {
+                searchOverlay.classList.remove('active');
+                searchInputOverlay.value = '';
+                searchClear.style.display = 'none';
+            });
+
+            // Search Input - Show/Hide Clear Button
+            searchInputOverlay?.addEventListener('input', function() {
+                searchClear.style.display = this.value ? 'block' : 'none';
+                // Trigger search
+                if (this.value.length >= 2) {
+                    handleOverlaySearch(this.value);
+                }
+            });
+
+            // Search Clear
+            searchClear?.addEventListener('click', function() {
+                searchInputOverlay.value = '';
+                this.style.display = 'none';
+                document.getElementById('search-grid').innerHTML = '';
+            });
+
+            // Filter Chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const group = this.parentElement;
+                    group.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    // Re-search with new filter
+                    if (searchInputOverlay.value) {
+                        handleOverlaySearch(searchInputOverlay.value);
+                    }
+                });
+            });
+
+            // Favorites Tab Toggle
+            document.querySelectorAll('.fav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.fav-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    // Load corresponding list
+                    loadFavoritesList(this.dataset.list);
+                });
+            });
+
+            // Modal Backdrop Close
             document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
                 backdrop.addEventListener('click', function() {
                     this.closest('.modal').classList.remove('active');
                 });
             });
 
-            // Modal close buttons
+            // Modal Close Buttons
             document.querySelectorAll('.modal-close').forEach(btn => {
                 btn.addEventListener('click', function() {
                     this.closest('.modal').classList.remove('active');
                 });
             });
 
-            // Mood modal trigger
-            document.getElementById('mood-prompt-trigger')?.addEventListener('click', function() {
-                document.getElementById('mood-modal').classList.add('active');
+            // Login Modal Close
+            document.getElementById('login-modal-close')?.addEventListener('click', function() {
+                document.getElementById('login-modal').classList.remove('active');
             });
 
-            // Filter chip toggle
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.addEventListener('click', function() {
-                    const group = this.parentElement;
-                    group.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Mood chip toggle
-            document.querySelectorAll('.mood-chip').forEach(chip => {
-                chip.addEventListener('click', function() {
-                    document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Favorites tab toggle
-            document.querySelectorAll('.fav-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.fav-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
+            // Load Infinity Feed
+            loadInfinityFeed();
         });
 
-        // SPA View Router (exposed globally for app.js)
+        // ============================================
+        // SPA VIEW ROUTER
+        // ============================================
         function switchView(viewId) {
-            // Hide all views
             document.querySelectorAll('.view').forEach(el => {
                 el.classList.remove('active');
             });
             
-            // Show target view
             const target = document.getElementById(viewId);
             if (target) {
                 target.classList.add('active');
@@ -508,24 +348,268 @@
 
             // Close search overlay if open
             document.getElementById('search-overlay')?.classList.remove('active');
+
+            // Load content for specific views
+            if (viewId === 'view-favorites') {
+                loadFavoritesList('liked');
+            } else if (viewId === 'view-profile') {
+                loadProfileData();
+            }
         }
 
-        // Override openModal for bottom sheet behavior
-        const originalOpenModal = window.openModal;
-        window.openModal = function(mediaType, id) {
-            document.getElementById('detail-modal').classList.add('active');
-            if (typeof originalOpenModal === 'function') {
-                originalOpenModal(mediaType, id);
+        // ============================================
+        // INFINITY FEED - MIXED CONTENT
+        // ============================================
+        async function loadInfinityFeed() {
+            const feedGrid = document.getElementById('feed-grid');
+            const loadingEl = document.getElementById('feed-loading');
+            
+            try {
+                // Fetch from multiple endpoints
+                const [trending, nowPlaying, topRated] = await Promise.all([
+                    API.getTrending ? API.getTrending() : fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${CONFIG.TMDB_API_KEY}&language=tr-TR`).then(r => r.json()),
+                    API.getNowPlaying ? API.getNowPlaying() : fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${CONFIG.TMDB_API_KEY}&language=tr-TR`).then(r => r.json()),
+                    API.getTopRated ? API.getTopRated() : fetch(`https://api.themoviedb.org/3/movie/top_rated?api_key=${CONFIG.TMDB_API_KEY}&language=tr-TR`).then(r => r.json())
+                ]);
+
+                // Combine and extract results
+                let allContent = [
+                    ...(trending.results || []),
+                    ...(nowPlaying.results || []),
+                    ...(topRated.results || [])
+                ];
+
+                // Filter out items without posters
+                allContent = allContent.filter(item => item.poster_path);
+
+                // Remove duplicates by ID
+                const seen = new Set();
+                allContent = allContent.filter(item => {
+                    if (seen.has(item.id)) return false;
+                    seen.add(item.id);
+                    return true;
+                });
+
+                // Shuffle array (Fisher-Yates)
+                for (let i = allContent.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [allContent[i], allContent[j]] = [allContent[j], allContent[i]];
+                }
+
+                // Render masonry items
+                feedGrid.innerHTML = allContent.map(item => `
+                    <div class="masonry-item" data-id="${item.id}" data-type="${item.media_type || 'movie'}">
+                        <img 
+                            src="https://image.tmdb.org/t/p/w500${item.poster_path}" 
+                            alt="${item.title || item.name}"
+                            loading="lazy"
+                            onerror="this.parentElement.style.display='none'"
+                        >
+                    </div>
+                `).join('');
+
+                // Add click handlers to open detail modal
+                feedGrid.querySelectorAll('.masonry-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const type = this.dataset.type;
+                        openDetailModal(id, type);
+                    });
+                });
+
+            } catch (error) {
+                console.error('Failed to load infinity feed:', error);
+                feedGrid.innerHTML = `
+                    <div class="empty-state" style="display: flex; grid-column: 1 / -1;">
+                        <span class="material-symbols-outlined" style="font-size: 64px; opacity: 0.3;">error</span>
+                        <p>İçerik yüklenemedi</p>
+                    </div>
+                `;
             }
+        }
+
+        // ============================================
+        // SEARCH OVERLAY
+        // ============================================
+        let searchTimeout;
+        async function handleOverlaySearch(query) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                const searchGrid = document.getElementById('search-grid');
+                const activeFilter = document.querySelector('.filter-chip.active')?.dataset.filter || 'all';
+                
+                try {
+                    let endpoint = 'multi';
+                    if (activeFilter === 'movie') endpoint = 'movie';
+                    else if (activeFilter === 'tv') endpoint = 'tv';
+                    else if (activeFilter === 'person') endpoint = 'person';
+
+                    const response = await fetch(
+                        `https://api.themoviedb.org/3/search/${endpoint}?api_key=${CONFIG.TMDB_API_KEY}&language=tr-TR&query=${encodeURIComponent(query)}`
+                    );
+                    const data = await response.json();
+
+                    if (data.results && data.results.length > 0) {
+                        searchGrid.innerHTML = data.results
+                            .filter(item => item.poster_path || item.profile_path)
+                            .slice(0, 20)
+                            .map(item => {
+                                const posterPath = item.poster_path || item.profile_path;
+                                const title = item.title || item.name;
+                                const year = (item.release_date || item.first_air_date || '').split('-')[0];
+                                const rating = item.vote_average?.toFixed(1) || '';
+                                const type = item.media_type === 'person' ? 'Actor' : (item.media_type === 'tv' ? 'TV Series' : year);
+
+                                return `
+                                    <div class="result-card" data-id="${item.id}" data-type="${item.media_type || 'movie'}">
+                                        <div class="result-card-poster" style="background-image: url('https://image.tmdb.org/t/p/w342${posterPath}')"></div>
+                                        <div class="result-card-info">
+                                            <div class="result-card-title">${title}</div>
+                                            <div class="result-card-meta">
+                                                <span>${type}</span>
+                                                ${rating ? `<span class="dot"></span><span class="result-card-rating"><span class="material-symbols-outlined">star</span>${rating}</span>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+
+                        // Add click handlers
+                        searchGrid.querySelectorAll('.result-card').forEach(card => {
+                            card.addEventListener('click', function() {
+                                const id = this.dataset.id;
+                                const type = this.dataset.type;
+                                document.getElementById('search-overlay').classList.remove('active');
+                                openDetailModal(id, type);
+                            });
+                        });
+                    } else {
+                        searchGrid.innerHTML = `
+                            <div style="grid-column: 1 / -1; text-align: center; padding: 48px; color: var(--text-muted);">
+                                <span class="material-symbols-outlined" style="font-size: 48px; opacity: 0.3;">search_off</span>
+                                <p>Sonuç bulunamadı</p>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Search failed:', error);
+                }
+            }, 300);
+        }
+
+        // ============================================
+        // DETAIL MODAL
+        // ============================================
+        async function openDetailModal(id, type) {
+            const modal = document.getElementById('detail-modal');
+            const modalBody = document.getElementById('modal-body');
+            
+            modal.classList.add('active');
+            modalBody.innerHTML = '<div class="loading-state" style="display: flex;"><div class="spinner"></div></div>';
+
+            try {
+                // Use existing openDetail function if available
+                if (typeof openDetail === 'function') {
+                    openDetail(id, type);
+                    return;
+                }
+
+                // Fallback to direct API call
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/${type}/${id}?api_key=${CONFIG.TMDB_API_KEY}&language=tr-TR&append_to_response=credits,videos,watch/providers`
+                );
+                const data = await response.json();
+
+                const title = data.title || data.name;
+                const year = (data.release_date || data.first_air_date || '').split('-')[0];
+                const rating = data.vote_average?.toFixed(1) || 'N/A';
+                const overview = data.overview || 'Açıklama bulunamadı.';
+                const backdrop = data.backdrop_path ? `https://image.tmdb.org/t/p/w780${data.backdrop_path}` : '';
+
+                modalBody.innerHTML = `
+                    <div style="margin: -24px -24px 24px; height: 200px; background: linear-gradient(to bottom, transparent, var(--bg-surface)), url('${backdrop}') center/cover;"></div>
+                    <h2 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 8px;">${title}</h2>
+                    <div style="display: flex; align-items: center; gap: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+                        <span>${year}</span>
+                        <span style="display: flex; align-items: center; gap: 4px; color: #facc15;">
+                            <span class="material-symbols-outlined" style="font-size: 16px; font-variation-settings: 'FILL' 1;">star</span>
+                            ${rating}
+                        </span>
+                    </div>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">${overview}</p>
+                `;
+            } catch (error) {
+                console.error('Failed to load detail:', error);
+                modalBody.innerHTML = '<p style="text-align: center; color: var(--text-muted);">Detaylar yüklenemedi.</p>';
+            }
+        }
+
+        // ============================================
+        // FAVORITES LIST
+        // ============================================
+        function loadFavoritesList(listType) {
+            const grid = document.getElementById('favorites-grid');
+            const emptyMessage = document.getElementById('empty-list-message');
+            
+            // Get from localStorage
+            const key = listType === 'liked' ? 'favorites' : 'watchlist';
+            const items = JSON.parse(localStorage.getItem(key) || '[]');
+
+            if (items.length === 0) {
+                grid.innerHTML = '';
+                emptyMessage.style.display = 'flex';
+                return;
+            }
+
+            emptyMessage.style.display = 'none';
+            grid.innerHTML = items.map(item => `
+                <div class="result-card" data-id="${item.id}" data-type="${item.type}">
+                    <div class="result-card-poster" style="background-image: url('https://image.tmdb.org/t/p/w342${item.poster}')"></div>
+                    <div class="result-card-info">
+                        <div class="result-card-title">${item.title}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            grid.querySelectorAll('.result-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    openDetailModal(this.dataset.id, this.dataset.type);
+                });
+            });
+        }
+
+        // ============================================
+        // PROFILE DATA
+        // ============================================
+        function loadProfileData() {
+            const user = window.AuthService?.getCurrentUser?.();
+            const profileName = document.getElementById('profile-name');
+            const profileBadge = document.getElementById('profile-badge');
+            const profileAvatar = document.getElementById('profile-avatar-img');
+
+            if (user) {
+                profileName.textContent = user.name || 'Kullanıcı';
+                if (user.photoURL) {
+                    profileAvatar.src = user.photoURL;
+                }
+                if (user.tier === 'premium') {
+                    profileBadge.style.display = 'inline-flex';
+                }
+            }
+
+            // Load stats
+            const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+            document.getElementById('stat-movies').textContent = favorites.length;
+        }
+
+        // Override modal functions for compatibility
+        window.openModal = function(type, id) {
+            openDetailModal(id, type);
         };
 
-        // Override closeModal for bottom sheet behavior
-        const originalCloseModal = window.closeModal;
         window.closeModal = function() {
             document.getElementById('detail-modal').classList.remove('active');
-            if (typeof originalCloseModal === 'function') {
-                originalCloseModal();
-            }
         };
     </script>
 </body>
