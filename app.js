@@ -801,9 +801,9 @@ function setupEventListeners() {
         }
     });
 
-    // Search
+    // Search - NOTE: Autocomplete is now handled in index.html with debounce
+    // This listener only handles the clear button visibility
     elements.searchInput.addEventListener('input', (e) => {
-        handleAutocomplete();
         // Show/hide clear button
         if (elements.searchClear) {
             elements.searchClear.style.display = e.target.value ? 'block' : 'none';
