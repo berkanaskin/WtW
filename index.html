@@ -227,21 +227,19 @@
              ============================================ -->
         <section id="view-favorites" class="view">
             <div class="favorites-header">
-                <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-lg);">
-                    <span class="material-symbols-outlined"
-                        style="vertical-align: middle; margin-right: 8px;">bookmark</span>
-                    Listem
-                </h1>
+                <div class="favorites-title-row">
+                    <div style="width: 40px;"></div>
+                    <h1 class="favorites-title">LİSTEM</h1>
+                    <button class="settings-btn" id="favorites-settings-btn">
+                        <span class="material-symbols-outlined">settings</span>
+                    </button>
+                </div>
 
-                <div class="favorites-tabs">
-                    <button class="fav-tab active" data-list="liked">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">favorite</span>
-                        Beğendiklerim
-                    </button>
-                    <button class="fav-tab" data-list="watchlist">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">add</span>
-                        İzleyeceklerim
-                    </button>
+                <div class="favorites-tabs-wrapper">
+                    <div class="favorites-tabs">
+                        <button class="fav-tab active" data-list="liked">Beğendiklerim</button>
+                        <button class="fav-tab" data-list="watchlist">İzleyeceklerim</button>
+                    </div>
                 </div>
             </div>
 
@@ -288,6 +286,53 @@
                     <div class="stat-label">Toplam Süre</div>
                     <div class="stat-value" id="stat-hours">0h</div>
                 </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="profile-settings">
+                <h3 class="settings-title">Ayarlar</h3>
+                <div class="settings-panel">
+                    <!-- Dark Mode Toggle -->
+                    <div class="settings-item">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">
+                                <span class="material-symbols-outlined">dark_mode</span>
+                            </div>
+                            <span class="settings-label">Karanlık Mod</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="profile-theme-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <!-- Notifications Toggle -->
+                    <div class="settings-item">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">
+                                <span class="material-symbols-outlined">notifications</span>
+                            </div>
+                            <span class="settings-label">Bildirimler</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="profile-notifications-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <!-- Wi-Fi Download Toggle -->
+                    <div class="settings-item settings-item-last">
+                        <div class="settings-item-left">
+                            <div class="settings-icon">
+                                <span class="material-symbols-outlined">wifi</span>
+                            </div>
+                            <span class="settings-label">Wi-Fi'de İndir</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="profile-wifi-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <p class="profile-version">Lumi Version 0.9.5-rc</p>
             </div>
 
             <div id="profile-content" style="padding: 0 var(--space-lg);"></div>
@@ -829,9 +874,9 @@
         });
 
         // ============================================
-        // SPA VIEW ROUTER
+        // SPA VIEW ROUTER WITH HISTORY
         // ============================================
-        function switchView(viewId) {
+        function switchView(viewId, pushToHistory = true) {
             document.querySelectorAll('.view').forEach(el => {
                 el.classList.remove('active');
             });
@@ -844,6 +889,22 @@
             // Close search overlay if open
             document.getElementById('search-overlay')?.classList.remove('active');
 
+            // Hide header search on wizard page (has its own AI search)
+            const searchContainer = document.querySelector('.search-container');
+            if (searchContainer) {
+                searchContainer.style.display = viewId === 'view-wizard' ? 'none' : 'block';
+            }
+
+            // Push to browser history for back button support
+            if (pushToHistory) {
+                const stateData = {
+                    view: viewId,
+                    searchQuery: typeof state !== 'undefined' ? state.searchQuery : '',
+                    searchResults: typeof state !== 'undefined' ? state.searchResults : []
+                };
+                history.pushState(stateData, '', `#${viewId.replace('view-', '')}`);
+            }
+
             // Load content for specific views
             if (viewId === 'view-favorites') {
                 loadFavoritesList('liked');
@@ -851,6 +912,29 @@
                 loadProfileData();
             }
         }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function (event) {
+            if (event.state && event.state.view) {
+                // Restore view without pushing new history
+                switchView(event.state.view, false);
+
+                // Restore search state if available
+                if (typeof state !== 'undefined' && event.state.searchQuery) {
+                    state.searchQuery = event.state.searchQuery;
+                    state.searchResults = event.state.searchResults || [];
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) {
+                        searchInput.value = state.searchQuery;
+                    }
+                }
+
+                // Update active nav item
+                const viewName = event.state.view.replace('view-', '');
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.querySelector(`.nav-item[data-page="${viewName}"]`)?.classList.add('active');
+            }
+        });
 
         // ============================================
         // INFINITY FEED - MIXED CONTENT
@@ -1248,6 +1332,22 @@
             // Load stats
             const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
             document.getElementById('stat-movies').textContent = favorites.length;
+
+            // Sync theme toggle with current theme
+            const profileThemeToggle = document.getElementById('profile-theme-toggle');
+            if (profileThemeToggle) {
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+                profileThemeToggle.checked = currentTheme === 'dark';
+
+                profileThemeToggle.addEventListener('change', function () {
+                    if (typeof toggleTheme === 'function') {
+                        toggleTheme();
+                    }
+                    // Keep toggle synced
+                    const newTheme = document.documentElement.getAttribute('data-theme');
+                    this.checked = newTheme === 'dark';
+                });
+            }
         }
 
         // Override modal functions for compatibility
