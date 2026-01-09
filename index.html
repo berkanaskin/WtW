@@ -285,8 +285,10 @@
         <div class="login-modal-content">
             <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: var(--space-sm);">Hoş Geldiniz</h2>
             <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Devam etmek için giriş yapın</p>
+
+            <!-- Social Login Buttons -->
             <div class="social-login-btns">
-                <button class="social-btn google" data-provider="google">
+                <button class="social-btn google" id="google-login-btn" data-provider="google">
                     <svg width="20" height="20" viewBox="0 0 24 24">
                         <path
                             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -311,6 +313,46 @@
                     <span>Apple ile devam et</span>
                 </button>
             </div>
+
+            <!-- Divider -->
+            <div style="display: flex; align-items: center; gap: var(--space-md); margin: var(--space-lg) 0;">
+                <div style="flex: 1; height: 1px; background: var(--glass-border);"></div>
+                <span style="color: var(--text-muted); font-size: 0.875rem;">veya</span>
+                <div style="flex: 1; height: 1px; background: var(--glass-border);"></div>
+            </div>
+
+            <!-- Email/Password Form -->
+            <form id="email-login-form" style="display: flex; flex-direction: column; gap: var(--space-md);">
+                <input type="email" id="login-email" placeholder="E-posta"
+                    style="width: 100%; padding: var(--space-md); background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                <input type="password" id="login-password" placeholder="Şifre"
+                    style="width: 100%; padding: var(--space-md); background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-md); color: var(--text-primary); font-size: 1rem;">
+                <button type="submit"
+                    style="width: 100%; padding: var(--space-md); background: var(--primary); border: none; border-radius: var(--radius-md); color: white; font-weight: 600; cursor: pointer;">
+                    Giriş Yap
+                </button>
+            </form>
+
+            <!-- Register Link -->
+            <p
+                style="margin-top: var(--space-md); text-align: center; font-size: 0.875rem; color: var(--text-secondary);">
+                Hesabınız yok mu? <a href="#" id="show-register" style="color: var(--primary);">Kayıt olun</a>
+            </p>
+
+            <!-- Tester Login (Dev Mode) -->
+            <div
+                style="margin-top: var(--space-lg); padding-top: var(--space-md); border-top: 1px dashed var(--glass-border);">
+                <button id="tester-login-btn"
+                    style="width: 100%; padding: var(--space-md); background: linear-gradient(135deg, #f59e0b, #ef4444); border: none; border-radius: var(--radius-md); color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm);">
+                    <span>👑</span>
+                    <span>Tester Premium ile Giriş</span>
+                </button>
+                <p
+                    style="margin-top: var(--space-xs); text-align: center; font-size: 0.75rem; color: var(--text-muted);">
+                    Geliştirici modu - Tüm premium özelliklere erişim
+                </p>
+            </div>
+
             <button
                 style="margin-top: var(--space-lg); width: 100%; padding: var(--space-md); background: transparent; border: 1px solid var(--glass-border); border-radius: var(--radius-lg); color: var(--text-secondary); cursor: pointer;"
                 id="login-modal-close">Kapat</button>
@@ -404,7 +446,78 @@
             // Premium trigger
             document.getElementById('premium-trigger')?.addEventListener('click', () => {
                 closeAllDropdowns();
-                alert('Premium özellikler yakında!');
+                if (typeof showPremiumModal === 'function') showPremiumModal();
+            });
+
+            // ============================================
+            // LOGIN MODAL HANDLERS
+            // ============================================
+            const loginModal = document.getElementById('login-modal');
+            const loginModalClose = document.getElementById('login-modal-close');
+
+            // Close login modal
+            loginModalClose?.addEventListener('click', () => {
+                loginModal?.classList.remove('active');
+            });
+
+            // Google Login
+            document.getElementById('google-login-btn')?.addEventListener('click', async () => {
+                try {
+                    if (window.AuthService?.loginWithGoogle) {
+                        await window.AuthService.loginWithGoogle();
+                        loginModal?.classList.remove('active');
+                        if (typeof updateAuthUI === 'function') updateAuthUI();
+                        location.reload(); // Refresh to update UI
+                    } else {
+                        alert('Firebase henüz yüklenmedi. Lütfen bekleyin.');
+                    }
+                } catch (err) {
+                    console.error('Google login error:', err);
+                    alert('Giriş başarısız: ' + err.message);
+                }
+            });
+
+            // Email/Password Login
+            document.getElementById('email-login-form')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email')?.value;
+                const password = document.getElementById('login-password')?.value;
+
+                if (!email || !password) {
+                    alert('Lütfen e-posta ve şifre girin.');
+                    return;
+                }
+
+                try {
+                    if (window.AuthService?.loginWithEmail) {
+                        await window.AuthService.loginWithEmail(email, password);
+                        loginModal?.classList.remove('active');
+                        location.reload();
+                    }
+                } catch (err) {
+                    console.error('Email login error:', err);
+                    if (err.code === 'auth/user-not-found') {
+                        alert('Bu e-posta ile kayıtlı kullanıcı bulunamadı.');
+                    } else if (err.code === 'auth/wrong-password') {
+                        alert('Şifre yanlış.');
+                    } else {
+                        alert('Giriş başarısız: ' + err.message);
+                    }
+                }
+            });
+
+            // Tester Premium Login
+            document.getElementById('tester-login-btn')?.addEventListener('click', async () => {
+                try {
+                    if (window.AuthService?.loginAsTester) {
+                        await window.AuthService.loginAsTester();
+                        loginModal?.classList.remove('active');
+                        alert('👑 Tester Premium olarak giriş yapıldı!\n\nTüm premium özelliklere erişebilirsiniz.');
+                        location.reload();
+                    }
+                } catch (err) {
+                    console.error('Tester login error:', err);
+                }
             });
 
             // ============================================
