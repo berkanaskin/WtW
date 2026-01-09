@@ -15,7 +15,12 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="index_lumi.css?v=2.2.1.2">
+    <link rel="stylesheet" href="index_lumi.css?v=0.9.5-rc">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
@@ -30,7 +35,7 @@
         <header class="gradient-header">
             <div class="header-row">
                 <div class="header-left">
-                    <span class="brand-logo">LUMI</span>
+                    <span class="brand-logo" id="brand-logo" onclick="loadHomePage()">LUMI</span>
                 </div>
                 <div class="header-actions">
                     <!-- Language Toggle -->

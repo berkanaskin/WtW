@@ -1,9 +1,9 @@
 // ============================================
-// NEREDE İZLERİM? v5.0 ALPHA
-// Clean Mockup Design - Full Features
+// LUMI v0.9.5-rc - Release Candidate 1
+// Mobile-First Film Discovery App
 // ============================================
 
-const APP_VERSION = '1.9.8.0-beta';
+const APP_VERSION = '0.9.5-rc';
 
 // DOM Elements
 const elements = {
