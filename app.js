@@ -80,6 +80,8 @@ const state = {
     cameFromSearch: false,
     skipNextHomePage: false, // Flag to prevent loadHomePage from overriding search restore
     searchRestoreTime: 0, // Timestamp when search was restored - prevents loadHomePage for 500ms
+    lastView: 'home', // Track last view for modal return
+    lastScrollPosition: 0, // Track scroll position before modal
 
     // Auth State
     currentUser: null,

@@ -216,6 +216,73 @@
     border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+/* Light Theme - Search Pill Fix */
+[data-theme="light"] .search-pill {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .search-pill input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .search-pill:focus-within {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: var(--primary);
+}
+
+/* Light Theme - Favorites/Listem */
+[data-theme="light"] .favorites-title {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .favorites-tabs {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .fav-tab {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .fav-tab:hover {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .fav-tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+[data-theme="light"] .empty-state p,
+[data-theme="light"] .empty-state small {
+    color: var(--text-secondary);
+}
+
+/* Light Theme - Profile Avatar */
+[data-theme="light"] .profile-avatar {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .profile-avatar-glow {
+    background: var(--primary);
+    opacity: 0.15;
+}
+
+/* Light Theme - Settings Panel */
+[data-theme="light"] .settings-item {
+    border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .settings-btn {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--text-secondary);
+}
+
 /* ============================================
    RESET & BASE
    ============================================ */
@@ -1106,6 +1173,17 @@ body {
 .view.active {
     display: block;
     opacity: 1;
+}
+
+/* Home View - Gradient Blend Effect */
+#view-home {
+    margin-top: -40px;
+    padding-top: 40px;
+}
+
+#feed-grid {
+    position: relative;
+    z-index: 1;
 }
 
 /* ============================================
@@ -2330,6 +2408,159 @@ body {
 /* iOS Touch Scrolling */
 .scroll-touch {
     -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
+   ENHANCED DETAIL MODAL - RATINGS & CREW
+   ============================================ */
+.detail-ratings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+}
+
+.rating-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+}
+
+.rating-logo {
+    height: 20px;
+    width: auto;
+    filter: brightness(1.2);
+}
+
+.rating-icon-rt {
+    font-size: 24px;
+}
+
+.rating-icon-mc {
+    width: 24px;
+    height: 24px;
+    background: #66CC33;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.rating-value {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.detail-crew {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin: var(--space-md) 0;
+}
+
+.crew-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.crew-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.crew-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.detail-btn-trailer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md);
+    margin-top: var(--space-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    color: var(--text-primary);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.detail-btn-trailer:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Trivia Section */
+.trivia-section {
+    position: relative;
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+}
+
+.trivia-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+    color: var(--text-primary);
+}
+
+.trivia-title .material-symbols-outlined {
+    color: var(--primary);
+}
+
+.trivia-content {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.trivia-content.trivia-locked {
+    filter: blur(4px);
+    user-select: none;
+}
+
+.trivia-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: var(--radius-lg);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.trivia-overlay .material-symbols-outlined {
+    font-size: 32px;
 }
 
 /* ============================================

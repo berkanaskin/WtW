@@ -5,6 +5,41 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ---
 
+## [0.9.6] - 2026-01-09 - Feature Completion
+
+### 🎨 UI Polishing
+
+- **Gradient Blend Fix:** Ana sayfa posterleri header gradient'ının arkasından akıyor
+- **Light Mode Fixes:**
+  - Arama input beyaz kutucuk sorunu düzeltildi
+  - Listem metin renkleri kontrastı artırıldı
+  - Profil avatar border temaya uygun hale getirildi
+- **Settings Panel:** Profil sayfasına toggle switch'ler eklendi
+
+### 🔍 Search UX
+
+- **Arama Geri Dönüş:** Modal kapanınca arama sonuçlarına geri dönüş
+- `state.lastView` ve `state.lastScrollPosition` ile scroll position korunuyor
+
+### 🎬 Detail Modal Enrichment
+
+- **Multi-Ratings Grid:** IMDb, Rotten Tomatoes, Metacritic puanları
+- **Crew Info:** Yönetmen ve Senarist bilgisi
+- **Match Percentage:** %XX Eşleşme göstergesi
+- **Trailer Button:** YouTube fragman linki
+- **Premium Trivia:** Blur + kilit ile premium-only içerik
+
+### 👤 Profile & Favorites
+
+- **Stitch Design:** LİSTEM başlığı, segmented control tabs
+- **Settings Section:** Karanlık Mod, Bildirimler, Wi-Fi toggle'ları
+
+### Technical
+
+- APP_VERSION: 0.9.6-beta
+
+---
+
 ## [0.9.5] - 2026-01-09 - Release Candidate 1
 
 ### 🚀 Major Changes

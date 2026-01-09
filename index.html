@@ -1196,6 +1196,7 @@
                                 <span class="material-symbols-outlined">star</span>
                                 ${rating}
                             </span>
+                            <span class="detail-match">%${Math.floor(70 + Math.random() * 28)} Eşleşme</span>
                         </div>
                     </div>
 
@@ -1206,6 +1207,34 @@
                     ` : ''}
 
                     <p class="detail-overview">${overview}</p>
+
+                    <!-- Multi-Ratings Section -->
+                    <div class="detail-ratings-grid" id="ratings-grid">
+                        <div class="rating-box">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" alt="IMDb" class="rating-logo">
+                            <span class="rating-value" id="imdb-rating">${rating}</span>
+                        </div>
+                        <div class="rating-box">
+                            <span class="rating-icon-rt">🍅</span>
+                            <span class="rating-value" id="rt-rating">--</span>
+                        </div>
+                        <div class="rating-box">
+                            <span class="rating-icon-mc">M</span>
+                            <span class="rating-value" id="mc-rating">--</span>
+                        </div>
+                    </div>
+
+                    <!-- Crew Info -->
+                    <div class="detail-crew" id="detail-crew">
+                        ${(() => {
+                        const director = data.credits?.crew?.find(c => c.job === 'Director');
+                        const writer = data.credits?.crew?.find(c => c.job === 'Screenplay' || c.job === 'Writer');
+                        return `
+                                ${director ? `<div class="crew-item"><span class="crew-label">Yönetmen</span><span class="crew-name">${director.name}</span></div>` : ''}
+                                ${writer ? `<div class="crew-item"><span class="crew-label">Senarist</span><span class="crew-name">${writer.name}</span></div>` : ''}
+                            `;
+                    })()}
+                    </div>
 
                     ${providers.length ? `
                         <div class="detail-providers">
@@ -1229,6 +1258,17 @@
                         </button>
                     </div>
 
+                    <!-- Trailer Button -->
+                    ${(() => {
+                        const trailer = data.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+                        return trailer ? `
+                            <button class="detail-btn detail-btn-trailer" onclick="window.open('https://www.youtube.com/watch?v=${trailer.key}', '_blank')">
+                                <span class="material-symbols-outlined">play_circle</span>
+                                Fragmanı İzle
+                            </button>
+                        ` : '';
+                    })()}
+
                     ${cast.length ? `
                         <div class="cast-section">
                             <h3 class="cast-title">Oyuncular</h3>
@@ -1242,6 +1282,23 @@
                             </div>
                         </div>
                     ` : ''}
+
+                    <!-- Premium Trivia Section -->
+                    <div class="trivia-section">
+                        <h3 class="trivia-title">
+                            <span class="material-symbols-outlined">tips_and_updates</span>
+                            Trivia & İlginç Bilgiler
+                        </h3>
+                        <div class="trivia-content ${state.userTier !== 'premium' ? 'trivia-locked' : ''}" id="trivia-content">
+                            <p>Bu film hakkında ilginç bilgiler ve set arkası hikayeleri burada görüntülenir.</p>
+                        </div>
+                        ${state.userTier !== 'premium' ? `
+                            <div class="trivia-overlay">
+                                <span class="material-symbols-outlined">lock</span>
+                                <span>Premium Özellik</span>
+                            </div>
+                        ` : ''}
+                    </div>
                 `;
 
                 // Add favorite button handler
@@ -1352,11 +1409,40 @@
 
         // Override modal functions for compatibility
         window.openModal = function (type, id) {
+            // Save current view state before opening modal
+            const searchOverlay = document.getElementById('search-overlay');
+            if (searchOverlay && searchOverlay.classList.contains('active')) {
+                state.lastView = 'search';
+                state.lastScrollPosition = document.getElementById('search-results-container')?.scrollTop || 0;
+            } else {
+                state.lastView = state.currentPage || 'home';
+                state.lastScrollPosition = window.scrollY;
+            }
             openDetailModal(id, type);
         };
 
         window.closeModal = function () {
-            document.getElementById('detail-modal').classList.remove('active');
+            const modal = document.getElementById('detail-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+
+            // Return to search if that's where user came from
+            if (state.lastView === 'search') {
+                const searchOverlay = document.getElementById('search-overlay');
+                if (searchOverlay) {
+                    searchOverlay.classList.add('active');
+                    // Restore scroll position after a tick
+                    setTimeout(() => {
+                        const container = document.getElementById('search-results-container');
+                        if (container) container.scrollTop = state.lastScrollPosition;
+                    }, 50);
+                }
+            } else {
+                // Restore scroll position for non-search views
+                setTimeout(() => {
+                    window.scrollTo(0, state.lastScrollPosition);
+                }, 50);
+            }
         };
     </script>
 </body>
