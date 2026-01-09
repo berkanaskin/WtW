@@ -3,7 +3,34 @@
 Tüm önemli değişiklikler bu dosyada belgelenmektedir.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
-Sürümleme: Major.Minor.Patch.Build (örn: 2.1.0.0)
+Sürümleme: Major.Minor.Patch.Build (örn: 2.2.0.0)
+
+---
+
+## [2.2.0.0] - 2026-01-09
+
+### Grand Unification - UI/UX & Features Complete
+
+**Yeni Özellikler:**
+
+- **Gradient Header**: Fixed position, siyah→şeffaf gradient, z-index: 1000
+- **Action Bar**: Dil (TR/EN), Tema toggle, Bildirimler, Profil butonları
+- **Notification Dropdown**: Glassmorphism bildirim paneli
+- **Profile Dropdown**: Kullanıcı bilgisi, Premium badge, Ayarlar menüsü
+- **Dual-Mode Search**:
+  - Focus → Trend Aramalar (chips)
+  - Typing → Autocomplete dropdown
+  - Enter → Full-page search overlay
+- **Matte Filter**: Posterlere premium vignette efekti (%15-30 opacity)
+- **Scroll Lock**: Modal açıkken `body.overflow: hidden`
+
+**Teknik İyileştirmeler:**
+
+- `showAutocomplete()`: Header arama için anlık sonuç dropdown
+- `closeAllDropdowns()`: Global dropdown kapatma fonksiyonu
+- Header butonları için dropdown toggle handlers
+- Trend chip click → Autocomplete tetikleme
+- Modal kapatma → Scroll unlock
 
 ---
 

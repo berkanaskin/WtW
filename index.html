@@ -25,18 +25,100 @@
 
     <div class="app">
         <!-- ============================================
-             STICKY SEARCH HEADER
+             GRADIENT HEADER (Fixed)
              ============================================ -->
-        <div class="sticky-search-header">
-            <div class="status-bar-gradient"></div>
-            <span class="brand-logo">LUMI</span>
-            <div class="search-pill-container">
-                <div class="search-pill" id="search-trigger">
-                    <span class="material-symbols-outlined search-icon">search</span>
-                    <input type="text" id="search-input" placeholder="Search..." autocomplete="off" readonly>
+        <header class="gradient-header">
+            <div class="header-row">
+                <div class="header-left">
+                    <span class="brand-logo">LUMI</span>
+                </div>
+                <div class="header-actions">
+                    <!-- Language Toggle -->
+                    <button class="header-btn lang-toggle" id="lang-toggle" title="Dil">TR</button>
+
+                    <!-- Theme Toggle -->
+                    <button class="header-btn theme-toggle" id="theme-toggle" title="Tema">
+                        <span class="material-symbols-outlined">dark_mode</span>
+                    </button>
+
+                    <!-- Notifications -->
+                    <div style="position: relative;">
+                        <button class="header-btn has-badge" id="notifications-btn" title="Bildirimler">
+                            <span class="material-symbols-outlined">notifications</span>
+                        </button>
+                        <div class="header-dropdown" id="notifications-dropdown">
+                            <div class="dropdown-header">
+                                <span class="dropdown-title">Bildirimler</span>
+                                <button class="dropdown-action" id="mark-all-read">Tümünü Okundu İşaretle</button>
+                            </div>
+                            <div class="dropdown-list" id="notifications-list">
+                                <div class="dropdown-empty">
+                                    <span class="material-symbols-outlined"
+                                        style="font-size: 32px; opacity: 0.3; margin-bottom: 8px;">notifications_off</span>
+                                    <p>Bildirim bulunmuyor</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile -->
+                    <div style="position: relative;">
+                        <button class="header-btn profile-btn guest" id="profile-btn" title="Profil">
+                            <span class="material-symbols-outlined">person</span>
+                        </button>
+                        <div class="header-dropdown" id="profile-dropdown">
+                            <div class="profile-dropdown-header" id="profile-dropdown-info">
+                                <div class="profile-dropdown-avatar"
+                                    style="background: var(--bg-elevated); display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-symbols-outlined"
+                                        style="font-size: 32px; color: var(--text-muted);">person</span>
+                                </div>
+                                <div class="profile-dropdown-name">Misafir</div>
+                                <span class="profile-dropdown-tier">Ücretsiz</span>
+                            </div>
+                            <button class="profile-menu-item" id="login-trigger">
+                                <span class="material-symbols-outlined">login</span>
+                                <span>Giriş Yap</span>
+                            </button>
+                            <button class="profile-menu-item" id="premium-trigger">
+                                <span class="material-symbols-outlined">workspace_premium</span>
+                                <span>Premium Ol</span>
+                            </button>
+                            <button class="profile-menu-item">
+                                <span class="material-symbols-outlined">settings</span>
+                                <span>Ayarlar</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-pill" id="search-trigger">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="search-input" placeholder="Ne İzlesem? Nereden İzlesem?" autocomplete="off">
+                    <button class="search-clear" id="search-clear-main">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">cancel</span>
+                    </button>
+
+                    <!-- Trend Chips (Focus State) -->
+                    <div class="trend-chips-container" id="trend-chips-container">
+                        <div class="trend-chips-title">🔥 Trend Aramalar</div>
+                        <div class="trend-chips" id="trend-chips">
+                            <span class="trend-chip">Inception</span>
+                            <span class="trend-chip">The Penguin</span>
+                            <span class="trend-chip">Dune 2</span>
+                            <span class="trend-chip">Severance</span>
+                            <span class="trend-chip">Oppenheimer</span>
+                        </div>
+                    </div>
+
+                    <!-- Autocomplete Dropdown -->
+                    <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+                </div>
+            </div>
+        </header>
 
         <!-- ============================================
              VIEW: HOME (Infinity Feed)
@@ -260,51 +342,162 @@
     <script src="app.js"></script>
     <script>
         // ============================================
-        // LUMI SPA NAVIGATION
+        // LUMI SPA NAVIGATION v2.2.0
         // ============================================
         document.addEventListener('DOMContentLoaded', function () {
             const feedGrid = document.getElementById('feed-grid');
-            const searchTrigger = document.getElementById('search-trigger');
+            const searchInput = document.getElementById('search-input');
+            const searchClearMain = document.getElementById('search-clear-main');
+            const trendChipsContainer = document.getElementById('trend-chips-container');
+            const autocompleteDropdown = document.getElementById('autocomplete-dropdown');
             const searchOverlay = document.getElementById('search-overlay');
             const searchInputOverlay = document.getElementById('search-input-overlay');
             const searchCancel = document.getElementById('search-cancel');
             const searchClear = document.getElementById('search-clear');
 
-            // Bottom Nav Click Handlers
+            // ============================================
+            // HEADER DROPDOWN HANDLERS
+            // ============================================
+            const notificationsBtn = document.getElementById('notifications-btn');
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+            const profileBtn = document.getElementById('profile-btn');
+            const profileDropdown = document.getElementById('profile-dropdown');
+
+            function closeAllDropdowns() {
+                document.querySelectorAll('.header-dropdown').forEach(d => d.classList.remove('active'));
+                trendChipsContainer?.classList.remove('active');
+                autocompleteDropdown?.classList.remove('active');
+            }
+
+            notificationsBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = notificationsDropdown.classList.contains('active');
+                closeAllDropdowns();
+                if (!isOpen) notificationsDropdown.classList.add('active');
+            });
+
+            profileBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = profileDropdown.classList.contains('active');
+                closeAllDropdowns();
+                if (!isOpen) profileDropdown.classList.add('active');
+            });
+
+            // Close dropdowns on outside click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.header-dropdown') && !e.target.closest('.header-btn')) {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Login trigger
+            document.getElementById('login-trigger')?.addEventListener('click', () => {
+                closeAllDropdowns();
+                document.getElementById('login-modal')?.classList.add('active');
+            });
+
+            // Premium trigger
+            document.getElementById('premium-trigger')?.addEventListener('click', () => {
+                closeAllDropdowns();
+                alert('Premium özellikler yakında!');
+            });
+
+            // ============================================
+            // DUAL-MODE SEARCH (Header Search Bar)
+            // ============================================
+            let searchTimeout;
+
+            // Focus: Show trend chips
+            searchInput?.addEventListener('focus', () => {
+                if (!searchInput.value) {
+                    trendChipsContainer?.classList.add('active');
+                }
+                autocompleteDropdown?.classList.remove('active');
+            });
+
+            // Input: Show autocomplete
+            searchInput?.addEventListener('input', function () {
+                const query = this.value.trim();
+                searchClearMain.style.display = query ? 'block' : 'none';
+
+                if (query.length >= 2) {
+                    trendChipsContainer?.classList.remove('active');
+                    showAutocomplete(query);
+                } else {
+                    autocompleteDropdown?.classList.remove('active');
+                    if (!query) trendChipsContainer?.classList.add('active');
+                }
+            });
+
+            // Enter: Open full search overlay
+            searchInput?.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && this.value.trim()) {
+                    closeAllDropdowns();
+                    searchOverlay?.classList.add('active');
+                    if (searchInputOverlay) {
+                        searchInputOverlay.value = this.value;
+                        searchInputOverlay.focus();
+                        handleOverlaySearch(this.value);
+                    }
+                }
+            });
+
+            // Blur: Hide dropdowns (with delay for click handling)
+            searchInput?.addEventListener('blur', () => {
+                setTimeout(() => {
+                    if (!document.activeElement?.closest('.search-pill')) {
+                        trendChipsContainer?.classList.remove('active');
+                        autocompleteDropdown?.classList.remove('active');
+                    }
+                }, 200);
+            });
+
+            // Clear button
+            searchClearMain?.addEventListener('click', () => {
+                searchInput.value = '';
+                searchClearMain.style.display = 'none';
+                autocompleteDropdown?.classList.remove('active');
+                trendChipsContainer?.classList.add('active');
+                searchInput.focus();
+            });
+
+            // Trend chip click
+            document.querySelectorAll('.trend-chip').forEach(chip => {
+                chip.addEventListener('click', function () {
+                    searchInput.value = this.textContent;
+                    trendChipsContainer?.classList.remove('active');
+                    showAutocomplete(this.textContent);
+                });
+            });
+
+            // ============================================
+            // BOTTOM NAV
+            // ============================================
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function () {
                     const page = this.dataset.page;
                     switchView('view-' + page);
-
-                    // Update nav state
                     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                     this.classList.add('active');
                 });
             });
 
-            // Search Trigger - Open Overlay
-            searchTrigger?.addEventListener('click', function () {
-                searchOverlay.classList.add('active');
-                searchInputOverlay.focus();
-            });
-
-            // Search Cancel - Close Overlay
+            // ============================================
+            // SEARCH OVERLAY (Full Page)
+            // ============================================
             searchCancel?.addEventListener('click', function () {
                 searchOverlay.classList.remove('active');
                 searchInputOverlay.value = '';
                 searchClear.style.display = 'none';
             });
 
-            // Search Input - Show/Hide Clear Button
             searchInputOverlay?.addEventListener('input', function () {
                 searchClear.style.display = this.value ? 'block' : 'none';
-                // Trigger search
                 if (this.value.length >= 2) {
                     handleOverlaySearch(this.value);
                 }
             });
 
-            // Search Clear
             searchClear?.addEventListener('click', function () {
                 searchInputOverlay.value = '';
                 this.style.display = 'none';
@@ -317,43 +510,50 @@
                     const group = this.parentElement;
                     group.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
                     this.classList.add('active');
-                    // Re-search with new filter
                     if (searchInputOverlay.value) {
                         handleOverlaySearch(searchInputOverlay.value);
                     }
                 });
             });
 
-            // Favorites Tab Toggle
+            // ============================================
+            // FAVORITES TAB
+            // ============================================
             document.querySelectorAll('.fav-tab').forEach(tab => {
                 tab.addEventListener('click', function () {
                     document.querySelectorAll('.fav-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    // Load corresponding list
                     loadFavoritesList(this.dataset.list);
                 });
             });
 
-            // Modal Backdrop Close
+            // ============================================
+            // MODAL HANDLERS (with scroll lock)
+            // ============================================
             document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
                 backdrop.addEventListener('click', function () {
-                    this.closest('.modal').classList.remove('active');
+                    const modal = this.closest('.modal');
+                    modal.classList.remove('active');
+                    document.body.style.overflow = ''; // Unlock scroll
                 });
             });
 
-            // Modal Close Buttons
             document.querySelectorAll('.modal-close').forEach(btn => {
                 btn.addEventListener('click', function () {
-                    this.closest('.modal').classList.remove('active');
+                    const modal = this.closest('.modal');
+                    modal.classList.remove('active');
+                    document.body.style.overflow = ''; // Unlock scroll
                 });
             });
 
-            // Login Modal Close
             document.getElementById('login-modal-close')?.addEventListener('click', function () {
                 document.getElementById('login-modal').classList.remove('active');
+                document.body.style.overflow = '';
             });
 
-            // Load Infinity Feed
+            // ============================================
+            // INIT
+            // ============================================
             loadInfinityFeed();
         });
 
@@ -522,11 +722,74 @@
         }
 
         // ============================================
+        // AUTOCOMPLETE (Header Search)
+        // ============================================
+        async function showAutocomplete(query) {
+            const dropdown = document.getElementById('autocomplete-dropdown');
+
+            try {
+                const response = await fetch(
+                    `https://api.themoviedb.org/3/search/multi?api_key=${CONFIG.TMDB_API_KEY}&language=tr-TR&query=${encodeURIComponent(query)}`
+                );
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    dropdown.innerHTML = data.results
+                        .filter(item => item.poster_path || item.profile_path)
+                        .slice(0, 6)
+                        .map(item => {
+                            const posterPath = item.poster_path || item.profile_path;
+                            const title = item.title || item.name;
+                            const year = (item.release_date || item.first_air_date || '').split('-')[0];
+                            const rating = item.vote_average?.toFixed(1) || '';
+                            const mediaType = item.media_type === 'tv' ? 'Dizi' : (item.media_type === 'person' ? 'Kişi' : 'Film');
+
+                            return `
+                                <div class="autocomplete-item" data-id="${item.id}" data-type="${item.media_type || 'movie'}">
+                                    <div class="autocomplete-poster" style="background-image: url('https://image.tmdb.org/t/p/w92${posterPath}')"></div>
+                                    <div class="autocomplete-info">
+                                        <div class="autocomplete-title">${title}</div>
+                                        <div class="autocomplete-meta">
+                                            <span>${mediaType}</span>
+                                            ${year ? ` • ${year}` : ''}
+                                            ${rating ? `<span class="autocomplete-rating"><span class="material-symbols-outlined">star</span>${rating}</span>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+
+                    dropdown.classList.add('active');
+
+                    // Add click handlers
+                    dropdown.querySelectorAll('.autocomplete-item').forEach(item => {
+                        item.addEventListener('click', function () {
+                            const id = this.dataset.id;
+                            const type = this.dataset.type;
+                            dropdown.classList.remove('active');
+                            document.getElementById('search-input').blur();
+                            openDetailModal(id, type);
+                        });
+                    });
+                } else {
+                    dropdown.innerHTML = '<div class="dropdown-empty">Sonuç bulunamadı</div>';
+                    dropdown.classList.add('active');
+                }
+            } catch (error) {
+                console.error('Autocomplete failed:', error);
+                dropdown.classList.remove('active');
+            }
+        }
+
+        // ============================================
         // DETAIL MODAL
         // ============================================
         async function openDetailModal(id, type) {
             const modal = document.getElementById('detail-modal');
             const modalBody = document.getElementById('modal-body');
+
+            // SCROLL LOCK
+            document.body.style.overflow = 'hidden';
 
             modal.classList.add('active');
             modalBody.innerHTML = '<div class="loading-state" style="display: flex; height: 300px;"><div class="spinner"></div></div>';
