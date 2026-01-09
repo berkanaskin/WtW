@@ -654,10 +654,10 @@ body {
    ============================================ */
 .masonry-grid {
     columns: 2;
-    column-gap: 16px;
+    column-gap: 0;
     width: 100%;
     min-height: 100vh;
-    padding: 0 var(--space-md) 120px;
+    padding-bottom: 120px;
     /* Space for bottom nav */
 }
 
