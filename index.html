@@ -225,7 +225,7 @@
         <!-- ============================================
              VIEW: FAVORITES (Listem)
              ============================================ -->
-        <section id="view-favorites" class="view" style="padding-top: var(--space-lg);">
+        <section id="view-favorites" class="view" style="padding-top: 60px; padding-bottom: 120px;">
             <div class="favorites-header">
                 <div class="favorites-title-row">
                     <div style="width: 40px;"></div>
@@ -256,7 +256,7 @@
         <!-- ============================================
              VIEW: PROFILE
              ============================================ -->
-        <section id="view-profile" class="view" style="padding-bottom: 150px; padding-top: var(--space-lg);">
+        <section id="view-profile" class="view" style="padding-bottom: 150px; padding-top: 60px;">
             <div class="profile-header">
                 <div class="profile-avatar-container">
                     <div class="profile-avatar-glow"></div>
@@ -988,6 +988,16 @@
             } else if (viewId === 'view-profile') {
                 loadProfileData();
             }
+        }
+
+        // Navigate to home page (called by logo click)
+        function loadHomePage() {
+            switchView('view-home');
+            // Update bottom nav to show home as active
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector('.nav-item[data-page="home"]')?.classList.add('active');
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Handle browser back/forward buttons
