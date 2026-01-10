@@ -383,13 +383,19 @@ async function handleSocialLogin(provider) {
 
 async function handleLogout() {
     if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-        await window.AuthService.logout();
-        state.currentUser = null;
-        state.userTier = 'guest';
-        localStorage.removeItem('userTier'); // Clear premium tier
-        updateAuthUI();
-        updateSuggestedVisibility();
-        await loadHomePage();
+        try {
+            await window.AuthService.logout();
+            state.currentUser = null;
+            state.userTier = 'guest';
+            localStorage.removeItem('userTier');
+            localStorage.removeItem('lumi_user');
+            // Reload page to reset all state
+            location.reload();
+        } catch (error) {
+            console.error('Logout error:', error);
+            // Force reload even on error
+            location.reload();
+        }
     }
 }
 

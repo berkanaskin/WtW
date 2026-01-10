@@ -256,7 +256,8 @@
         <!-- ============================================
              VIEW: PROFILE
              ============================================ -->
-        <section id="view-profile" class="view">
+        <section id="view-profile" class="view"
+            style="padding-bottom: 120px; overflow-y: auto; max-height: calc(100vh - 60px);">
             <div class="profile-header">
                 <div class="profile-avatar-container">
                     <div class="profile-avatar-glow"></div>
@@ -1123,6 +1124,16 @@
                             card.addEventListener('click', function () {
                                 const id = this.dataset.id;
                                 const type = this.dataset.type;
+
+                                // Save search state before opening detail
+                                if (typeof state !== 'undefined') {
+                                    state.cameFromSearch = true;
+                                    state.searchResultsVisible = true;
+                                    state.searchQuery = document.getElementById('search-input-overlay')?.value || '';
+                                    state.searchScrollPosition = document.getElementById('search-grid')?.scrollTop || 0;
+                                }
+
+                                // Hide search overlay (will be restored on modal close)
                                 document.getElementById('search-overlay').classList.remove('active');
                                 openDetailModal(id, type);
                             });
