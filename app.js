@@ -399,6 +399,67 @@ async function handleLogout() {
     }
 }
 
+// Tester Login - Free User
+async function handleTesterLoginFree() {
+    try {
+        await window.AuthService.loginAsTesterFree();
+        state.currentUser = window.AuthService.currentUser;
+        state.userTier = 'free';
+        updateAuthUI();
+        updateProfileAuthUI();
+        alert('Test Kullanıcı olarak giriş yapıldı!');
+    } catch (error) {
+        console.error('Tester login error:', error);
+        alert('Giriş yapılamadı.');
+    }
+}
+
+// Tester Login - Premium User
+async function handleTesterLoginPremium() {
+    try {
+        await window.AuthService.loginAsTester();
+        state.currentUser = window.AuthService.currentUser;
+        state.userTier = 'premium';
+        localStorage.setItem('userTier', 'premium');
+        updateAuthUI();
+        updateProfileAuthUI();
+        alert('Test Premium olarak giriş yapıldı!');
+    } catch (error) {
+        console.error('Tester premium login error:', error);
+        alert('Giriş yapılamadı.');
+    }
+}
+
+// Update Profile Action Buttons based on Auth State
+function updateProfileAuthUI() {
+    const guestButtons = document.getElementById('guest-buttons');
+    const loggedinButtons = document.getElementById('loggedin-buttons');
+    const premiumBtn = document.getElementById('profile-premium-btn');
+
+    if (!guestButtons || !loggedinButtons) return;
+
+    const isLoggedIn = window.AuthService && window.AuthService.isLoggedIn();
+    const isPremium = window.AuthService && window.AuthService.isPremium();
+
+    if (isLoggedIn) {
+        guestButtons.style.display = 'none';
+        loggedinButtons.style.display = 'block';
+        // Hide premium button if already premium
+        if (premiumBtn) {
+            premiumBtn.style.display = isPremium ? 'none' : 'flex';
+        }
+    } else {
+        guestButtons.style.display = 'block';
+        loggedinButtons.style.display = 'none';
+    }
+}
+
+// Listen for auth state changes
+window.addEventListener('authStateChanged', function (e) {
+    updateAuthUI();
+    updateProfileAuthUI();
+});
+
 // ============================================
 // LEGAL PAGES
 // ============================================

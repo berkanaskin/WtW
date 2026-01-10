@@ -164,68 +164,131 @@
         </section>
 
         <!-- ============================================
-             VIEW: NE İZLESEM (Wizard)
+             VIEW: NE İZLESEM (Wizard) - Stitch Design
              ============================================ -->
-        <section id="view-wizard" class="view">
-            <div class="wizard-container">
-                <div class="wizard-header">
-                    <h1 class="wizard-title">
-                        <span class="material-symbols-outlined">auto_awesome</span>
-                        Ne İzlesem?
-                    </h1>
-                    <p class="wizard-subtitle">Bugün ne izleyeceğine karar veremiyorsan bize bırak!</p>
+        <section id="view-wizard" class="view" style="margin-top: -80px;">
+            <div class="wizard-container" style="padding: var(--space-md); padding-bottom: 120px;">
+
+                <!-- Günün Önerisi (Daily Recommendation) -->
+                <div class="daily-recommendation" id="daily-recommendation" style="margin-bottom: var(--space-xl);">
+                    <div class="daily-header"
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-md);">
+                        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                            <span class="material-symbols-outlined"
+                                style="color: var(--primary); font-size: 24px;">star</span>
+                            <h2 style="font-size: 1.125rem; font-weight: 600; color: var(--text-primary);">Günün Önerisi
+                            </h2>
+                        </div>
+                        <span class="daily-timer" id="daily-timer"
+                            style="font-size: 0.75rem; color: var(--text-muted);"></span>
+                    </div>
+                    <div class="daily-card" id="daily-card"
+                        style="position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 2/3; max-height: 400px; background: var(--glass-bg); border: 1px solid var(--glass-border);">
+                        <!-- Will be populated by JS -->
+                        <div class="loading-state" style="display: flex; height: 100%;">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Mood Input -->
-                <div class="wizard-mood-card">
-                    <label for="mood-input">Bugün modun nasıl?</label>
-                    <div class="mood-input-wrapper">
-                        <input type="text" id="mood-input" placeholder="Örn: Heyecanlı, romantik, karamsar..."
-                            autocomplete="off">
-                        <button class="mood-submit-btn" id="mood-submit-btn">
-                            <span class="material-symbols-outlined">send</span>
+                <!-- Mood Selection -->
+                <div class="mood-section" style="margin-bottom: var(--space-lg);">
+                    <h2
+                        style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-md);">
+                        Bugün
+                        <span style="color: var(--primary);">ne moddasın?</span>
+                    </h2>
+                    <div class="mood-chips" id="mood-chips"
+                        style="display: flex; gap: var(--space-sm); overflow-x: auto; padding-bottom: var(--space-sm);">
+                        <button class="mood-chip active" data-mood="chill"
+                            style="display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); border-radius: 9999px; background: rgba(88,88,243,0.2); border: 1px solid rgba(88,88,243,0.5); color: white; font-size: 0.875rem; font-weight: 600; white-space: nowrap; cursor: pointer;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">sentiment_satisfied</span>
+                            Rahat
+                        </button>
+                        <button class="mood-chip" data-mood="adrenaline"
+                            style="display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); border-radius: 9999px; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; white-space: nowrap; cursor: pointer;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">bolt</span>
+                            Heyecan
+                        </button>
+                        <button class="mood-chip" data-mood="tearjerker"
+                            style="display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); border-radius: 9999px; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; white-space: nowrap; cursor: pointer;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">water_drop</span>
+                            Duygusal
+                        </button>
+                        <button class="mood-chip" data-mood="mindbending"
+                            style="display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); border-radius: 9999px; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; white-space: nowrap; cursor: pointer;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">psychology</span>
+                            Beyin Yakan
+                        </button>
+                        <button class="mood-chip" data-mood="funny"
+                            style="display: flex; align-items: center; gap: var(--space-xs); padding: var(--space-sm) var(--space-md); border-radius: 9999px; background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; white-space: nowrap; cursor: pointer;">
+                            <span class="material-symbols-outlined"
+                                style="font-size: 18px;">sentiment_very_satisfied</span>
+                            Komedi
                         </button>
                     </div>
                 </div>
 
-                <!-- Category Chips -->
-                <div class="wizard-categories">
-                    <h3>Veya bir kategori seç:</h3>
-                    <div class="category-chips">
-                        <button class="category-chip" data-genre="28">🎬 Aksiyon</button>
-                        <button class="category-chip" data-genre="35">😂 Komedi</button>
-                        <button class="category-chip" data-genre="18">🎭 Drama</button>
-                        <button class="category-chip" data-genre="27">👻 Korku</button>
-                        <button class="category-chip" data-genre="10749">💕 Romantik</button>
-                        <button class="category-chip" data-genre="878">🚀 Bilim Kurgu</button>
-                        <button class="category-chip" data-genre="53">🔍 Gerilim</button>
-                        <button class="category-chip" data-genre="16">🎨 Animasyon</button>
-                        <button class="category-chip" data-genre="99">📹 Belgesel</button>
-                        <button class="category-chip" data-genre="14">🧙 Fantastik</button>
+                <!-- Platform Selection -->
+                <div class="platform-section" style="margin-bottom: var(--space-lg);">
+                    <div
+                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-sm);">
+                        <h3
+                            style="font-size: 0.875rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+                            Platformlar</h3>
+                        <button id="select-all-platforms"
+                            style="font-size: 0.75rem; font-weight: 600; color: var(--primary); background: none; border: none; cursor: pointer;">Tümünü
+                            Seç</button>
+                    </div>
+                    <div class="platform-grid" id="platform-grid"
+                        style="display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-sm);">
+                        <button class="platform-btn active" data-platform="netflix"
+                            style="aspect-ratio: 1; border-radius: var(--radius-lg); background: rgba(88,88,243,0.2); border: 1px solid rgba(88,88,243,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <span style="color: #E50914; font-weight: 700; font-size: 1.25rem;">N</span>
+                        </button>
+                        <button class="platform-btn" data-platform="prime"
+                            style="aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.6;">
+                            <span style="color: #00A8E1; font-weight: 700; font-size: 0.75rem;">prime</span>
+                        </button>
+                        <button class="platform-btn" data-platform="disney"
+                            style="aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.6;">
+                            <span style="color: #113CCF; font-weight: 700; font-size: 1rem;">D+</span>
+                        </button>
+                        <button class="platform-btn" data-platform="apple"
+                            style="aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.6;">
+                            <span style="color: white; font-size: 1.25rem;"></span>
+                        </button>
+                        <button class="platform-btn" data-platform="mubi"
+                            style="aspect-ratio: 1; border-radius: var(--radius-lg); background: var(--glass-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0.6;">
+                            <span style="color: #E9423A; font-weight: 700; font-size: 0.625rem;">MUBI</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Surprise Button -->
-                <div class="wizard-surprise">
-                    <button class="surprise-btn" id="surprise-btn">
-                        <span class="material-symbols-outlined">casino</span>
-                        <span>Sürpriz Yap!</span>
-                    </button>
-                    <p class="surprise-hint">Rastgele bir film veya dizi öner</p>
+                <!-- Recommendation Card -->
+                <div class="recommendation-card" id="recommendation-card"
+                    style="position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 2/3; max-height: 500px; background: var(--glass-bg); border: 1px solid var(--glass-border);">
+                    <div class="card-placeholder"
+                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: var(--space-lg);">
+                        <span class="material-symbols-outlined"
+                            style="font-size: 64px; color: var(--primary); opacity: 0.5; margin-bottom: var(--space-md);">movie</span>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">Mod ve platform seçtikten sonra<br>bir
+                            öneri alabilirsin</p>
+                    </div>
                 </div>
 
-                <!-- Result Area -->
-                <div class="wizard-result" id="wizard-result" style="display: none;">
-                    <h3>Sana Önerimiz:</h3>
-                    <div class="wizard-result-content" id="wizard-result-content"></div>
-                </div>
+                <!-- Shuffle FAB -->
+                <button class="shuffle-fab" id="shuffle-fab"
+                    style="position: fixed; bottom: 100px; right: 20px; width: 64px; height: 64px; border-radius: 50%; background: var(--primary); border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 20px rgba(88,88,243,0.5); z-index: 100;">
+                    <span class="material-symbols-outlined" style="font-size: 28px;">shuffle</span>
+                </button>
             </div>
         </section>
 
         <!-- ============================================
              VIEW: FAVORITES (Listem)
              ============================================ -->
-        <section id="view-favorites" class="view" style="padding-top: 60px; padding-bottom: 120px;">
+        <section id="view-favorites" class="view" style="margin-top: -80px; padding-bottom: 120px;">
             <div class="favorites-header">
                 <div class="favorites-title-row">
                     <div style="width: 40px;"></div>
@@ -256,7 +319,7 @@
         <!-- ============================================
              VIEW: PROFILE
              ============================================ -->
-        <section id="view-profile" class="view" style="padding-bottom: 150px; padding-top: 60px;">
+        <section id="view-profile" class="view" style="margin-top: -80px; padding-bottom: 150px;">
             <div class="profile-header">
                 <div class="profile-avatar-container">
                     <div class="profile-avatar-glow"></div>
@@ -333,18 +396,35 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="profile-actions" style="margin-top: var(--space-lg);">
-                    <button class="profile-action-btn premium-btn" id="profile-premium-btn" onclick="showPremiumModal()"
-                        style="width: 100%; padding: var(--space-md); background: linear-gradient(135deg, var(--primary), #8b7cf7); border: none; border-radius: var(--radius-lg); color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
-                        <span class="material-symbols-outlined">workspace_premium</span>
-                        <span>Premium'a Yükselt</span>
-                    </button>
-                    <button class="profile-action-btn logout-btn" id="profile-logout-btn" onclick="handleLogout()"
-                        style="width: 100%; padding: var(--space-md); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-lg); color: #ef4444; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm);">
-                        <span class="material-symbols-outlined">logout</span>
-                        <span>Çıkış Yap</span>
-                    </button>
+                <!-- Action Buttons (Updated by JS based on auth state) -->
+                <div class="profile-actions" id="profile-actions" style="margin-top: var(--space-lg);">
+                    <!-- Guest State: Show Login Options -->
+                    <div id="guest-buttons">
+                        <button class="profile-action-btn" onclick="handleTesterLoginFree()"
+                            style="width: 100%; padding: var(--space-md); background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); color: var(--text-primary); font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+                            <span class="material-symbols-outlined">person</span>
+                            <span>Test Kullanıcı Girişi</span>
+                        </button>
+                        <button class="profile-action-btn" onclick="handleTesterLoginPremium()"
+                            style="width: 100%; padding: var(--space-md); background: linear-gradient(135deg, var(--primary), #8b7cf7); border: none; border-radius: var(--radius-lg); color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm);">
+                            <span class="material-symbols-outlined">workspace_premium</span>
+                            <span>Test Premium Girişi</span>
+                        </button>
+                    </div>
+                    <!-- Logged In State: Show Premium Upgrade (if free) and Logout -->
+                    <div id="loggedin-buttons" style="display: none;">
+                        <button class="profile-action-btn premium-btn" id="profile-premium-btn"
+                            onclick="showPremiumModal()"
+                            style="width: 100%; padding: var(--space-md); background: linear-gradient(135deg, var(--primary), #8b7cf7); border: none; border-radius: var(--radius-lg); color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+                            <span class="material-symbols-outlined">workspace_premium</span>
+                            <span>Premium'a Yükselt</span>
+                        </button>
+                        <button class="profile-action-btn logout-btn" id="profile-logout-btn" onclick="handleLogout()"
+                            style="width: 100%; padding: var(--space-md); background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-lg); color: #ef4444; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-sm);">
+                            <span class="material-symbols-outlined">logout</span>
+                            <span>Çıkış Yap</span>
+                        </button>
+                    </div>
                 </div>
 
                 <p class="profile-version">Lumi Version 0.9.6-beta</p>

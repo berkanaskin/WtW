@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumi v0.9.6 - Test Raporu #3</title>
+    <title>Lumi v0.9.6 - Test Raporu #4</title>
     <style>
         * {
             box-sizing: border-box;
@@ -145,10 +145,6 @@
             border-color: #5858f3;
         }
 
-        .comment-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
         .summary {
             background: linear-gradient(135deg, rgba(88, 88, 243, 0.1), rgba(88, 88, 243, 0.05));
             border: 1px solid rgba(88, 88, 243, 0.3);
@@ -223,11 +219,6 @@
             color: #22c55e;
         }
 
-        .badge.pending {
-            background: rgba(234, 179, 8, 0.2);
-            color: #eab308;
-        }
-
         .badge.major {
             background: rgba(239, 68, 68, 0.2);
             color: #ef4444;
@@ -256,49 +247,20 @@
             font-family: inherit;
             resize: vertical;
         }
-
-        .general-comment textarea:focus {
-            outline: none;
-            border-color: #5858f3;
-        }
     </style>
 </head>
 
 <body>
-    <h1>🧪 Lumi v0.9.6 Test Raporu #3</h1>
-    <p class="subtitle">Son düzeltmeler yapıldı! Test et ve sonuçları işaretle.</p>
+    <h1>🧪 Lumi v0.9.6 Test Raporu #4</h1>
+    <p class="subtitle">Son düzeltmeler: Logo tıklama ve sayfa padding'i</p>
 
     <div class="section">
-        <h2><span>🔍</span> Arama UX (YENİ FIX)</h2>
+        <h2><span>🏠</span> Logo & Navigasyon (YENİ FIX)</h2>
         <div class="test-item">
             <input type="checkbox" onchange="toggleComplete(this)">
             <div class="test-info">
-                <div class="test-name">Klavye Otomatik Kapanma <span class="badge fixed">✓ Fixed</span></div>
-                <div class="test-how">Ana sayfada ara → Enter bas → Klavye kapanıyor ve sonuçlar görünüyor mu?</div>
-                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
-            </div>
-            <div class="test-status">
-                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
-                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
-            </div>
-        </div>
-        <div class="test-item">
-            <input type="checkbox" onchange="toggleComplete(this)">
-            <div class="test-info">
-                <div class="test-name">İptal Arama Sıfırlama <span class="badge fixed">✓ Fixed</span></div>
-                <div class="test-how">Arama yap → İptal'e bas → Ana sayfaya dön → Arama inputu boş mu?</div>
-                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
-            </div>
-            <div class="test-status">
-                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
-                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
-            </div>
-        </div>
-        <div class="test-item">
-            <input type="checkbox" onchange="toggleComplete(this)">
-            <div class="test-info">
-                <div class="test-name">Overlay Geri Dönüş</div>
-                <div class="test-how">Arama → Sonuç seç → Detay aç → Kapat → Overlay geri açılıyor mu?</div>
+                <div class="test-name">Logo Tıklama → Ana Sayfa <span class="badge fixed">✓ Fixed</span></div>
+                <div class="test-how">LUMI logosuna tıkla → Ana sayfaya dönüyor mu? Nav aktif güncelleniyor mu?</div>
                 <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
             </div>
             <div class="test-status">
@@ -309,24 +271,13 @@
     </div>
 
     <div class="section">
-        <h2><span>📜</span> Profil & Listem Layout (YENİ FIX)</h2>
+        <h2><span>📐</span> Sayfa Layout (YENİ FIX)</h2>
         <div class="test-item">
             <input type="checkbox" onchange="toggleComplete(this)">
             <div class="test-info">
-                <div class="test-name">Profil Tek Scroll <span class="badge fixed">✓ Fixed</span></div>
-                <div class="test-how">Profile git → Tek harekette en alta scroll edebiliyor musun? (İki adım yok)</div>
-                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
-            </div>
-            <div class="test-status">
-                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
-                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
-            </div>
-        </div>
-        <div class="test-item">
-            <input type="checkbox" onchange="toggleComplete(this)">
-            <div class="test-info">
-                <div class="test-name">Sayfa Üst Boşluk <span class="badge fixed">✓ Fixed</span></div>
-                <div class="test-how">Profile/Listem → Logo altından uygun mesafede mi başlıyor?</div>
+                <div class="test-name">Profile/Listem Üst Boşluk <span class="badge fixed">✓ Fixed</span></div>
+                <div class="test-how">Profile veya Listem'e git → İçerik logo altından 60px'de mi başlıyor? Boşluk
+                    azaldı mı?</div>
                 <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
             </div>
             <div class="test-status">
@@ -341,32 +292,44 @@
         <div class="test-item">
             <input type="checkbox" onchange="toggleComplete(this)">
             <div class="test-info">
+                <div class="test-name">Klavye Otomatik Kapanma</div>
+                <div class="test-how">Ara → Enter → Klavye kapanıyor mu?</div>
+                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
+            </div>
+            <div class="test-status">
+                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
+                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
+            </div>
+        </div>
+        <div class="test-item">
+            <input type="checkbox" onchange="toggleComplete(this)">
+            <div class="test-info">
+                <div class="test-name">İptal → Arama Sıfırlama</div>
+                <div class="test-how">İptal'e bas → Input temizleniyor mu?</div>
+                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
+            </div>
+            <div class="test-status">
+                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
+                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
+            </div>
+        </div>
+        <div class="test-item">
+            <input type="checkbox" onchange="toggleComplete(this)">
+            <div class="test-info">
+                <div class="test-name">Overlay Geri Dönüş</div>
+                <div class="test-how">Detaydan kapat → Overlay geri açılıyor mu?</div>
+                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
+            </div>
+            <div class="test-status">
+                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
+                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
+            </div>
+        </div>
+        <div class="test-item">
+            <input type="checkbox" onchange="toggleComplete(this)">
+            <div class="test-info">
                 <div class="test-name">Premium Modal</div>
-                <div class="test-how">Profile → Premium'a Yükselt → Güzel modal açılıyor mu?</div>
-                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
-            </div>
-            <div class="test-status">
-                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
-                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
-            </div>
-        </div>
-        <div class="test-item">
-            <input type="checkbox" onchange="toggleComplete(this)">
-            <div class="test-info">
-                <div class="test-name">Light Mode</div>
-                <div class="test-how">Tema toggle → Okunabilir mi?</div>
-                <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
-            </div>
-            <div class="test-status">
-                <button class="status-btn pass" onclick="setStatus(this, 'pass')">✓ Geçti</button>
-                <button class="status-btn fail" onclick="setStatus(this, 'fail')">✗ Hata</button>
-            </div>
-        </div>
-        <div class="test-item">
-            <input type="checkbox" onchange="toggleComplete(this)">
-            <div class="test-info">
-                <div class="test-name">Version 0.9.6-beta</div>
-                <div class="test-how">Profile en altta versiyon yazıyor mu?</div>
+                <div class="test-how">Profile → Premium'a Yükselt → Modal?</div>
                 <textarea class="comment-input" placeholder="Yorum ekle..." rows="1"></textarea>
             </div>
             <div class="test-status">
@@ -382,28 +345,35 @@
             <input type="checkbox" disabled>
             <div class="test-info">
                 <div class="test-name">Üyelik Sistemi <span class="badge major">Major</span></div>
-                <div class="test-how">Tester Premium / Tester Giriş ayrımı, login/logout flow</div>
+                <div class="test-how">Login/Logout flow, Tester Premium/Giriş ayrımı</div>
             </div>
         </div>
         <div class="test-item" style="opacity: 0.6;">
             <input type="checkbox" disabled>
             <div class="test-info">
                 <div class="test-name">Dil Dropdown <span class="badge major">Major</span></div>
-                <div class="test-how">Glassmorphism tasarım, tüm diller, çeviri eksikleri</div>
+                <div class="test-how">Glassmorphism tasarım, çeviri eksikleri</div>
             </div>
         </div>
         <div class="test-item" style="opacity: 0.6;">
             <input type="checkbox" disabled>
             <div class="test-info">
-                <div class="test-name">Ne İzlesem Stitch <span class="badge major">Major</span></div>
-                <div class="test-how">Discover screen tasarımı, Günün Önerisi modülü</div>
+                <div class="test-name">Ne İzlesem + Günün Önerisi <span class="badge major">Major</span></div>
+                <div class="test-how">Stitch tasarımı, discover modülü</div>
             </div>
         </div>
         <div class="test-item" style="opacity: 0.6;">
             <input type="checkbox" disabled>
             <div class="test-info">
-                <div class="test-name">RevenueCat Entegrasyonu <span class="badge pending">Sonra</span></div>
-                <div class="test-how">Premium satın alma flow</div>
+                <div class="test-name">IMDb dışı puanlar inline <span class="badge major">Major</span></div>
+                <div class="test-how">RT, Metacritic yıl yanında göster</div>
+            </div>
+        </div>
+        <div class="test-item" style="opacity: 0.6;">
+            <input type="checkbox" disabled>
+            <div class="test-info">
+                <div class="test-name">Profil Ayarlar Dropdown <span class="badge major">Major</span></div>
+                <div class="test-how">Üst sağ profil ikonu ayarları</div>
             </div>
         </div>
     </div>
@@ -420,7 +390,7 @@
                 <div class="stat-label">Hata</div>
             </div>
             <div class="stat">
-                <div class="stat-value" id="pending-count">8</div>
+                <div class="stat-value" id="pending-count">6</div>
                 <div class="stat-label">Bekliyor</div>
             </div>
         </div>
@@ -428,47 +398,42 @@
 
     <div class="section general-comment">
         <h3><span>📝</span> Genel Yorum & Ekstra Sorunlar</h3>
-        <textarea id="general-notes"
-            placeholder="Listede olmayan sorunları, genel gözlemleri veya önerileri buraya yaz..."></textarea>
+        <textarea id="general-notes" placeholder="Listede olmayan sorunları buraya yaz..."></textarea>
     </div>
 
     <button class="export-btn" onclick="exportResults()">📋 Sonuçları Kopyala</button>
 
     <script>
         function setStatus(btn, status) {
-            const container = btn.closest('.test-status');
-            container.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+            btn.closest('.test-status').querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             updateSummary();
         }
-        function toggleComplete(checkbox) {
-            const item = checkbox.closest('.test-item');
-            item.classList.toggle('completed', checkbox.checked);
-        }
+        function toggleComplete(cb) { cb.closest('.test-item').classList.toggle('completed', cb.checked); }
         function updateSummary() {
-            const passCount = document.querySelectorAll('.status-btn.pass.active').length;
-            const failCount = document.querySelectorAll('.status-btn.fail.active').length;
-            const total = document.querySelectorAll('.test-item:not([style*="opacity"])').length;
-            document.getElementById('pass-count').textContent = passCount;
-            document.getElementById('fail-count').textContent = failCount;
-            document.getElementById('pending-count').textContent = total - passCount - failCount;
+            const p = document.querySelectorAll('.status-btn.pass.active').length;
+            const f = document.querySelectorAll('.status-btn.fail.active').length;
+            const t = document.querySelectorAll('.test-item:not([style*="opacity"])').length;
+            document.getElementById('pass-count').textContent = p;
+            document.getElementById('fail-count').textContent = f;
+            document.getElementById('pending-count').textContent = t - p - f;
         }
         function exportResults() {
-            let results = '# Lumi v0.9.6 Test Sonuçları #3\n\n';
-            document.querySelectorAll('.test-item:not([style*="opacity"])').forEach(item => {
-                const name = item.querySelector('.test-name').textContent.split('✓')[0].trim();
-                const pass = item.querySelector('.status-btn.pass.active');
-                const fail = item.querySelector('.status-btn.fail.active');
-                const comment = item.querySelector('.comment-input')?.value || '';
-                let status = '⏳ Bekliyor';
-                if (pass) status = '✅ Geçti';
-                if (fail) status = '❌ Hata';
-                results += `- ${name}: ${status}\n`;
-                if (comment) results += `  > ${comment}\n`;
+            let r = '# Lumi v0.9.6 Test Sonuçları #4\n\n';
+            document.querySelectorAll('.test-item:not([style*="opacity"])').forEach(i => {
+                const n = i.querySelector('.test-name').textContent.split('✓')[0].trim();
+                const p = i.querySelector('.status-btn.pass.active');
+                const f = i.querySelector('.status-btn.fail.active');
+                const c = i.querySelector('.comment-input')?.value || '';
+                let s = '⏳ Bekliyor';
+                if (p) s = '✅ Geçti';
+                if (f) s = '❌ Hata';
+                r += `- ${n}: ${s}\n`;
+                if (c) r += `  > ${c}\n`;
             });
-            const generalNotes = document.getElementById('general-notes').value;
-            if (generalNotes) results += '\n## Genel Yorum\n' + generalNotes + '\n';
-            navigator.clipboard.writeText(results).then(() => alert('Sonuçlar panoya kopyalandı!'));
+            const g = document.getElementById('general-notes').value;
+            if (g) r += '\n## Genel Yorum\n' + g + '\n';
+            navigator.clipboard.writeText(r).then(() => alert('Kopyalandı!'));
         }
     </script>
 </body>

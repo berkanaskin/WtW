@@ -211,6 +211,24 @@ class AuthService {
         return testerUser;
     }
 
+    async loginAsTesterFree() {
+        // Demo account for testing as regular free user
+        const testerUser = {
+            id: 'tester_free_001',
+            name: 'Test Kullanıcı',
+            email: 'free@lumi.app',
+            avatar: 'https://i.pravatar.cc/150?img=33',
+            tier: 'free',
+            provider: 'tester',
+            joinedAt: new Date().toISOString(),
+            isTester: true
+        };
+
+        this.saveLocalUser(testerUser);
+        window.dispatchEvent(new CustomEvent('authStateChanged', { detail: { user: testerUser } }));
+        return testerUser;
+    }
+
     // ============================================
     // PREMIUM MANAGEMENT
     // ============================================
