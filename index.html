@@ -225,7 +225,7 @@
         <!-- ============================================
              VIEW: FAVORITES (Listem)
              ============================================ -->
-        <section id="view-favorites" class="view">
+        <section id="view-favorites" class="view" style="padding-top: var(--space-lg);">
             <div class="favorites-header">
                 <div class="favorites-title-row">
                     <div style="width: 40px;"></div>
@@ -256,8 +256,7 @@
         <!-- ============================================
              VIEW: PROFILE
              ============================================ -->
-        <section id="view-profile" class="view"
-            style="padding-bottom: 120px; overflow-y: auto; max-height: calc(100vh - 60px);">
+        <section id="view-profile" class="view" style="padding-bottom: 150px; padding-top: var(--space-lg);">
             <div class="profile-header">
                 <div class="profile-avatar-container">
                     <div class="profile-avatar-glow"></div>
@@ -752,7 +751,8 @@
                     searchOverlay?.classList.add('active');
                     if (searchInputOverlay) {
                         searchInputOverlay.value = this.value;
-                        searchInputOverlay.focus();
+                        // Don't focus overlay input - let keyboard close
+                        searchInputOverlay.blur();
                         handleOverlaySearch(this.value);
                     }
                 }
@@ -805,6 +805,17 @@
                 searchOverlay.classList.remove('active');
                 searchInputOverlay.value = '';
                 searchClear.style.display = 'none';
+                // Also clear main search input
+                if (searchInput) {
+                    searchInput.value = '';
+                    searchClearMain.style.display = 'none';
+                }
+                // Reset search state
+                if (typeof state !== 'undefined') {
+                    state.searchQuery = '';
+                    state.cameFromSearch = false;
+                    state.searchResultsVisible = false;
+                }
             });
 
             searchInputOverlay?.addEventListener('input', function () {
