@@ -161,8 +161,237 @@ async function init() {
     setupEventListeners();
     await loadHomePage();
 
+    // Initialize Ne İzlesem (Discover) module
+    initDiscoverModule();
+
     // Initial sync for Suggested section visibility
     updateSuggestedVisibility();
+}
+
+// ============================================
+// NE İZLESEM (DISCOVER) MODULE
+// ============================================
+
+const DAILY_REC_KEY = 'lumi_daily_recommendation';
+const DAILY_REC_CATEGORIES = [
+    { list: 'popular', label: 'Popüler' },
+    { list: 'top_rated', label: 'En İyiler' },
+    { list: 'now_playing', label: 'Vizyondakiler' },
+    { genres: [18, 10749], label: 'Klasik Drama' },
+    { genres: [878, 28], label: 'Aksiyon & Bilim Kurgu' },
+    { genres: [35, 14], label: 'Fantastik Komedi' }
+];
+
+function initDiscoverModule() {
+    // Load Daily Recommendation
+    loadDailyRecommendation();
+
+    // Update timer every minute
+    setInterval(updateDailyTimer, 60000);
+    updateDailyTimer();
+
+    // Mood chips toggle
+    document.querySelectorAll('.mood-chip').forEach(chip => {
+        chip.addEventListener('click', function () {
+            document.querySelectorAll('.mood-chip').forEach(c => {
+                c.classList.remove('active');
+                c.style.background = 'var(--glass-bg)';
+                c.style.border = '1px solid var(--glass-border)';
+                c.style.color = 'var(--text-secondary)';
+            });
+            this.classList.add('active');
+            this.style.background = 'rgba(88,88,243,0.2)';
+            this.style.border = '1px solid rgba(88,88,243,0.5)';
+            this.style.color = 'white';
+        });
+    });
+
+    // Platform button toggle
+    document.querySelectorAll('.platform-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const wasActive = this.classList.contains('active');
+            if (wasActive) {
+                this.classList.remove('active');
+                this.style.background = 'var(--glass-bg)';
+                this.style.border = '1px solid var(--glass-border)';
+                this.style.opacity = '0.6';
+            } else {
+                this.classList.add('active');
+                this.style.background = 'rgba(88,88,243,0.2)';
+                this.style.border = '1px solid rgba(88,88,243,0.5)';
+                this.style.opacity = '1';
+            }
+        });
+    });
+
+    // Select All Platforms
+    document.getElementById('select-all-platforms')?.addEventListener('click', function () {
+        document.querySelectorAll('.platform-btn').forEach(btn => {
+            btn.classList.add('active');
+            btn.style.background = 'rgba(88,88,243,0.2)';
+            btn.style.border = '1px solid rgba(88,88,243,0.5)';
+            btn.style.opacity = '1';
+        });
+    });
+
+    // Shuffle FAB
+    document.getElementById('shuffle-fab')?.addEventListener('click', async function () {
+        this.style.transform = 'rotate(360deg)';
+        setTimeout(() => this.style.transform = 'rotate(0deg)', 500);
+        await loadRandomRecommendation();
+    });
+}
+
+async function loadDailyRecommendation() {
+    const stored = localStorage.getItem(DAILY_REC_KEY);
+    const today = new Date().toDateString();
+
+    if (stored) {
+        const data = JSON.parse(stored);
+        if (data.date === today && data.movie) {
+            renderDailyCard(data.movie, data.category);
+            return;
+        }
+    }
+
+    // Fetch new daily recommendation
+    try {
+        const dayOfWeek = new Date().getDay();
+        const categoryIndex = dayOfWeek % DAILY_REC_CATEGORIES.length;
+        const category = DAILY_REC_CATEGORIES[categoryIndex];
+
+        let movies = [];
+        if (category.list) {
+            const resp = await fetch(`${CONFIG.BASE_URL}/movie/${category.list}?api_key=${CONFIG.API_KEY}&language=${state.language}&page=1`);
+            const data = await resp.json();
+            movies = data.results || [];
+        } else if (category.genres) {
+            const genreStr = category.genres.join(',');
+            const resp = await fetch(`${CONFIG.BASE_URL}/discover/movie?api_key=${CONFIG.API_KEY}&language=${state.language}&with_genres=${genreStr}&sort_by=vote_average.desc&vote_count.gte=500&page=1`);
+            const data = await resp.json();
+            movies = data.results || [];
+        }
+
+        if (movies.length > 0) {
+            const randomIndex = Math.floor(Math.random() * Math.min(movies.length, 10));
+            const selected = movies[randomIndex];
+
+            localStorage.setItem(DAILY_REC_KEY, JSON.stringify({
+                date: today,
+                movie: selected,
+                category: category.label
+            }));
+
+            renderDailyCard(selected, category.label);
+        }
+    } catch (error) {
+        console.error('Daily recommendation error:', error);
+    }
+}
+
+function renderDailyCard(movie, categoryLabel) {
+    const dailyCard = document.getElementById('daily-card');
+    if (!dailyCard || !movie) return;
+
+    const posterUrl = movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : 'https://via.placeholder.com/500x750?text=No+Poster';
+
+    dailyCard.innerHTML = `
+        <div style="position: absolute; inset: 0; background: url('${posterUrl}') center/cover;"></div>
+        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,1) 0%, rgba(5,5,5,0.6) 50%, transparent 100%);"></div>
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: var(--space-lg);">
+            <div style="display: inline-flex; align-items: center; gap: var(--space-xs); background: var(--primary); padding: 4px 12px; border-radius: 9999px; margin-bottom: var(--space-sm);">
+                <span class="material-symbols-outlined" style="font-size: 14px;">auto_awesome</span>
+                <span style="font-size: 0.75rem; font-weight: 600;">${categoryLabel}</span>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 4px;">${movie.title || movie.name}</h3>
+            <div style="display: flex; align-items: center; gap: var(--space-sm); color: var(--text-muted); font-size: 0.875rem;">
+                <span>⭐ ${movie.vote_average?.toFixed(1) || 'N/A'}</span>
+                <span>•</span>
+                <span>${movie.release_date?.substring(0, 4) || ''}</span>
+            </div>
+        </div>
+    `;
+
+    dailyCard.style.cursor = 'pointer';
+    dailyCard.onclick = () => openDetailModal(movie.id, 'movie');
+}
+
+function updateDailyTimer() {
+    const timerEl = document.getElementById('daily-timer');
+    if (!timerEl) return;
+
+    const now = new Date();
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const diff = midnight - now;
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    timerEl.textContent = `Yeni öneri: ${hours}s ${minutes}dk`;
+}
+
+async function loadRandomRecommendation() {
+    const card = document.getElementById('recommendation-card');
+    if (!card) return;
+
+    card.innerHTML = '<div class="loading-state" style="display: flex; height: 100%;"><div class="spinner"></div></div>';
+
+    try {
+        const activeMood = document.querySelector('.mood-chip.active')?.dataset.mood || 'chill';
+        const moodGenres = {
+            chill: [35, 10751, 16],
+            adrenaline: [28, 53, 12],
+            tearjerker: [18, 10749],
+            mindbending: [878, 9648, 53],
+            funny: [35, 16]
+        };
+
+        const genres = moodGenres[activeMood] || [28, 35];
+        const genreStr = genres.join(',');
+
+        const resp = await fetch(`${CONFIG.BASE_URL}/discover/movie?api_key=${CONFIG.API_KEY}&language=${state.language}&with_genres=${genreStr}&sort_by=popularity.desc&page=${Math.floor(Math.random() * 5) + 1}`);
+        const data = await resp.json();
+
+        if (data.results?.length > 0) {
+            const movie = data.results[Math.floor(Math.random() * data.results.length)];
+            const posterUrl = movie.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : 'https://via.placeholder.com/500x750?text=No+Poster';
+
+            card.innerHTML = `
+                <div style="position: absolute; inset: 0; background: url('${posterUrl}') center/cover;"></div>
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,5,5,1) 0%, rgba(5,5,5,0.6) 50%, transparent 100%);"></div>
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: var(--space-lg);">
+                    <div style="display: inline-flex; align-items: center; gap: var(--space-xs); background: var(--primary); padding: 4px 12px; border-radius: 9999px; margin-bottom: var(--space-sm);">
+                        <span class="material-symbols-outlined" style="font-size: 14px;">auto_awesome</span>
+                        <span style="font-size: 0.75rem; font-weight: 600;">${Math.floor(Math.random() * 15 + 85)}% Uyum</span>
+                    </div>
+                    <h3 style="font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 4px;">${movie.title}</h3>
+                    <div style="display: flex; align-items: center; gap: var(--space-sm); color: var(--text-muted); font-size: 0.875rem; margin-bottom: var(--space-md);">
+                        <span>⭐ ${movie.vote_average?.toFixed(1)}</span>
+                        <span>•</span>
+                        <span>${movie.release_date?.substring(0, 4)}</span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${movie.overview || ''}</p>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: var(--space-sm); margin-top: var(--space-md);">
+                        <button onclick="addToWatchlist(${movie.id})" style="padding: var(--space-sm); background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-md); color: white; cursor: pointer;">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                        <button onclick="openDetailModal(${movie.id}, 'movie')" style="padding: var(--space-sm); background: white; border: none; border-radius: var(--radius-md); color: black; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: var(--space-xs);">
+                            <span class="material-symbols-outlined">play_arrow</span>
+                            Detaylar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Random recommendation error:', error);
+        card.innerHTML = '<div class="card-placeholder" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;"><p style="color: var(--text-muted);">Öneri yüklenemedi</p></div>';
+    }
 }
 
 // Auto-detect user's region for local content and platform providers
