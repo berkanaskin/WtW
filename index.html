@@ -203,7 +203,7 @@
                             placeholder="Ne izlemek istersin? (ör: uzayda geçen aksiyon)"
                             style="width: 100%; background: transparent; border: none; color: white; font-size: 14px; resize: none; line-height: 1.4; font-family: inherit; outline: none;"></textarea>
                     </div>
-                    <button id="ai-search-btn" class="glass-active"
+                    <button id="ai-search-btn" class="glass-active" onclick="handleAISearch()"
                         style="width: 100%; height: 36px; border-radius: 8px; border: none; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
                         <span class="material-symbols-outlined" style="font-size: 16px;">auto_awesome</span>
                         Öner Bana
@@ -302,7 +302,7 @@
                     </div>
 
                     <!-- Find Button -->
-                    <button id="wizard-search-btn" class="glass"
+                    <button id="wizard-search-btn" class="glass" onclick="handleWizardSearch()"
                         style="width: 100%; height: 36px; border-radius: 8px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(255,255,255,0.1);">
                         <span class="material-symbols-outlined" style="font-size: 16px;">search</span>
                         Filtrele
@@ -311,7 +311,7 @@
 
                 <!-- ======== SURPRISE BUTTON ======== -->
                 <section style="margin-bottom: 20px;">
-                    <button id="surprise-btn"
+                    <button id="surprise-btn" onclick="handleSurpriseMe()"
                         style="width: 100%; height: 36px; background: linear-gradient(135deg, #5858f3, #3b82f6); border: none; border-radius: 8px; color: white; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
                         <span class="material-symbols-outlined" style="font-size: 16px;">casino</span>
                         Sürpriz Yap!
