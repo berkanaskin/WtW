@@ -6,7 +6,7 @@
 
 ### Tasarım
 
-- [x] Günün Önerisi: Banner 170px, gradient opak ✅
+- [x] Günün Önerisi: Banner 200px, gradient opak ✅ (v0.9.14)
 - [x] "Bugün hangi moddasın?" Stitch tarzı yazı (28px) ✅
 - [x] Tür/Mod chips: İkonlarla birlikte ✅
 - [x] Öner Bana + Sürpriz Yap: Yan yana, 36px butonlar ✅
@@ -15,9 +15,9 @@
 
 ### Fonksiyonellik
 
-- [/] Öner Bana butonu çalışır (toast ✅, sonuç test edilecek)
-- [/] Filtrele butonu çalışır (toast ✅, sonuç test edilecek)
-- [/] Sürpriz butonu çalışır (toast ✅, sonuç test edilecek)
+- [x] Öner Bana butonu çalışır ✅ (v0.9.14 - wizard-results)
+- [x] Filtrele butonu çalışır ✅ (v0.9.14 - wizard-results)
+- [x] Sürpriz butonu çalışır ✅ (v0.9.14 - wizard-results)
 - [x] Günün Önerisi tıklanabilir ✅
 
 ---
@@ -78,18 +78,18 @@
 
 ## 📊 Özet
 
-| Bölüm | Tamamlanan | Toplam | % |
-|-------|-----------|--------|---|
-| Ne İzlesem Tasarım | 6 | 6 | 100% |
-| Ne İzlesem Fonksiyon | 1 | 4 | 25% |
-| Üyelik | 0 | 3 | 0% |
-| Dil | 0 | 3 | 0% |
-| Bildirimler | 0 | 2 | 0% |
-| Detay Sayfası | 0 | 11 | 0% |
-| Listem | 0 | 2 | 0% |
-| Profil | 0 | 3 | 0% |
-| **TOPLAM** | **7** | **34** | **21%** |
+| Bölüm                  | Tamamlanan | Toplam | %    |
+| ---------------------- | ---------- | ------ | ---- |
+| Ne İzlesem Tasarım     | 6          | 6      | 100% |
+| Ne İzlesem Fonksiyon   | 4          | 4      | 100% |
+| Üyelik                 | 0          | 3      | 0%   |
+| Dil                    | 0          | 3      | 0%   |
+| Bildirimler            | 0          | 2      | 0%   |
+| Detay Sayfası          | 0          | 11     | 0%   |
+| Listem                 | 0          | 2      | 0%   |
+| Profil                 | 0          | 3      | 0%   |
+| **TOPLAM**             | **10**     | **34** | **29%** |
 
 ---
 
-*Son güncelleme: 2026-01-11 16:43*
+*Son güncelleme: 2026-01-11 17:05*
