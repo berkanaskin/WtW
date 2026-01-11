@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumi v0.9.11 - Test</title>
+    <title>Lumi v0.9.12 - Test</title>
     <style>
         * {
             box-sizing: border-box;
@@ -62,6 +62,7 @@
 
         .test-name {
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .btns {
@@ -172,49 +173,43 @@
 </head>
 
 <body>
-    <h1>🎯 Lumi v0.9.11</h1>
+    <h1>🎯 Lumi v0.9.12</h1>
     <p class="subtitle">Ctrl+Shift+R → Test et</p>
 
     <div class="section">
         <h2>✨ Ne İzlesem Tasarım</h2>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Günün Önerisi: 180px banner, güçlü gradient</span>
+            <div class="test-row"><span class="test-name">Günün Önerisi: 160px banner</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Stitch başlık: 28px, "Bugün hangi moddasın?"</span>
+            <div class="test-row"><span class="test-name">Stitch başlık: 28px</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Tür chips: 36px, her biri ikonlu (😊⚡💧🧠🔥💀🚀❤️🎬)</span>
+            <div class="test-row"><span class="test-name">Tür chips: ikonlu</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Dönem chips: kompakt, yatay scroll</span>
+            <div class="test-row"><span class="test-name">Textarea: 3 satır + derin placeholder</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Textarea: 3 satır, random poetik placeholder</span>
+            <div class="test-row"><span class="test-name">Sürpriz Yap butonu</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Öner Bana + Sürpriz: yan yana, 36px</span>
-                <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
-                        class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
-            </div><input class="comment" placeholder="Yorum...">
-        </div>
-        <div class="test-item">
-            <div class="test-row"><span class="test-name">Üst boşluk: padding-top: 0</span>
+            <div class="test-row"><span class="test-name">Margin-top: -8px (daha yukarı)</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
@@ -222,27 +217,45 @@
     </div>
 
     <div class="section">
-        <h2>🔘 Butonlar</h2>
+        <h2>🔘 Butonlar (Toast + Sonuç)</h2>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Öner Bana → Toast + sonuç</span>
+            <div class="test-row"><span class="test-name">Öner Bana → Toast çıkıyor</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Sürpriz → Random filmler</span>
+            <div class="test-row"><span class="test-name">Öner Bana → Film sonuçları</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Filtrele → Toast + sonuç</span>
+            <div class="test-row"><span class="test-name">Sürpriz Yap → Toast çıkıyor</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
         </div>
         <div class="test-item">
-            <div class="test-row"><span class="test-name">Günün Önerisi banner tıklanabilir</span>
+            <div class="test-row"><span class="test-name">Sürpriz Yap → Random filmler</span>
+                <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
+                        class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
+            </div><input class="comment" placeholder="Yorum...">
+        </div>
+        <div class="test-item">
+            <div class="test-row"><span class="test-name">Filtrele → Toast çıkıyor</span>
+                <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
+                        class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
+            </div><input class="comment" placeholder="Yorum...">
+        </div>
+        <div class="test-item">
+            <div class="test-row"><span class="test-name">Filtrele → Sonuç gösteriyor</span>
+                <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
+                        class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
+            </div><input class="comment" placeholder="Yorum...">
+        </div>
+        <div class="test-item">
+            <div class="test-row"><span class="test-name">Günün Önerisi → Tıklanabilir</span>
                 <div class="btns"><button class="status-btn pass" onclick="toggle(this,'pass')">✓</button><button
                         class="status-btn fail" onclick="toggle(this,'fail')">✗</button></div>
             </div><input class="comment" placeholder="Yorum...">
@@ -261,7 +274,7 @@
                 <div class="stat-label">Hata</div>
             </div>
             <div>
-                <div class="stat-value pending" id="pending-count">11</div>
+                <div class="stat-value pending" id="pending-count">13</div>
                 <div class="stat-label">Bekliyor</div>
             </div>
         </div>
@@ -271,6 +284,7 @@
     <button class="export-btn" onclick="exportResults()">📋 Sonuçları Kopyala</button>
 
     <script>
+        const TOTAL = 13;
         function toggle(btn, type) {
             const item = btn.closest('.test-item');
             const btns = item.querySelectorAll('.status-btn');
@@ -285,10 +299,10 @@
             const f = document.querySelectorAll('.status-btn.fail.active').length;
             document.getElementById('pass-count').textContent = p;
             document.getElementById('fail-count').textContent = f;
-            document.getElementById('pending-count').textContent = 11 - p - f;
+            document.getElementById('pending-count').textContent = TOTAL - p - f;
         }
         function exportResults() {
-            let r = '# Lumi v0.9.11 Test\n\n';
+            let r = '# Lumi v0.9.12 Test\n\n';
             document.querySelectorAll('.test-item').forEach(item => {
                 const name = item.querySelector('.test-name').textContent;
                 const p = item.querySelector('.status-btn.pass.active');

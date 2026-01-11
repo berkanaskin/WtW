@@ -298,10 +298,8 @@ function initDiscoverModule() {
         });
     });
 
-    // Button Click Handlers
-    document.getElementById('ai-search-btn')?.addEventListener('click', handleAISearch);
-    document.getElementById('wizard-search-btn')?.addEventListener('click', handleWizardSearch);
-    document.getElementById('surprise-btn')?.addEventListener('click', handleSurpriseMe);
+    // Button handlers are attached via onclick attributes in HTML
+    // No need for addEventListener here to avoid double execution
 }
 
 // AI Search Handler - Uses text input to find recommendations
@@ -477,7 +475,7 @@ function displayDiscoverResultsView(movies, source) {
     const label = sourceLabels[source] || 'Öneriler';
 
     // Switch to home view
-    switchView('home');
+    switchView('view-home');
 
     // Get the feed grid
     const feedGrid = document.getElementById('feed-grid');
